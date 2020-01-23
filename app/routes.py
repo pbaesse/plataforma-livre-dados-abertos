@@ -40,8 +40,7 @@ def login():
 		return redirect(next_page)
 	return render_template('login.html', title=(_('Entrar')), form=form)
     
-@app.route('/logout')
-@login_required
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     logout_user()
     return redirect(url_for('login'))
@@ -60,7 +59,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title=(_('Registrar')), form=form)
  
-@app.route('/user/<username>')
+@app.route('/user/<username>', methods=['GET', 'POST'])
 @login_required
 def user(username):
 	user = User.query.filter_by(username=username).first_or_404()

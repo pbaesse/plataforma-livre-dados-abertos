@@ -4,9 +4,9 @@
 {% block app_content %}
 	<p><a href="{{ url_for('source') }}">Cadastre uma nova fonte de dados abertos aqui!</a></p>
    	<p><a href="{{ url_for('software') }}">Cadastre um software de dados abertos aqui!</a></p>
-   	<h1>Fontes de Dados Abertos Governamentais: </h1>
 	<div class="row">
         <div class="col-md-4">
+        	<h1>Fontes de Dados Abertos Governamentais: </h1>
         	{% for registered_sources in registered_sources %}
     		<h1>{{ registered_sources.title }}</h1>
     		<ul>
@@ -17,11 +17,7 @@
     		</ul>
     		{% endfor %}
     		</br>
-    	</div>
-	</div>
-	<h1>Softwares de Dados Abertos Governamentais: </h1>
-    <div class="row">
-        <div class="col-md-4">
+        	<h1>Softwares de Dados Abertos Governamentais: </h1>
     		{% for registered_softwares in registered_softwares %}
     		<h1>{{ registered_softwares.title }}</h1>
     		<ul>
