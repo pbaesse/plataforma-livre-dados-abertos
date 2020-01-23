@@ -18,11 +18,11 @@ Este software, visa ter um grande número de engajamento, participação e colab
 
 
 ## Lista de autores
-- **Maria Carolina** - [@mariacarolinass](https://github.com/MariaCarolinass)
-- **Luiz Felipe** - [@luiz200](https://github.com/luiz200/)
+- Maria Carolina - [@mariacarolinass](https://github.com/MariaCarolinass)
+- Luiz Felipe - [@luiz200](https://github.com/luiz200/)
 
 ## Licença
-
+Software Livre
 
 ## Contato
-- **Pedro Baesse** - pbaesse@gmail.com
+- Pedro Baesse - pbaesse@gmail.com
