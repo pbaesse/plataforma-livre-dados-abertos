@@ -1,7 +1,6 @@
 # Plataforma Livre de Dados Abertos Governamentais
 
 ## Descrição
--------------------------------------------------------------------------------------
 A Plataforma Livre de Dados Abertos Governamentais trata-se de um site que nasceu no IFRN — campus Ceará-Mirim no ano de 2018, quando dois alunos tiveram interesse em criar um projeto de pesquisa onde o foco seria ajudar pessoas com informação e, ao mesmo tempo, contribuir com o Software Livre. Então, foi aí que o orientador e mestre Baesse, apresentou os Dados Abertos Governamentais e uma ferramenta que pudesse ser construída unindo tudo isso.
 
 Dados Abertos Governamentais são informações que são disponibilizadas pelo governo obrigatoriamente pela Lei de Acesso à Informação, que permite reutiliza-los, reproduzi-los e redistribui-los livremente, sendo alguns dos temas, que podem ser trabalhados: saúde, educação, segurança, meio ambiente, cultura e lazer. Mas nem sempre essas informações estão facilmente acessíveis e visualizáveis, pois elas estão espalhadas em todas as esferas do governo municipal, federal e estadual, então visando suprir essas lacunas foi lançada a Plataforma Livre de Dados Abertos Governamentais, onde o seu principal objetivo é:
@@ -13,22 +12,18 @@ Então o usuário poderia cadastrar, por exemplo, a frequência de médicos em h
 Este software, visa ter um grande número de engajamento, participação e colaboração do público, onde pode servir tanto para pessoas comuns, como para pesquisadores e jornalistas e ainda para qualquer desenvolvedor que queira contribuir com o seu código-fonte que será distribuído em Software Livre com as suas principais tecnologias Python e a MicroFramework Flask. Assim, gerando participação popular, democracia, controle social e transparência para reivindicar mudanças e decidir novos projetos de lei.
 
 ## Problemas conhecidos e possíveis melhorias
--------------------------------------------------------------------------------------
 
 
 ## Como instalar
--------------------------------------------------------------------------------------
 
 
 ## Lista de autores
--------------------------------------------------------------------------------------
 - (foto) **Maria Carolina** [@mariacarolinass](https://github.com/MariaCarolinass) (descrição) (redes sociais)
 
 - (foto) **Luiz Felipe** (link do GitHub) (descrição) (redes sociais)
 
 ## Licença
--------------------------------------------------------------------------------------
+
 
 ## Contato
--------------------------------------------------------------------------------------
 - **Pedro Baesse** @pbaesse - pbaesse@gmail.com
