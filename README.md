@@ -44,6 +44,12 @@ Os pacotes estão salvos em um arquivo requirements. Para instala-los:
 $ pip install -r requirements.txt
 ```
 
+### Exportando as variáveis de ambiente
+```sh
+$ export FLASK_APP=plataforma.py
+$ export FLASK_DEBUG=1
+```
+
 ### Rodando a plataforma web com Flask
 Flask, roda com o comando:
 ```sh
