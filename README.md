@@ -16,13 +16,13 @@ Este software, visa ter um grande número de engajamento, participação e colab
 
 ## Como instalar
 
-### Iniciando o repositório: 
+#### Iniciando o repositório: 
 ```sh
 git clone https://github.com/pbaesse/plataforma-livre-dados-abertos
 cd plataforma-livre-dados-abertos
 ```
 
-### Usando o ambiente virtual (Virtualenv)
+#### Usando o ambiente virtual (Virtualenv)
 
 Instalando... (no Linux já vêm instalado)
 ```sh
@@ -38,19 +38,19 @@ $ source venv/bin/activate       (Linux)
 $ source venv\Script\activate    (Windows)
 ```
 
-### Instalando a lista de pacotes
+#### Instalando a lista de pacotes
 Os pacotes estão salvos em um arquivo requirements. Para instala-los:
 ```sh
 $ pip install -r requirements.txt
 ```
 
-### Exportando as variáveis de ambiente
+#### Exportando as variáveis de ambiente
 ```sh
 $ export FLASK_APP=plataforma.py
 $ export FLASK_DEBUG=1
 ```
 
-### Rodando a plataforma web com Flask
+#### Rodando a plataforma web com Flask
 Flask, roda com o comando:
 ```sh
 $ flask run
@@ -61,21 +61,12 @@ http://localhost:5000/
 ```
 
 ## Lista de autores
-- **Maria Carolina** [@mariacarolinass](https://github.com/MariaCarolinass)
-- **Luiz Felipe**
+- Maria Carolina: [@mariacarolinass](https://github.com/MariaCarolinass)
+- Luiz Felipe: [@luiz200](https://github.com/luiz200/)
 
 ## Licença
-- GPL -- Software Livre
-
-## Contato
-- pbaesse@gmail.com -- @pbaesse
-
-## Lista de autores
-- Maria Carolina - [@mariacarolinass](https://github.com/MariaCarolinass)
-- Luiz Felipe - [@luiz200](https://github.com/luiz200/)
-
-## Licença
+GPL
 Software Livre
 
 ## Contato
-- Pedro Baesse - pbaesse@gmail.com
+- pbaesse@gmail.com | @pbaesse
