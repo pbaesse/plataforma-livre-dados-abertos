@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 from flask_login import LoginManager
-#from flask_moment import Moment
+from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from flask_bootstrap import Bootstrap
 from config import Config
@@ -16,7 +16,7 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 login = LoginManager(app)
-#moment = Moment(app)
+moment = Moment(app)
 babel = Babel(app)
 bootstrap = Bootstrap(app)
 
