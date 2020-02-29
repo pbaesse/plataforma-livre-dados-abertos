@@ -16,14 +16,50 @@ Este software, visa ter um grande número de engajamento, participação e colab
 
 ## Como instalar
 
+### Iniciando o repositório: 
+```sh
+git clone https://github.com/pbaesse/plataforma-livre-dados-abertos
+cd plataforma-livre-dados-abertos
+```
+
+### Usando o ambiente virtual (Virtualenv)
+
+Instalando... (no Linux já vêm instalado)
+```sh
+$ virtualenv venv
+```
+Criando...
+```sh
+$ python3 -m venv venv
+```
+Ativando...
+```sh
+$ source venv/bin/activate       (Linux)
+$ source venv\Script\activate    (Windows)
+```
+
+### Instalando a lista de pacotes
+Os pacotes estão salvos em um arquivo requirements. Para instala-los:
+```sh
+$ pip install -r requirements.txt
+```
+
+### Rodando a plataforma web com Flask
+Flask, roda com o comando:
+```sh
+$ flask run
+```
+Endereço que roda o servidor (Localhost: Porta 5000):
+```sh
+http://localhost:5000/
+```
 
 ## Lista de autores
-- (foto) **Maria Carolina** [@mariacarolinass](https://github.com/MariaCarolinass) (descrição) (redes sociais)
-
-- (foto) **Luiz Felipe** (link do GitHub) (descrição) (redes sociais)
+- **Maria Carolina** [@mariacarolinass](https://github.com/MariaCarolinass)
+- **Luiz Felipe**
 
 ## Licença
-
+- GPL -- Software Livre
 
 ## Contato
-- **Pedro Baesse** @pbaesse - pbaesse@gmail.com
+- pbaesse@gmail.com -- @pbaesse
