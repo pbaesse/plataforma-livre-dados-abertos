@@ -2,16 +2,15 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>{{ _('Entre na Plataforma: Dados Livres) }}</h1>
+    <h1>{{ _('Entre na Plataforma: Dados Livres') }}</h1>
     <div class="row">
         <div class="col-md-4">
             {{ wtf.quick_form(form) }}
         </div>
     </div>
     </br>
-    <p> {{ _('Novo usuário?') }} <a href="{{ url_for('auth.register') }}">{{ _('Clique aqui para se registrar!') }}</a></p>
-    <p>
-        {{ _('Esqueceu sua senha?') }}
-         <a href="{{ url_for('auth.reset_password_request') }}">{{ _('Clique aquui para renomeiar sua senha!') }}</a>
+    <p>{{ _('Novo usuário?') }} <a href="{{ url_for( 'auth.register' ) }}">{{ ('Clique aqui para se registrar!') }}</a></p>
+    <p>{{ _('Esqueceu sua senha?') }}
+      <a href="{{ url_for( 'auth.reset_password_request' ) }}">{{ ('Clique aqui para renomeiar sua senha!') }}</a>
     </p>
 {% endblock %}

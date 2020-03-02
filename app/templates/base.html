@@ -1,7 +1,7 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block title %}
-    {% if title %}{{ title }} - Plataforma{% else %}{{ _(Bem vindo a Plataforma!) }}{% endif %}
+    {% if title %}{{ title }} - Plataforma{% else %}{{ _('Bem vindo a Plataforma!') }}{% endif %}
 {% endblock %}
 
 {% block navbar %}
@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('main.index') }}">{{ _('Página Incial') }}</a></li>
-                </ul>/
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('auth.login') }}">{{ _('Entrar') }}</a></li>
