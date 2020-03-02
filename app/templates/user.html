@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <h1>Usuário: {{ user.username }}</h1>
-    {% if user.nickname %}<p>Apelido: {{ user.nickname }}</p>{% endif %}
-    {% if user.typeUser %}<p>Tipo de usuário: {{ user.typeUser }}</p>{% endif %}
-	{% if user.about_me %}<p>Descrição: {{ user.about_me }}</p>{% endif %}
-    {% if user.last_seen %}<p>Visto pela última vez em: {{ user.last_seen }}</p>{% endif %}
-    
-    <hr>
+{% block app_content %}
+    <table class="table table-hover">
+        <tr>
+            <td width="256px"><img src="{{ user.avatar(256) }}"></td>
+            <td>
+                <h1>{{ _('Usuário') }}: {{ user.username }}</h1>
+                {% if user.nickname %}<p>{{ _('Apelido') }}: {{ user.nickname }}</p>{% endif %}
+                {% if user.typeUser %}<p>{{ _('Tipo de usuário') }}: {{ user.typeUser }}</p>{% endif %}
+	              {% if user.about_me %}<p>{{ _('Descrição') }}: {{ user.about_me }}</p>{% endif %}
+                {% if user.last_seen %}
+                <p>{{ _('Visto pela última vez') }}: {{ moment(user.last_seen).format('LLL') }}</p>
+                  {% if user == current_user %}
+                  <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil de usuário aqui!') }}</a></p>
+                  {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+    </table>
     {% for post in posts %}
     <p>
     {{ post.author.username }} diz: <b>{{ post.body }}</b>
     </p>
     {% endfor %}
-    
-    {% if user == current_user %}
-    <p><a href="{{ url_for('edit_profile') }}">Edite seu perfil de usuário aqui!</a></p>
-    {% endif %}
-    
+
 {% endblock %}
