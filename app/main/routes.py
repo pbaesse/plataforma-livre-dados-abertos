@@ -21,11 +21,25 @@ def before_request():
 @bp.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-	registered_sources = Source.query.filter_by(user_id=current_user.id).all()
-	registered_softwares = Software.query.filter_by(user_id=current_user.id).all()
-	db.session.commit()
-	return render_template('index.html', registered_sources=registered_sources, registered_softwares=registered_softwares, title=(_('Início')))
+    user = {'username': 'Carol'}
+    posts = [
+        {
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+            'body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template('index.html', title='Principal', user=user, posts=posts)
 
+    #registered_sources = Source.query.filter_by(user_id=current_user.id).all()
+	#registered_softwares = Software.query.filter_by(user_id=current_user.id).all()
+	#db.session.commit()
+	#return render_template('index.html', registered_sources=registered_sources, registered_softwares=registered_softwares, title=(_('Início')))
+
+# perfil do usuário com as suas fontes
 @bp.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
 	user = User.query.filter_by(username=username).first_or_404()
@@ -35,7 +49,38 @@ def user(username):
 	]
 	return render_template('user.html', user=user, posts=posts)
 
+@bp.route('/follow/<username>')
+@login_required
+def follow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found.'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('You cannot follow yourself!')
+        return redirect(url_for('user', username=username))
+    current_user.follow(user)
+    db.session.commit()
+    flash('You are following {}!'.format(username))
+    return redirect(url_for('user', username=username))
+
+@bp.route('/unfollow/<username>')
+@login_required
+def unfollow(username):
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('User {} not found.'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('You cannot unfollow yourself!')
+        return redirect(url_for('user', username=username))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('You are not following {}.'.format(username))
+    return redirect(url_for('user', username=username))
+
 @bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
 def edit_profile():
 	form = EditProfileForm(current_user.username)
 	if form.validate_on_submit():
