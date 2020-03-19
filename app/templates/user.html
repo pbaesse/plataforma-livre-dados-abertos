@@ -9,7 +9,6 @@
                 <td>
                   <h1>{{ _('Usuário') }}: {{ user.username }}</h1>
                   {% if user.nickname %}<p>{{ _('Apelido') }}: {{ user.nickname }}</p>{% endif %}
-                  {% if user.typeUser %}<p>{{ _('Tipo de usuário') }}: {{ user.typeUser }}</p>{% endif %}
   	              {% if user.about_me %}<p>{{ _('Descrição') }}: {{ user.about_me }}</p>{% endif %}
                   {% if user.last_seen %}<p>{{ _('Visto pela última vez') }}: {{ moment(user.last_seen).format('LLL') }}</p>
                   <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
