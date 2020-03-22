@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-11-19 10:52-0300\n"
+"POT-Creation-Date: 2020-03-22 01:57-0300\n"
 "PO-Revision-Date: 2019-11-19 10:59-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,136 +17,314 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.4.0\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"Generated-By: Babel 2.7.0\n"
 
-#: app/forms.py:8 app/forms.py:14 app/forms.py:32
+#: app/__init__.py:23
+msgid "Para acessar essa página entre como usuário"
+msgstr "Please log in to access this page."
+
+#: app/auth/email.py:7
+msgid "[Dados Livres] Redefina sua senha"
+msgstr "[Free Data] Reset your password"
+
+#: app/auth/forms.py:9 app/auth/forms.py:16 app/main/form.py:10
 msgid "Nome"
 msgstr "Name"
 
-#: app/forms.py:9 app/forms.py:16
+#: app/auth/forms.py:10 app/auth/forms.py:18 app/auth/forms.py:40
 msgid "Senha"
 msgstr "Password"
 
-#: app/forms.py:10
+#: app/auth/forms.py:11
 msgid "Lembre de mim"
 msgstr "remember me"
 
-#: app/forms.py:11 app/routes.py:48
+#: app/auth/forms.py:12 app/auth/routes.py:28 app/templates/base.html:27
 msgid "Entrar"
 msgstr "Login"
 
-#: app/forms.py:15
-msgid "Email"
+#: app/auth/forms.py:17 app/auth/forms.py:35
+msgid "E-mail"
 msgstr "Email"
 
-#: app/forms.py:17
+#: app/auth/forms.py:19
 msgid "Repita a senha"
 msgstr "Repeat Password"
 
-#: app/forms.py:19 app/routes.py:67
+#: app/auth/forms.py:21 app/auth/routes.py:47
 msgid "Registrar"
 msgstr "Register"
 
-#: app/forms.py:24
+#: app/auth/forms.py:26
 msgid "Por favor, use um nome de usuário diferente."
 msgstr "Please use a different username."
 
-#: app/forms.py:29
+#: app/auth/forms.py:31
 msgid "Por favor, use um endereço de e-mail diferente."
 msgstr "Please use a different email address."
 
-#: app/forms.py:33
-msgid "Apelido"
-msgstr "Nickname"
+#: app/auth/forms.py:36 app/auth/forms.py:44
+msgid "Solicitar redefinição de senha"
+msgstr "Request password reset"
 
-#: app/forms.py:34
-msgid "Tipo de usuário"
-msgstr "User Type"
+#: app/auth/forms.py:42
+msgid "Repita sua senha"
+msgstr "Repeat your password"
 
-#: app/forms.py:35
-msgid "Sobre mim"
-msgstr "About me"
-
-#: app/forms.py:36 app/forms.py:44 app/forms.py:55
-msgid "Enviar"
-msgstr "Submit"
-
-#: app/forms.py:39 app/forms.py:47
-msgid "Título"
-msgstr "Title"
-
-#: app/forms.py:40
-msgid "Esfera"
-msgstr "Sphere"
-
-#: app/forms.py:41
-msgid "Link Oficial"
-msgstr "Official Link"
-
-#: app/forms.py:42
-msgid "Link da Fonte de Dados"
-msgstr "Dataset Link"
-
-#: app/forms.py:43 app/forms.py:54
-msgid "Descrição"
-msgstr "Description"
-
-#: app/forms.py:48
-msgid "Licença"
-msgstr "License"
-
-#: app/forms.py:49
-msgid "Proprietário"
-msgstr "Owner"
-
-#: app/forms.py:50
-msgid "Desenvolvedor Ativo"
-msgstr "Active Development"
-
-#: app/forms.py:51
-msgid "Link para Download"
-msgstr "Download Link "
-
-#: app/forms.py:52
-msgid "Data de Criação"
-msgstr "Date Creation"
-
-#: app/forms.py:53
-msgid "Data de Lançamento"
-msgstr "Date Release "
-
-#: app/routes.py:31
-msgid "Início"
-msgstr "Home"
-
-#: app/routes.py:41
+#: app/auth/routes.py:21
 msgid "Nome de usuário ou senha inválidos"
 msgstr "Invalid username or password!"
 
-#: app/routes.py:65
+#: app/auth/routes.py:45
 msgid "Parabéns, agora você é um usuário registrado!"
 msgstr "Congratulations, you are now a registered user!"
 
-#: app/routes.py:89
+#: app/auth/routes.py:59
+msgid "Verifique seu e-mail para obter instruções para redefinir sua senha"
+msgstr "Check your email for the instructions to reset your password"
+
+#: app/auth/routes.py:62
+msgid "Redefina sua senha"
+msgstr "Reset Password"
+
+#: app/auth/routes.py:75
+msgid "Sua senha foi alterada"
+msgstr "Your password has been reset."
+
+#: app/main/form.py:11 app/templates/user.html:11
+msgid "Apelido"
+msgstr "Nickname"
+
+#: app/main/form.py:12
+msgid "Sobre mim"
+msgstr "About me"
+
+#: app/main/form.py:13 app/main/form.py:32 app/main/form.py:44
+msgid "Enviar"
+msgstr "Submit"
+
+#: app/main/form.py:23
+msgid "Por favor digite um nome diferente."
+msgstr "please enter a different name"
+
+#: app/main/form.py:27 app/main/form.py:36
+msgid "Título"
+msgstr "Title"
+
+#: app/main/form.py:28 app/main/form.py:37
+msgid "Tag"
+msgstr "Tag"
+
+#: app/main/form.py:29
+msgid "Esfera"
+msgstr "Sphere"
+
+#: app/main/form.py:30
+msgid "Link Oficial"
+msgstr "Official Link"
+
+#: app/main/form.py:31 app/main/form.py:43 app/templates/user.html:12
+msgid "Descrição"
+msgstr "Description"
+
+#: app/main/form.py:38
+msgid "Licença"
+msgstr "License"
+
+#: app/main/form.py:39
+msgid "Proprietário"
+msgstr "Owner"
+
+#: app/main/form.py:40
+msgid "Desenvolvedor Ativo"
+msgstr "Active Development"
+
+#: app/main/form.py:41
+msgid "Link para Download"
+msgstr "Download Link "
+
+#: app/main/form.py:42
+msgid "Data de Criação"
+msgstr "Date Creation"
+
+#: app/main/routes.py:28 app/main/routes.py:46
+msgid "Your post is now live!"
+msgstr ""
+
+#: app/main/routes.py:49
+msgid "Página Principal"
+msgstr "Home Page"
+
+#: app/main/routes.py:70
+msgid "usuário {} Página não encontrada."
+msgstr "User {} Not Found"
+
+#: app/main/routes.py:73
+msgid "Você não pode seguir a si mesmo!"
+msgstr "You cannot follow yourself"
+
+#: app/main/routes.py:77
+msgid "Você está seguindo {}!"
+msgstr "You are following"
+
+#: app/main/routes.py:85
+msgid "Usuário {} Página não encontrada."
+msgstr "User {} Not Found"
+
+#: app/main/routes.py:88
+msgid "Você não pode deixar de seguir a si mesmo!"
+msgstr "You cannot unfollow yourself"
+
+#: app/main/routes.py:92
+msgid "Você não está seguindo {}."
+msgstr "You are not following"
+
+#: app/main/routes.py:104
 msgid "Suas alterações foram salvas."
 msgstr "Your changes have been saved."
 
-#: app/routes.py:96
+#: app/main/routes.py:110 app/templates/edit_profile.html:5
 msgid "Editar Perfil"
 msgstr "Edit profile"
 
-#: app/routes.py:102
+#: app/main/routes.py:121
+msgid "Parabéns, você acabou de registrar uma foonte de dados!"
+msgstr "Congratulations, you registered a data source"
+
+#: app/main/routes.py:123
 msgid "Cadastrar Fonte"
 msgstr "Register Source"
 
-#: app/routes.py:107
+#: app/main/routes.py:134
+msgid "Parabéns, você acabou de registrar um software de dados!"
+msgstr "Congratulations, you registered a data software"
+
+#: app/main/routes.py:136
 msgid "Cadastrar Software"
 msgstr "Register Software"
 
-#: app/templates/base.html:3
-msgid "Bem vindo a Plataforma!"
-msgstr "Welcome to Plataforma"
+#: app/templates/base.html:4 app/templates/index.html:5
+msgid "Dados Livres"
+msgstr "Free Data"
 
-#~ msgid "Inicial"
-#~ msgstr "Home"
+#: app/templates/base.html:4
+msgid "Bem vindo a Dados Livres!"
+msgstr "Welcome to Free Data"
+
+#: app/templates/base.html:17
+msgid "DadosLivres.org: Pré-Alfa"
+msgstr "DadosLivres.org: Pré-Alfa"
+
+#: app/templates/base.html:21
+msgid "Página inicial"
+msgstr "Home page"
+
+#: app/templates/base.html:22
+msgid "Cadastre uma fonte de dados"
+msgstr "Register a data source"
+
+#: app/templates/base.html:23
+msgid "Cadastre um software de dados"
+msgstr "Register a data software"
+
+#: app/templates/base.html:30
+msgid "Sair"
+msgstr "Logout"
+
+#: app/templates/index.html:6
+msgid ""
+"Plataforma Livre de Dados Abertos Governamentais que permite o "
+"compartilhamento\n"
+"\t\t\t\t\te a colobaração na identificação de fontes de dados abertos e "
+"aplicações\n"
+"\t\t\t\t\tque fazem uso desse tipo de informação."
+msgstr ""
+
+#: app/templates/index.html:9
+msgid "(Colabore no GitHub)"
+msgstr "(Collaborate on GitHub)"
+
+#: app/templates/software.html:5
+msgid "Cadastre seu software de dados!"
+msgstr "Register a data software"
+
+#: app/templates/source.html:5
+msgid "Cadastre sua fonte de dados!"
+msgstr ""
+
+#: app/templates/user.html:10
+msgid "Usuário"
+msgstr "User"
+
+#: app/templates/user.html:13
+msgid "Visto pela última vez"
+msgstr "Last seen"
+
+#: app/templates/user.html:14
+msgid "seguidores"
+msgstr "followers"
+
+#: app/templates/user.html:14
+msgid "seguindo"
+msgstr "following"
+
+#: app/templates/user.html:16
+msgid "Edite seu perfil de usuário aqui!"
+msgstr "Edit your profile"
+
+#: app/templates/user.html:18
+msgid "Seguir"
+msgstr "Follow"
+
+#: app/templates/user.html:20
+msgid "Deixar de seguir"
+msgstr "Unfollow"
+
+#: app/templates/auth/login.html:5
+msgid "Entre na Plataforma: Dados Livres"
+msgstr "Enter the platform: Free Data"
+
+#: app/templates/auth/login.html:12
+msgid "Novo usuário?"
+msgstr "New user?"
+
+#: app/templates/auth/login.html:12
+msgid "Clique aqui para se registrar!"
+msgstr "Click here to register"
+
+#: app/templates/auth/login.html:13
+msgid "Esqueceu sua senha?"
+msgstr "Forgot your password"
+
+#: app/templates/auth/login.html:14
+msgid "Clique aqui para renomeiar sua senha!"
+msgstr "Click here to rename your password!"
+
+#: app/templates/auth/register.html:5
+msgid "Registre-se"
+msgstr "Register"
+
+#: app/templates/auth/reset_password.html:5
+msgid "Crie sua nova senha"
+msgstr "Create your new password"
+
+#: app/templates/auth/reset_password_request.html:5
+msgid "Renomeie sua senha"
+msgstr "Rename your password"
+
+#: app/templates/errors/404.html:4
+msgid "Página não encontrada"
+msgstr "Not Found"
+
+#: app/templates/errors/404.html:5 app/templates/errors/500.html:6
+msgid "Voltar"
+msgstr "Back"
+
+#: app/templates/errors/500.html:4
+msgid "Ocorreu um erro inesperado"
+msgstr "An unexpected error has occurred"
+
+#: app/templates/errors/500.html:5
+msgid "O administrador foi notificado. Descupe pela incoveniência"
+msgstr "The administrator has been notified. Sorry for the inconvenience!"
+
