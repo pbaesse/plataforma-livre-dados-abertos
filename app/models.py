@@ -23,7 +23,6 @@ class User(UserMixin, db.Model):
 	password_hash = db.Column(db.String(150))
 	about_me = db.Column(db.String(300))
 	nickname = db.Column(db.String(150))
-	typeUser = db.Column(db.String(200))
 	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 	followed = db.relationship(
 		'User', secondary=followers,
@@ -82,22 +81,23 @@ def load_user(id):
 	return User.query.get(int(id))
 
 
-class Source(db.Model):
-	__tablename__ = "sources"
+class Post(db.Model):
+    __tablename__ = "posts"
+    __searchable__ = ['body']
 
-	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(200), index=True, unique=True)
-	sphere = db.Column(db.String(200), index=True)
-	description = db.Column(db.String(800), index=True)
-	officialLink = db.Column(db.String(300), index=True)
-	datasetLink = db.Column(db.String(300), index=True)
-	timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), index=True, unique=True)
+    tag = db.Column(db.String(200), index=True, unique=True)
+    sphere = db.Column(db.String(200), index=True)
+    description = db.Column(db.String(800), index=True)
+    officialLink = db.Column(db.String(300), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-	user = db.relationship('User', backref=db.backref('sources', lazy=True))
+    user = db.relationship('User', backref=db.backref('posts', lazy=True))
 
-	def __repr__(self):
-		return '<Source {}>'.format(self.title)
+    def __repr__(self):
+    	return '<Post {}>'.format(self.title)
 
 
 class Software(db.Model):
