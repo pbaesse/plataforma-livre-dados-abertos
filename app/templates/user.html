@@ -11,19 +11,18 @@
                   {% if user.nickname %}<p>{{ _('Apelido') }}: {{ user.nickname }}</p>{% endif %}
   	              {% if user.about_me %}<p>{{ _('Descrição') }}: {{ user.about_me }}</p>{% endif %}
                   {% if user.last_seen %}<p>{{ _('Visto pela última vez') }}: {{ moment(user.last_seen).format('LLL') }}</p>
-                  <p>{{ user.followers.count() }} followers, {{ user.followed.count() }} following.</p>
+                  <p>{{ user.followers.count() }} {{ _('seguidores') }}, {{ user.followed.count() }} {{ _('seguindo') }}.</p>
                     {% if user == current_user %}
                       <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil de usuário aqui!') }}</a></p>
                     {% elif not current_user.is_following(user) %}
-                      <p><a href="{{ url_for('follow', username=user.username) }}">Seguir</a></p>
+                      <p><a href="{{ url_for('follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
                     {% else %}
-                      <p><a href="{{ url_for('unfollow', username=user.username) }}">Deixar de seguir</a></p>
+                      <p><a href="{{ url_for('unfollow', username=user.username) }}">{{ _('Deixar de seguir') }}</a></p>
                     {% endif %}
                   {% endif %}
                 </td>
             </tr>
           </table>
-          <hr>
         {% for post in posts %}
           {% include '_post.html' %}
         {% endfor %}
