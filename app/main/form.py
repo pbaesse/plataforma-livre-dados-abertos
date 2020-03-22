@@ -34,6 +34,7 @@ class PostForm(FlaskForm):
 
 class SoftwareForm(FlaskForm):
 	title = StringField(_l('Título'), validators=[DataRequired()])
+	tag = StringField(_l('Tag'), validators=[DataRequired()])
 	license = StringField(_l('Licença'), validators=[DataRequired()])
 	owner = StringField(_l('Proprietário'), validators=[DataRequired()])
 	activeDevelopment = StringField(_l('Desenvolvedor Ativo'), validators=[DataRequired()])
