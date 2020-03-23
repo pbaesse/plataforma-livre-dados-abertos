@@ -30,8 +30,8 @@
               {% endfor %}
             </p>
             <p>
-              {{ form.officialLink.label }} <br>
-              {{ form.officialLink(cols=32, rows=4) }}<br>
+              {{ form.officialLink.label }}<br>
+              {{ form.officialLink(cols=32, rows=4, placeholder="https://wwww.exemplo.com/") }}<br>
               {% for error in form.officialLink.errors %}
               <span style="color: red;">[{{ error }}]</span>
               {% endfor %}
