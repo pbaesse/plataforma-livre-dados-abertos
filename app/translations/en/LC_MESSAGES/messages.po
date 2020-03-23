@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-22 01:57-0300\n"
+"POT-Creation-Date: 2020-03-22 22:32-0300\n"
 "PO-Revision-Date: 2019-11-19 10:59-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -27,7 +27,7 @@ msgstr "Please log in to access this page."
 msgid "[Dados Livres] Redefina sua senha"
 msgstr "[Free Data] Reset your password"
 
-#: app/auth/forms.py:9 app/auth/forms.py:16 app/main/form.py:10
+#: app/auth/forms.py:9 app/auth/forms.py:16 app/main/form.py:11
 msgid "Nome"
 msgstr "Name"
 
@@ -91,61 +91,69 @@ msgstr "Reset Password"
 msgid "Sua senha foi alterada"
 msgstr "Your password has been reset."
 
-#: app/main/form.py:11 app/templates/user.html:11
+#: app/main/form.py:12 app/templates/user.html:11
 msgid "Apelido"
 msgstr "Nickname"
 
-#: app/main/form.py:12
+#: app/main/form.py:13
 msgid "Sobre mim"
 msgstr "About me"
 
-#: app/main/form.py:13 app/main/form.py:32 app/main/form.py:44
+#: app/main/form.py:14 app/main/form.py:35 app/main/form.py:47
 msgid "Enviar"
 msgstr "Submit"
 
-#: app/main/form.py:23
+#: app/main/form.py:24
 msgid "Por favor digite um nome diferente."
 msgstr "please enter a different name"
 
-#: app/main/form.py:27 app/main/form.py:36
+#: app/main/form.py:28
+msgid "Título:"
+msgstr ""
+
+#: app/main/form.py:29
+msgid "Palavra-Chave:"
+msgstr ""
+
+#: app/main/form.py:33
+msgid "Link Oficial:"
+msgstr "Link Oficial:"
+
+#: app/main/form.py:34
+msgid "Descrição:"
+msgstr ""
+
+#: app/main/form.py:39
 msgid "Título"
 msgstr "Title"
 
-#: app/main/form.py:28 app/main/form.py:37
+#: app/main/form.py:40
 msgid "Tag"
 msgstr "Tag"
 
-#: app/main/form.py:29
-msgid "Esfera"
-msgstr "Sphere"
-
-#: app/main/form.py:30
-msgid "Link Oficial"
-msgstr "Official Link"
-
-#: app/main/form.py:31 app/main/form.py:43 app/templates/user.html:12
-msgid "Descrição"
-msgstr "Description"
-
-#: app/main/form.py:38
+#: app/main/form.py:41
 msgid "Licença"
 msgstr "License"
 
-#: app/main/form.py:39
+#: app/main/form.py:42
 msgid "Proprietário"
 msgstr "Owner"
 
-#: app/main/form.py:40
+#: app/main/form.py:43
 msgid "Desenvolvedor Ativo"
 msgstr "Active Development"
 
-#: app/main/form.py:41
+#: app/main/form.py:44
 msgid "Link para Download"
 msgstr "Download Link "
 
-#: app/main/form.py:42
+#: app/main/form.py:45
 msgid "Data de Criação"
 msgstr "Date Creation"
+
+#: app/main/form.py:46 app/templates/user.html:12
+msgid "Descrição"
+msgstr "Description"
 
 #: app/main/routes.py:28 app/main/routes.py:46
 msgid "Your post is now live!"
@@ -226,6 +234,10 @@ msgstr "Register a data source"
 #: app/templates/base.html:23
 msgid "Cadastre um software de dados"
 msgstr "Register a data software"
+
+#: app/templates/base.html:29
+msgid "Perfil"
+msgstr ""
 
 #: app/templates/base.html:30
 msgid "Sair"
@@ -327,4 +339,10 @@ msgstr "An unexpected error has occurred"
 #: app/templates/errors/500.html:5
 msgid "O administrador foi notificado. Descupe pela incoveniência"
 msgstr "The administrator has been notified. Sorry for the inconvenience!"
+
+#~ msgid "Esfera"
+#~ msgstr "Sphere"
+
+#~ msgid "Link Oficial"
+#~ msgstr "Official Link"
 
