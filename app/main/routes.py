@@ -101,10 +101,10 @@ def explore():
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
 # perfil da fonte
-@bp.route('/perfil_post', methods=['GET', 'POST'])
+@bp.route('/post_profile', methods=['GET', 'POST'])
 def perfil_post():
     fonte = {'title': 'Perfil da Fonte'}
-    return render_template('perfil_post.html', fonte=fonte)
+    return render_template('post_profile.html', fonte=fonte)
 
 # perfil do usuário com as suas fontes
 @bp.route('/user/<username>', methods=['GET', 'POST'])
@@ -173,7 +173,8 @@ def source():
 	form = PostForm()
 	if form.validate_on_submit():
 		sources = Post(title=form.title.data, description=form.description.data, \
-		tag=form.tag.data, sphere=form.sphere.data, officialLink=form.officialLink.data)
+		      tag=form.tag.data, categorie=form.categorie.data, sphere=form.sphere.data,
+              officialLink=form.officialLink.data)
 		db.session.add(sources)
 		db.session.commit()
 		flash(_('Parabéns, você acabou de registrar uma foonte de dados!'))
@@ -184,9 +185,11 @@ def source():
 def software():
 	form = SoftwareForm()
 	if form.validate_on_submit():
-		software = Software(title=form.title.data,description=form.description.data, \
-		downloadLink=form.downloadLink.data,activeDevelopment=form.activeDevelopment.data,
-						license=form.license.data, owner=form.owner.data, dateCreation=form.dateCreation.data)
+		software = Software(title=form.title.data, tag=form.tag.data, \
+            categorie=form.categorie.data, description=form.description.data,
+            downloadLink=form.downloadLink.data,
+            activeDevelopment=form.activeDevelopment.data, license=form.license.data,
+            owner=form.owner.data, dateCreation=form.dateCreation.data)
 		db.session.add(software)
 		db.session.commit()
 		flash(_('Parabéns, você acabou de registrar um software de dados!'))

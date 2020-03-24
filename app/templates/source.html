@@ -23,6 +23,13 @@
               {% endfor %}
             </p>
             <p>
+              {{ form.categorie.label }} <br>
+              {{ form.categorie(cols=32, rows=4) }}<br>
+              {% for error in form.categorie.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+              {% endfor %}
+            </p>
+            <p>
               {{ form.sphere.label }} <br>
               {{ form.sphere(cols=32, rows=4) }}<br>
               {% for error in form.sphere.errors %}

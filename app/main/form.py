@@ -36,23 +36,25 @@ class EditProfileForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-	title = StringField(_l('Título:'), validators=[DataRequired()])
-	tag = StringField(_l('Palavra-Chave:'), validators=[DataRequired()])
-	sphere = SelectField('Esfera:', choices=[('Municipal', 'Municipal'),
-		('Estadual', 'Estadual'), ('Federal', 'Federal'),
-		('Internacional','Internacional')], validators=[DataRequired()])
-	description = TextAreaField(_l('Descrição:'), validators=[DataRequired()])
-	officialLink = URLField(_l('Link Oficial:'), validators=[DataRequired(), url()])
-	submit = SubmitField(_l('Enviar'))
+    title = StringField(_l('Título:'), validators=[DataRequired()])
+    tag = StringField(_l('Palavra-Chave:'), validators=[DataRequired()])
+    sphere = SelectField('Esfera:', choices=[('Municipal', 'Municipal'),
+        ('Estadual', 'Estadual'), ('Federal', 'Federal'),
+        ('Internacional','Internacional')], validators=[DataRequired()])
+    categorie = StringField(_l('Categoria'), validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição:'), validators=[DataRequired()])
+    officialLink = URLField(_l('Link Oficial:'), validators=[DataRequired(), url()])
+    submit = SubmitField(_l('Enviar'))
 
 
 class SoftwareForm(FlaskForm):
-	title = StringField(_l('Título'), validators=[DataRequired()])
-	tag = StringField(_l('Palavra-Chave:'), validators=[DataRequired()])
-	license = StringField(_l('Licença:'), validators=[DataRequired()])
-	owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
-	activeDevelopment = StringField(_l('Desenvolvedor Ativo:'), validators=[DataRequired()])
-	downloadLink = URLField(_l('Link para Download:'), validators=[DataRequired()])
-	dateCreation = StringField(_l('Data de Criação:'), validators=[DataRequired()])
-	description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
-	submit = SubmitField(_l('Enviar'))
+    title = StringField(_l('Título'), validators=[DataRequired()])
+    tag = StringField(_l('Palavra-Chave:'), validators=[DataRequired()])
+    categorie = StringField(_l('Categoria'), validators=[DataRequired()])
+    license = StringField(_l('Licença:'), validators=[DataRequired()])
+    owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
+    activeDevelopment = StringField(_l('Desenvolvedor Ativo:'), validators=[DataRequired()])
+    downloadLink = URLField(_l('Link para Download:'), validators=[DataRequired()])
+    dateCreation = StringField(_l('Data de Criação:'), validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
+    submit = SubmitField(_l('Enviar'))
