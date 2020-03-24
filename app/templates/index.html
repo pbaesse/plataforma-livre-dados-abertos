@@ -22,7 +22,21 @@
 			<a href="">saúde</a>, <a href="">educação</a>,
 			<a href="">segurança pública</a>, <a href="">meio ambiente</a></p>
 			<br>
+
+			<h2>Lista de fontes cadastradas:</h2>
 			{% for post in posts %}
 				{% include '_post.html' %}<br>
-			{% endfor%}
+			{% endfor %}
+			<br>
+			<h2>Lista de softwares cadastrados:</h2>
+			{% for software in softwares %}
+				{% include '_software.html' %}<br>
+			{% endfor %}
+
+			{% if prev_url %}
+			<a href="{{ prev_url }}">Mais recentes</a>
+			{% endif %}
+			{% if next_url %}
+			<a href="{{ next_url }}">Mais antigas</a>
+			{% endif %}
 {% endblock %}
