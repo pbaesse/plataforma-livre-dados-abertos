@@ -1,7 +1,11 @@
+{% if post.language and post.language != g.locale %}
+    <br><br>
+    <a href="#">{{ _('Translate') }}</a>
+{% endif %}
 <table>
   <tr valign="top">
     <td>
-      <h3><a href=""> {{ post.title }}</a><br></h3>
+      <h3><a href="{{ url_for('main.perfil_post') }}"> {{ post.title }}</a><br></h3>
       {{ post.tag }}<br>
       {{ post.sphere }}<br>
       {{ post.description }}<br>
