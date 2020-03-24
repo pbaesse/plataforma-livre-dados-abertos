@@ -35,25 +35,32 @@ def before_request():
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
+    # posts - fontes
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, tag=form.tag.data, description=form.description.data)
+        language = guess_language(form.post.data)
+        if language == 'UNKNOWN' or len(language) > 5:
+            language = ''
+        post = Post(title=form.title.data, tag=form.tag.data,
+            description=form.description.data, language=language)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post is now live!'))
         return redirect(url_for('main.index'))
 
-    page = request.args.get('page', 1, type=int)
     #posts = current_user.followed_posts().all() # usuários em comum
+    #posts = Post.query.order_by(Post.timestamp.desc()).all
+
+    page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False) #postagem de todos usuários
-    next_url = url_for('index.html', page=posts.next_num) \
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=posts.next_num) \
         if posts.has_next else None
-    prev_url = url_for('index.html', page=posts.prev_num) \
+    prev_url = url_for('main.index', page=posts.prev_num) \
         if posts.has_prev else None
 
-    #software
-    formSoftware = SoftwareForm()
+    # softwares
+    form = SoftwareForm()
     if form.validate_on_submit():
         softwares = Software(title=form.title.data, tag=form.tag.data, license=form.license.data)
         db.session.add(softwares)
@@ -61,7 +68,43 @@ def index():
         flash(_('Your post is now live!'))
         return redirect(url_for('main.index'))
 
-    return render_template('index.html', title=(_('Página Principal')), form=form, formSoftware=formSoftware, posts=posts.items, next_url=next_url, prev_url=prev_url)
+    page = request.args.get('page', 1, type=int)
+    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
+        page, current_app.config['SOFTWARES_PER_PAGE'], False)
+    next_url = url_for('main.index', page=softwares.next_num) \
+        if softwares.has_next else None
+    prev_url = url_for('main.index', page=softwares.prev_num) \
+        if softwares.has_prev else None
+
+    return render_template('index.html', title=(_('Página Principal')), form=form,
+            next_url=next_url, prev_url=prev_url, posts=posts.items, softwares=softwares.items)
+
+@bp.route('/explore')
+def explore():
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('main.index', page=posts.prev_num) \
+        if posts.has_prev else None
+
+    page = request.args.get('page', 1, type=int)
+    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=softwares.next_num) \
+        if softwares.has_next else None
+    prev_url = url_for('main.index', page=softwares.prev_num) \
+        if softwares.has_prev else None
+
+    return render_template('explore.html', title='Explore', posts=posts.items,
+        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
+
+# perfil da fonte
+@bp.route('/perfil_post', methods=['GET', 'POST'])
+def perfil_post():
+    fonte = {'title': 'Perfil da Fonte'}
+    return render_template('perfil_post.html', fonte=fonte)
 
 # perfil do usuário com as suas fontes
 @bp.route('/user/<username>', methods=['GET', 'POST'])
