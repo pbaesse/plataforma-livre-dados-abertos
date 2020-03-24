@@ -103,6 +103,13 @@ class User(UserMixin, db.Model):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
+    def followed_softwares(self):
+        followed = Software.query.join(
+            followers, (followers.c.followed_id == Software.user_id)).filter(
+                followers.c.followed_id == self.id)
+        own = Software.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Software.timestamp.desc())
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -129,12 +136,13 @@ def load_user(id):
 
 class Post(SearchableMixin, db.Model):
     __tablename__ = "posts"
-    __searchable__ = ['title', 'tag', 'sphere', 'description', 'officialLink']
+    __searchable__ = ['title', 'tag', 'categorie','sphere', 'description', 'officialLink']
 
     language = db.Column(db.String(5))
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
-    tag = db.Column(db.String(200), index=True, unique=True)
+    tag = db.Column(db.String(200), index=True)
+    categorie = db.Column(db.String(200), index=True)
     sphere = db.Column(db.String(200), index=True)
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
@@ -149,9 +157,13 @@ class Post(SearchableMixin, db.Model):
 
 class Software(db.Model):
     __tablename__ = "softwares"
+    __searchable__ = ['title', 'tag', 'categorie','downloadLink',
+        'description', 'activeDevelopment', 'license', 'owner', 'dateCreation']
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
+    tag = db.Column(db.String(800), index=True)
+    categorie = db.Column(db.String(800), index=True)
     description = db.Column(db.String(800), index=True)
     downloadLink = db.Column(db.String(300), index=True)
     activeDevelopment = db.Column(db.String(200), index=True)
