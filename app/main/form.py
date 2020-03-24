@@ -53,6 +53,6 @@ class SoftwareForm(FlaskForm):
 	owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
 	activeDevelopment = StringField(_l('Desenvolvedor Ativo:'), validators=[DataRequired()])
 	downloadLink = URLField(_l('Link para Download:'), validators=[DataRequired()])
-	dateCreation = DateField(_l('Data de Criação:', format='%m/%d%y'), validators=[DataRequired()])
+	dateCreation = StringField(_l('Data de Criação:'), validators=[DataRequired()])
 	description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
 	submit = SubmitField(_l('Enviar'))
