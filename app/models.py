@@ -58,65 +58,68 @@ followers = db.Table('followers',
 
 
 class User(UserMixin, db.Model):
-	__tablename__ = "users"
+    __tablename__ = "users"
 
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(200), index=True, unique=True)
-	email = db.Column(db.String(200), index=True, unique=True)
-	password_hash = db.Column(db.String(150))
-	about_me = db.Column(db.String(300))
-	nickname = db.Column(db.String(150))
-	last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-	followed = db.relationship(
-		'User', secondary=followers,
-		primaryjoin=(followers.c.follower_id == id),
-		secondaryjoin=(followers.c.followed_id == id),
-		backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(200), index=True, unique=True)
+    email = db.Column(db.String(200), index=True, unique=True)
+    password_hash = db.Column(db.String(150))
+    about_me = db.Column(db.String(300))
+    nickname = db.Column(db.String(150))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    softwares = db.relationship('Software', backref='author', lazy='dynamic')
 
-	def __repr__(self):
-		return '<User {}>'.format(self.username)
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
-	def avatar(self, size):
-		digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-		return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
-	def follow(self, user):
-		if not self.is_following(user):
-			self.followed.append(user)
+    def follow(self, user):
+        if not self.is_following(user):
+        	self.followed.append(user)
 
-	def unfollow(self, user):
-		if self.is_following(user):
-			self.followed.remove(user)
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
 
-	def is_following(self, user):
-		return self.followed.filter(
-			followers.c.followed_id == user.id).count() > 0
+    def is_following(self, user):
+        return self.followed.filter(
+        	followers.c.followed_id == user.id).count() > 0
 
-	def followed_posts(self):
-		followed = Post.query.join(
-			followers, (followers.c.followed_id == Post.user_id)).filter(
-                followers.c.follower_id == self.id)
-		own = Post.query.filter_by(user_id=self.id)
-		return followed.union(own).order_by(Post.timestamp.desc())
+    def followed_posts(self):
+        followed = Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)).filter(
+                    followers.c.follower_id == self.id)
+        own = Post.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Post.timestamp.desc())
 
-	def set_password(self, password):
-		self.password_hash = generate_password_hash(password)
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-	def check_password(self, password):
-		return check_password_hash(self.password_hash, password)
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
-	def get_reset_password_token(self, expires_in=600):
-		return jwt.encode( {'reset_password': self.id, 'exp': time() + expires_in},
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode( {'reset_password': self.id, 'exp': time() + expires_in},
             app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
 
-	@staticmethod
-	def verify_reset_password_token(token):
-		try:
-			id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
-		except:
-			return
-		return User.query.get(id)
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+        except:
+            return
+        return User.query.get(id)
 
 
 @login.user_loader
@@ -126,8 +129,9 @@ def load_user(id):
 
 class Post(SearchableMixin, db.Model):
     __tablename__ = "posts"
-    __searchable__ = ['body']
+    __searchable__ = ['title', 'tag', 'sphere', 'description', 'officialLink']
 
+    language = db.Column(db.String(5))
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
     tag = db.Column(db.String(200), index=True, unique=True)
@@ -137,30 +141,31 @@ class Post(SearchableMixin, db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = db.relationship('User', backref=db.backref('posts', lazy=True))
+    #user = db.relationship('User', backref=db.backref('posts', lazy=True))
 
     def __repr__(self):
     	return '<Post {}>'.format(self.title)
 
 
 class Software(db.Model):
-	__tablename__ = "softwares"
+    __tablename__ = "softwares"
 
-	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(200), index=True, unique=True)
-	description = db.Column(db.String(800), index=True)
-	downloadLink = db.Column(db.String(300), index=True)
-	activeDevelopment = db.Column(db.String(200), index=True)
-	license = db.Column(db.String(200), index=True)
-	owner = db.Column(db.String(200), index=True)
-	dateCreation = db.Column(db.String(300), index=True)
-	dateRelease = db.Column(db.String(300), index=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), index=True, unique=True)
+    description = db.Column(db.String(800), index=True)
+    downloadLink = db.Column(db.String(300), index=True)
+    activeDevelopment = db.Column(db.String(200), index=True)
+    license = db.Column(db.String(200), index=True)
+    owner = db.Column(db.String(200), index=True)
+    dateCreation = db.Column(db.String(300), index=True)
+    dateRelease = db.Column(db.String(300), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-	user = db.relationship('User', backref=db.backref('softwares', lazy=True))
+	#user = db.relationship('User', backref=db.backref('softwares', lazy=True))
 
-	def __repr__(self):
-		return '<Software {}>'.format(self.title)
+    def __repr__(self):
+        return '<Software {}>'.format(self.title)
 
 
 class Tag(db.Model):
