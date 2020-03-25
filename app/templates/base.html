@@ -24,6 +24,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('auth.login') }}">{{ _('Entrar') }}</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">{{ _('Registre-se') }}</a></li>
                     {% else %}
                     <li><a href="{{ url_for('main.source') }}"> {{ _('Cadastre uma fonte de dados') }} </a></li>
                     <li><a href="{{ url_for('main.software') }}"> {{ _('Cadastre um software de dados') }} </a></li>
