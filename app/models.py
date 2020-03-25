@@ -52,13 +52,12 @@ db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
 
 
 followers = db.Table('followers',
-    db.Column('follower_id', db.Integer, db.ForeignKey('users.id')),
-    db.Column('followed_id', db.Integer, db.ForeignKey('users.id'))
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(200), index=True, unique=True)
@@ -135,7 +134,6 @@ def load_user(id):
 
 
 class Post(SearchableMixin, db.Model):
-    __tablename__ = "posts"
     __searchable__ = ['title', 'tag', 'categorie','sphere', 'description', 'officialLink']
 
     language = db.Column(db.String(5))
@@ -147,16 +145,20 @@ class Post(SearchableMixin, db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #user = db.relationship('User', backref=db.backref('posts', lazy=True))
 
     def __repr__(self):
     	return '<Post {}>'.format(self.title)
 
+    def avatar(self, size):
+        digest = md5(self.title.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
+
 
 class Software(db.Model):
-    __tablename__ = "softwares"
     __searchable__ = ['title', 'tag', 'categorie','downloadLink',
         'description', 'activeDevelopment', 'license', 'owner', 'dateCreation']
 
@@ -172,13 +174,17 @@ class Software(db.Model):
     dateCreation = db.Column(db.String(300), index=True)
     dateRelease = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	#user = db.relationship('User', backref=db.backref('softwares', lazy=True))
 
     def __repr__(self):
         return '<Software {}>'.format(self.title)
 
+    def avatar(self, size):
+        digest = md5(self.title.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
 
 class Tag(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

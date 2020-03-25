@@ -58,3 +58,9 @@ class SoftwareForm(FlaskForm):
     dateCreation = StringField(_l('Data de Criação:'), validators=[DataRequired()])
     description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
+
+
+class ComentarioForm(FlaskForm):
+    title = StringField(_l('Título'), validators=[DataRequired()])
+    body = StringField(_l('Comentário'), validators=[DataRequired()])
+    submit = SubmitField(_l('Enviar'))

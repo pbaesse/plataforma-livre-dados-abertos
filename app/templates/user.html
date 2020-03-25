@@ -14,16 +14,21 @@
                   {% if user == current_user %}
                     <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil aqui!') }}</a></p>
                   {% elif not current_user.is_following(user) %}
-                    <p><a href="{{ url_for('follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
+                    <p><a href="{{ url_for('main.follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
                   {% else %}
-                    <p><a href="{{ url_for('unfollow', username=user.username) }}">{{ _('Deixar de seguir') }}</a></p>
+                    <p><a href="{{ url_for('main.unfollow', username=user.username) }}">{{ _('Deixar de seguir') }}</a></p>
                   {% endif %}
               </td>
           </tr>
       </table>
 
+      <h2>Fontes:</h2>
       {% for post in posts %}
         {% include '_post.html' %}
+      {% endfor %}<br>
+      <h2>Softwares:</h2>
+      {% for software in softwares %}
+        {% include '_software.html' %}
       {% endfor %}
 
       {% if prev_url %}
