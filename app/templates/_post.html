@@ -6,7 +6,7 @@
   <tr valign="top">
     <td><img src="{{ post.avatar(36) }}"></td>
     <td>
-      <h3><a href="{{ url_for('main.post_profile', title=post.title) }}"> {{ post.title }}</a><br></h3>
+      <h3><a href="{{ url_for('main.edit_post') }}"> {{ post.title }}</a><br></h3>
       {{ post.tag }}<br>
       {{ post.categorie }}<br>
       {{ post.sphere }}<br>

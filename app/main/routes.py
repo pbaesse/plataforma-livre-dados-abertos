@@ -114,7 +114,7 @@ def explore():
 def post(title):
     post = Post.query.filter_by(title=title).first_or_404()
     page = request.args.get('page', 1, type=int)
-    
+
     posts = post.posts.order_by(Post.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('post_profile', title=post.title, page=posts.next_num) \
