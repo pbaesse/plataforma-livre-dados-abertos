@@ -26,8 +26,8 @@
                     <li><a href="{{ url_for('auth.login') }}">{{ _('Entrar') }}</a></li>
                     <li><a href="{{ url_for('auth.register') }}">{{ _('Registre-se') }}</a></li>
                     {% else %}
-                    <li><a href="{{ url_for('main.source') }}"> {{ _('Cadastre uma fonte de dados') }} </a></li>
-                    <li><a href="{{ url_for('main.software') }}"> {{ _('Cadastre um software de dados') }} </a></li>
+                    <li><a href="{{ url_for('main.register_source') }}"> {{ _('Cadastre uma fonte de dados') }} </a></li>
+                    <li><a href="{{ url_for('main.register_software') }}"> {{ _('Cadastre um software de dados') }} </a></li>
                     <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Perfil') }}</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
                     {% endif %}

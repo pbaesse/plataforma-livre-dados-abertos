@@ -60,7 +60,8 @@ class SoftwareForm(FlaskForm):
     submit = SubmitField(_l('Enviar'))
 
 
-class ComentarioForm(FlaskForm):
-    title = StringField(_l('Título'), validators=[DataRequired()])
-    body = StringField(_l('Comentário'), validators=[DataRequired()])
+class CommentForm(FlaskForm):
+    name = StringField(_l('Nome'), validators=[DataRequired()])
+    email = StringField(_l('E-mail'), validators=[DataRequired()])
+    comment = TextAreaField(_l('Comentário'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))

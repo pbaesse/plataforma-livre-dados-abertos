@@ -2,10 +2,36 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>{{ _('Cadastre seu software de dados!') }}</h1>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
+
+<table class="table table-hover">
+    <tr valign="top">
+        <td width="256px"><img src="{{ software.avatar(256) }}"></td>
+        <td>
+              <h1>{{ _('Software') }}: {{ software.title }}</h1>
+              {% if software.tag %}<p>{{ _('Palavras-chave') }}: {{ software.tag }}</p>{% endif %}
+              {% if software.categorie %}<p>{{ _('Categoria') }}: {{ software.categorie }}</p>{% endif %}
+              {% if software.downloadLink %}<p>{{ _('Link de download') }}: {{ software.downloadLink }}</p>{% endif %}
+              {% if software.description %}<p>{{ _('Descrição') }}: {{ software.description }}</p>{% endif %}
+              {% if software.activeDevelopment %}<p>{{ _('Desenvolvedor ativo') }}: {{ software.activeDevelopment }}</p>{% endif %}
+              {% if software.license %}<p>{{ _('Licensa') }}: {{ software.license }}</p>{% endif %}
+              {% if software.owner %}<p>{{ _('Proprietário') }}: {{ software.owner }}</p>{% endif %}
+              {% if software.dateCreation %}<p>{{ _('Data de criação') }}: {{ software.dateCreation }}</p>{% endif %}
+              {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
+                {{ software.author.username }} </a><br><br>
+              <p><a href="{{ url_for('main.edit_software') }}">{{ _('Edite sua fonte aqui!') }}</a></p>
+
+        </td>
+    </tr>
+</table>
+<br>
+<h2>Comentários</h2>
+<hr>
+<p>exibir comentário</p>
+<hr>
+<div class="row">
+    <div class="col-md-4">
+        {{ wtf.quick_form(form) }}
     </div>
+</div>
+
 {% endblock %}

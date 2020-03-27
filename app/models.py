@@ -186,6 +186,18 @@ class Software(db.Model):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), index=True)
+    email = db.Column(db.String(200), index=True)
+    comment = db.Column(db.String(600), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<Comment {}>'.format(self.name)
+
+
 class Tag(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	palavraChave = db.Column(db.String(200), index=True)
@@ -207,15 +219,6 @@ class Favorito(db.Model):
 
 	def __repr__(self):
 		return '<Favorito {}>'.format(self.gostei)
-
-
-class Comentario(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	data = db.Column(db.String(200), index=True)
-	texto = db.Column(db.String(500), index=True)
-
-	def __repr__(self):
-		return '<Comentario {}>'.format(self.data)
 
 
 class Denuncia(db.Model):
