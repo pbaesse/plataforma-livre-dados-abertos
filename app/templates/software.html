@@ -18,16 +18,20 @@
               {% if software.dateCreation %}<p>{{ _('Data de criação') }}: {{ software.dateCreation }}</p>{% endif %}
               {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
                 {{ software.author.username }} </a><br><br>
+              {% if not current_user.is_anonymous %}
               <p><a href="{{ url_for('main.edit_software') }}">{{ _('Edite sua fonte aqui!') }}</a></p>
-
+              {% endif %}
         </td>
     </tr>
 </table>
 <br>
-<h2>Comentários</h2>
+<h2>Comentários:</h2>
+
+{% for comment in comments %}
+    {% include '_comment.html' %}<br>
+{% endfor %}
 <hr>
-<p>exibir comentário</p>
-<hr>
+
 <div class="row">
     <div class="col-md-4">
         {{ wtf.quick_form(form) }}

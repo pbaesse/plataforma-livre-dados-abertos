@@ -43,7 +43,7 @@ def index():
         language = guess_language(form.post.data)
         if language == 'UNKNOWN' or len(language) > 5:
             language = ''
-        post = Post(title=form.post.data, tag=form.tag.data,
+        post = Post(title=form.title.data, tag=form.tag.data,
             description=form.description.data, author=current_user,
             language=language)
         db.session.add(post)
@@ -121,17 +121,24 @@ def post(title):
     prev_url = url_for('post', page=posts.prev_num) \
         if posts.has_prev else None
 
+    # Comentários
     form = CommentForm()
     if form.validate_on_submit():
-        comments = Comment(name=name.form.data, email=email.form.data,
-            comment=comment.form.data)
-        db.session.add(comments)
+        comment = Comment(name=form.name.data, email=form.email.data,
+            comment=form.comment.data)
+        db.session.add(comment)
         db.session.commit()
-        flash(_('Your post is now live!'))
-        return redirect(url_for('main.post'))
+
+    page = request.args.get('page', 1, type=int)
+    comments = Comment.query.order_by(Comment.timestamp.desc()).paginate(
+        page, current_app.config['COMMENTS_PER_PAGE'], False)
+    next_url = url_for('main.post', page=comments.next_num) \
+        if comments.has_next else None
+    prev_url = url_for('main.post', page=comments.prev_num) \
+        if comments.has_prev else None
 
     return render_template('post.html', post=post, form=form,
-        posts=posts.items, next_url=next_url, prev_url=prev_url)
+        posts=posts.items, comments=comments.items, next_url=next_url, prev_url=prev_url)
 
 # edite a fonte
 @bp.route('/edit_post', methods=['GET', 'POST'])
@@ -154,6 +161,7 @@ def edit_post():
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
+
     software = Software.query.filter_by(title=title).first_or_404()
     page = request.args.get('page', 1, type=int)
     softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
@@ -165,15 +173,22 @@ def software(title):
 
     form = CommentForm()
     if form.validate_on_submit():
-        comments = Comment(name=name.form.data, email=email.form.data,
+        comment = Comment(name=name.form.data, email=email.form.data,
             comment=comment.form.data)
-        db.session.add(comments)
+        db.session.add(comment)
         db.session.commit()
-        flash(_('Your post is now live!'))
-        return redirect(url_for('main.software'))
+
+    page = request.args.get('page', 1, type=int)
+    comments = Comment.query.order_by(Comment.timestamp.desc()).paginate(
+        page, current_app.config['COMMENTS_PER_PAGE'], False)
+    next_url = url_for('main.software', page=comments.next_num) \
+        if comments.has_next else None
+    prev_url = url_for('main.software', page=comments.prev_num) \
+        if comments.has_prev else None
 
     return render_template('software.html', software=software, form=form,
-        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
+        softwares=softwares.items, comments=comments.items, next_url=next_url,
+        prev_url=prev_url)
 
 # Edite o software
 @bp.route('/edit_software', methods=['GET', 'POST'])
