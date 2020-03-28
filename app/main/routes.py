@@ -14,7 +14,7 @@ from app.main import bp
 @bp.route('/search')
 def search():
     if not g.search_form.validate():
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.explore'))
     page = request.args.get('page', 1, type=int)
     posts, total = Post.search(g.search_form.q.data, page,
                                current_app.config['POSTS_PER_PAGE'])
@@ -116,16 +116,16 @@ def post(title):
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('post', page=posts.next_num) \
+    next_url = url_for('main.post', page=posts.next_num) \
         if posts.has_next else None
-    prev_url = url_for('post', page=posts.prev_num) \
+    prev_url = url_for('main.post', page=posts.prev_num) \
         if posts.has_prev else None
 
     # Comentários
     form = CommentForm()
     if form.validate_on_submit():
         comment = Comment(name=form.name.data, email=form.email.data,
-            comment=form.comment.data)
+            text=form.text.data)
         db.session.add(comment)
         db.session.commit()
 
@@ -158,6 +158,9 @@ def edit_post():
     return render_template('edit_post.html', title=(_('Editar Fontes')),
                            form=form)
 
+# deletar fonte
+
+
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
@@ -166,9 +169,9 @@ def software(title):
     page = request.args.get('page', 1, type=int)
     softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
         page, current_app.config['SOFTWARES_PER_PAGE'], False)
-    next_url = url_for('software', page=softwares.next_num) \
+    next_url = url_for('main.software', page=softwares.next_num) \
         if softwares.has_next else None
-    prev_url = url_for('software', page=softwares.prev_num) \
+    prev_url = url_for('main.software', page=softwares.prev_num) \
         if softwares.has_prev else None
 
     form = CommentForm()
@@ -206,7 +209,7 @@ def edit_software():
         dateCreation = form.dateCreation.data
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
-    return render_template('main.edit_software', title=(_('Editar Software')),
+    return render_template('edit_software.html', title=(_('Editar Software')),
         form=form)
 
 # perfil do usuário mostrando suas fontes e softwares
@@ -225,9 +228,9 @@ def user(username):
 
     softwares = user.softwares.order_by(Software.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('user', title=user.username, page=posts.next_num) \
+    next_url = url_for('main.user', title=user.username, page=posts.next_num) \
         if posts.has_next else None
-    prev_url = url_for('user', username=user.username, page=posts.prev_num) \
+    prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
         if posts.has_prev else None
 
     return render_template('user.html', user=user, posts=posts.items,
@@ -292,7 +295,7 @@ def register_source():
 		sources = Post(title=form.title.data, description=form.description.data, \
 		      tag=form.tag.data, categorie=form.categorie.data,
               sphere=form.sphere.data, officialLink=form.officialLink.data,
-              author=current_user)
+              author=current_user, body=post)
 		db.session.add(sources)
 		db.session.commit()
 		flash(_('Parabéns, você acabou de registrar uma foonte de dados!'))
@@ -309,7 +312,7 @@ def register_software():
             downloadLink=form.downloadLink.data,
             activeDevelopment=form.activeDevelopment.data,
             license=form.license.data, owner=form.owner.data,
-            dateCreation=form.dateCreation.data, author=current_user)
+            dateCreation=form.dateCreation.data, author=current_user, body=post)
 		db.session.add(software)
 		db.session.commit()
 		flash(_('Parabéns, você acabou de registrar um software de dados!'))

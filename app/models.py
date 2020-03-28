@@ -134,7 +134,7 @@ def load_user(id):
 
 
 class Post(SearchableMixin, db.Model):
-    __searchable__ = ['title', 'tag', 'categorie','sphere', 'description', 'officialLink']
+    __searchable__ = ['title']
 
     language = db.Column(db.String(5))
     id = db.Column(db.Integer, primary_key=True)
@@ -145,6 +145,7 @@ class Post(SearchableMixin, db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    comment = db.relationship('Comment', backref='body', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #user = db.relationship('User', backref=db.backref('post', lazy=True))
@@ -158,9 +159,8 @@ class Post(SearchableMixin, db.Model):
             digest, size)
 
 
-class Software(db.Model):
-    __searchable__ = ['title', 'tag', 'categorie','downloadLink',
-        'description', 'activeDevelopment', 'license', 'owner', 'dateCreation']
+class Software(SearchableMixin, db.Model):
+    __searchable__ = ['title']
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
@@ -191,8 +191,9 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), index=True)
     email = db.Column(db.String(200), index=True)
-    comment = db.Column(db.String(600), index=True)
+    text = db.Column(db.String(600), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
     def __repr__(self):
         return '<Comment {}>'.format(self.name)

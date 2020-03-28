@@ -8,7 +8,7 @@ from app.models import User, Post, Software
 
 
 class SearchForm(FlaskForm):
-    q = StringField(_l('Search'), validators=[DataRequired()])
+    q = StringField(_l('Buscar'), validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         if 'formdata' not in kwargs:
@@ -63,5 +63,5 @@ class SoftwareForm(FlaskForm):
 class CommentForm(FlaskForm):
     name = StringField(_l('Nome'), validators=[DataRequired()])
     email = StringField(_l('E-mail'), validators=[DataRequired()])
-    comment = TextAreaField(_l('Comentário'), validators=[DataRequired()])
+    text = TextAreaField(_l('Comentário'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
