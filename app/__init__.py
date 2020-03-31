@@ -16,8 +16,6 @@ from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
-#manager = Manager()
-#manager.add_command('db', MigrateCommand)
 login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = _l('Para acessar essa página entre como usuário')
