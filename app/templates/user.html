@@ -12,7 +12,8 @@
                   {% if user.last_seen %}<p>{{ _('Visto pela última vez') }}: {{ moment(user.last_seen).format('LLL') }}</p>{% endif %}
                   <p>{{ user.followers.count() }} {{ _('seguidores') }}, {{ user.followed.count() }} {{ _('seguindo') }}.</p>
                   {% if user == current_user %}
-                    <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil aqui!') }}</a></p>
+                    <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil') }}</a> |
+                     <a href="{{ url_for('main.deletar_user', id=user.id) }}">{{ _('Excluia seu perfil') }}</a></p>
                   {% elif not current_user.is_following(user) %}
                     <p><a href="{{ url_for('main.follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
                   {% else %}

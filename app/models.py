@@ -133,6 +133,11 @@ def load_user(id):
 	return User.query.get(int(id))
 
 
+favorites_post = db.Table('favorites_post',
+    db.Column('favorite_id', db.Integer, db.ForeignKey('post.id'))
+)
+
+
 class Post(SearchableMixin, db.Model):
     __searchable__ = ['title']
 
@@ -145,7 +150,7 @@ class Post(SearchableMixin, db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    comment = db.relationship('Comment', backref='body', lazy='dynamic')
+    comment = db.relationship('Comment', backref='comments', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #user = db.relationship('User', backref=db.backref('post', lazy=True))
@@ -157,6 +162,30 @@ class Post(SearchableMixin, db.Model):
         digest = md5(self.title.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
+
+    def favorite(self, post):
+        if not self.is_favorite(post):
+        	self.favored.append(post)
+
+    def unfavorite(self, post):
+        if self.is_favorite(post):
+            self.favored.remove(post)
+
+    def is_favorite(self, post):
+        return self.favored.filter(
+        	favorites_post.c.favorite_id == post.id).count() > 0
+
+    def favorite_posts(self):
+        favored = Post.query.join(
+            favorites, (favorites.c.favorite_id == Post.user_id)).filter(
+                    favorites.c.favorite_id == self.id)
+        own = Post.query.filter_by(user_id=self.id)
+        return favored.union(own).order_by(Post.timestamp.desc())
+
+
+favorites_software = db.Table('favorites_software',
+    db.Column('favorite_id', db.Integer, db.ForeignKey('software.id'))
+)
 
 
 class Software(SearchableMixin, db.Model):
@@ -212,14 +241,6 @@ class Categoria(db.Model):
 
 	def __repr__(self):
 		return '<Categoria {}>'.format(self.id)
-
-
-class Favorito(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	gostei = db.Column(db.String(200), index=True)
-
-	def __repr__(self):
-		return '<Favorito {}>'.format(self.gostei)
 
 
 class Denuncia(db.Model):

@@ -19,8 +19,8 @@
               {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
                 {{ software.author.username }} </a><br><br>
               {% if not current_user.is_anonymous %}
-              <p><a href="{{ url_for('main.edit_software') }}">{{ _('Edite sua fonte aqui!') }}</a></p>
-              <p><a href="">{{ _('Deletar fonte') }}</a></p>
+              <p><a href="{{ url_for('main.edit_software', id=software.id) }}">{{ _('Editar software') }}</a>
+              | <a href="{{ url_for('main.deletar_software', id=software.id) }}">{{ _('Excluir software') }}</a></p>
               {% endif %}
         </td>
     </tr>

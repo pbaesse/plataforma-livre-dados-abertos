@@ -140,26 +140,44 @@ def post(title):
     return render_template('post.html', post=post, form=form,
         posts=posts.items, comments=comments.items, next_url=next_url, prev_url=prev_url)
 
-# edite a fonte
-@bp.route('/edit_post', methods=['GET', 'POST'])
+# editar a fonte
+@bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_post():
+def edit_post(id):
+    post = Post.query.get_or_404(id)
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.tag = form.tag.data
-        post.sphere = form.sphere.data
-        post.categorie = form.categorie.data
         post.description = form.description.data
+        post.tag = form.tag.data
+        post.categorie = form.categorie.data
+        post.sphere = form.sphere.data
         post.officialLink = form.officialLink.data
+        db.session.add(post)
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
-        return redirect(url_for('main.edit_post'))
-    return render_template('edit_post.html', title=(_('Editar Fontes')),
-                           form=form)
+        return redirect(url_for('main.index'))
+
+    form.title.data = post.title
+    form.description.data = post.description
+    form.tag.data = post.tag
+    form.categorie.data = post.categorie
+    form.sphere.data = post.sphere
+    form.officialLink.data = post.officialLink
+
+    return render_template('edit_post.html', title=(_('Editar Fonte')),
+                           form=form, post=post)
 
 # deletar fonte
+@bp.route("/deletar_post/<int:id>")
+def deletar_post(id):
+    post = Post.query.filter_by(id=id).first()
 
+    db.session.delete(post)
+    db.session.commit()
+    flash(_('A fonte foi excluída!'))
+
+    return redirect(url_for("main.index"))
 
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
@@ -193,24 +211,49 @@ def software(title):
         softwares=softwares.items, comments=comments.items, next_url=next_url,
         prev_url=prev_url)
 
-# Edite o software
-@bp.route('/edit_software', methods=['GET', 'POST'])
-def edit_software():
+# Editar software
+@bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
+def edit_software(id):
+    software = Software.query.get_or_404(id)
     form = SoftwareForm()
     if form.validate_on_submit():
-        title = form.title.data
-        tag = form.tag.data
-        categorie = form.categorie.data
-        description = form.description.data
-        downloadLink = form.downloadLink.data
-        activeDevelopment = form.activeDevelopment.data
-        license = form.license.data
-        owner = form.owner.data
-        dateCreation = form.dateCreation.data
+        software.title = form.title.data
+        software.description = form.description.data
+        software.tag = form.tag.data
+        software.categorie = form.categorie.data
+        software.downloadLink = form.downloadLink.data
+        software.activeDevelopment = form.activeDevelopment.data
+        software.license = form.license.data
+        software.owner = form.owner.data
+        software.dateCreation = form.dateCreation.data
+        db.session.add(software)
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
+        return redirect(url_for('main.index'))
+
+    form.title.data = software.title
+    form.description.data = software.description
+    form.tag.data = software.tag
+    form.categorie.data = software.categorie
+    form.downloadLink.data = software.downloadLink
+    form.activeDevelopment.data = software.activeDevelopment
+    form.license.data = software.license
+    form.owner.data = software.owner
+    form.dateCreation.data = software.dateCreation
+
     return render_template('edit_software.html', title=(_('Editar Software')),
-        form=form)
+        form=form, software=software)
+
+# deletar software
+@bp.route("/deletar_software/<int:id>")
+def deletar_software(id):
+    software = Software.query.filter_by(id=id).first()
+
+    db.session.delete(software)
+    db.session.commit()
+    flash(_('O software foi excluído!'))
+
+    return redirect(url_for("main.index"))
 
 # perfil do usuário mostrando suas fontes e softwares
 @bp.route('/user/<username>', methods=['GET', 'POST'])
@@ -254,6 +297,17 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title=(_('Editar Perfil')),
                            form=form)
+
+# Deletar usuário
+@bp.route("/deletar_user/<int:id>")
+def deletar_user(id):
+    user = User.query.filter_by(id=id).first()
+
+    db.session.delete(user)
+    db.session.commit()
+    flash(_('O Usuário foi excluído!'))
+
+    return redirect(url_for("main.index"))
 
 # seguir usuário
 @bp.route('/follow/<username>')
@@ -318,3 +372,29 @@ def register_software():
 		flash(_('Parabéns, você acabou de registrar um software de dados!'))
 		return redirect(url_for('main.index'))
 	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
+
+# favoritar post
+@bp.route('/favorite/<title>')
+@login_required
+def favorite(title):
+    post = Post.query.filter_by(title=title).first()
+    if post is None:
+        flash(_('Fonte {} não encontrada.').format(title))
+        return redirect(url_for('main.index'))
+    db.session.add(post)
+    db.session.commit()
+    flash(_('Você favoritou {}!').format(title))
+    return redirect(url_for('main.post', title=title))
+
+# deixar de favoritar post
+@bp.route('/unfavorite/<title>')
+@login_required
+def unfavorite(title):
+    post = Post.query.filter_by(title=title).first()
+    if post is None:
+        flash(_('Fonte {} não encontrada.').format(title))
+        return redirect(url_for('main.index'))
+    db.session.add(post)
+    db.session.commit()
+    flash(_('Você parou de favoritar {}!').format(title))
+    return redirect(url_for('main.post', title=title))
