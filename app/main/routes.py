@@ -295,10 +295,10 @@ def register_source():
 		sources = Post(title=form.title.data, description=form.description.data, \
 		      tag=form.tag.data, categorie=form.categorie.data,
               sphere=form.sphere.data, officialLink=form.officialLink.data,
-              author=current_user, body=post)
+              author=current_user)
 		db.session.add(sources)
 		db.session.commit()
-		flash(_('Parabéns, você acabou de registrar uma foonte de dados!'))
+		flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
 		return redirect(url_for('main.index'))
 	return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
 
@@ -312,7 +312,7 @@ def register_software():
             downloadLink=form.downloadLink.data,
             activeDevelopment=form.activeDevelopment.data,
             license=form.license.data, owner=form.owner.data,
-            dateCreation=form.dateCreation.data, author=current_user, body=post)
+            dateCreation=form.dateCreation.data, author=current_user)
 		db.session.add(software)
 		db.session.commit()
 		flash(_('Parabéns, você acabou de registrar um software de dados!'))
