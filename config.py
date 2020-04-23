@@ -20,5 +20,5 @@ class Config(object):
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     POSTS_PER_PAGE = 25
     SOFTWARES_PER_PAGE = 25
-    COMMENTS_PER_PAGE = 25
+    COMMENTS_PER_PAGE = 40
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')

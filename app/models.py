@@ -150,7 +150,7 @@ class Post(SearchableMixin, db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    comment = db.relationship('Comment', backref='comments', lazy='dynamic')
+    comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #user = db.relationship('User', backref=db.backref('post', lazy=True))

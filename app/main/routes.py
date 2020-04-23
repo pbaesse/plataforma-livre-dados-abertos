@@ -45,7 +45,7 @@ def index():
             language = ''
         post = Post(title=form.title.data, tag=form.tag.data,
             description=form.description.data, author=current_user,
-            language=language)
+            language=language, comments=comments)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post is now live!'))
@@ -121,7 +121,6 @@ def post(title):
     prev_url = url_for('main.post', page=posts.prev_num) \
         if posts.has_prev else None
 
-    # Comentários
     form = CommentForm()
     if form.validate_on_submit():
         comment = Comment(name=form.name.data, email=form.email.data,
@@ -129,16 +128,10 @@ def post(title):
         db.session.add(comment)
         db.session.commit()
 
-    page = request.args.get('page', 1, type=int)
-    comments = Comment.query.order_by(Comment.timestamp.desc()).paginate(
-        page, current_app.config['COMMENTS_PER_PAGE'], False)
-    next_url = url_for('main.post', page=comments.next_num) \
-        if comments.has_next else None
-    prev_url = url_for('main.post', page=comments.prev_num) \
-        if comments.has_prev else None
+    comments = post.comments.order_by(Comment.timestamp.desc()).all()
 
     return render_template('post.html', post=post, form=form,
-        posts=posts.items, comments=comments.items, next_url=next_url, prev_url=prev_url)
+        posts=posts.items, comments=comments, next_url=next_url, prev_url=prev_url)
 
 # editar a fonte
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
