@@ -9,3 +9,6 @@ Plataforma Livre de Dados Abertos Governamentais para cadastramento e visualiza√
 Projeto continuado no GitLab! Acesse o Link para ter acesso ao c√≥digo-fonte atualizado do projeto:
 
 [https://gitlab.com/pbaesse/dados-livres](https://gitlab.com/pbaesse/dados-livres)
+
+
+[logo-provisoria-dados-livres](logoprovisoria.png)
