@@ -11,4 +11,4 @@ Projeto continuado no GitLab! Acesse o Link para ter acesso ao código-fonte atu
 [https://gitlab.com/pbaesse/dados-livres](https://gitlab.com/pbaesse/dados-livres)
 
 
-[logo-provisoria-dados-livres](logoprovisoria.png)
+![logo-provisoria-dados-livres](logoprovisoria.png)
