@@ -12,7 +12,7 @@
               {% if post.categorie %}<p>{{ _('Categoria') }}: {{ post.categorie }}</p>{% endif %}
               {% if post.sphere %}<p>{{ _('Esfera') }}: {{ post.sphere }}</p>{% endif %}
               {% if post.description %}<p>{{ _('Descrição') }}: {{ post.description }}</p>{% endif %}
-              {% if post.officialLink %}<p>{{ _('Link Oficial') }}: {{ post.officialLink }}</p>{% endif %}
+              {% if post.officialLink %}<p>{{ _('Link Oficial') }}: <a href="{{ post.officialLink }}" target="_blank"> {{ post.officialLink }}</a></p>{% endif %}
               {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=post.author.username ) }}">
                 {{ post.author.username }} </a><br><br>
 
@@ -26,16 +26,21 @@
         </td>
     </tr>
 </table>
-<br>
-<h2>Semelhantes: </h2>
-<hr>
-<br><br>
-<h2>Comentários:</h2>
 
+<br>
+<h2>Softwares Relacionados com {{ post.title }}: </h2>
+<hr>
+<p>....</p>
+<br>
+<p>Relacione um software parecido com a fonte {{ post.title }}: </p>
+<p><a href="{{ url_for('main.register_source') }}">{{ _('Relacionar fonte com um software existente') }}</a> |
+<a href="{{ url_for('main.register_source') }}">{{ _('Cadastrar um novo software para relacionar com a fonte') }}</a></p>
+<br><br>
+
+<h2>Comentários:</h2>
 {% for comment in comments %}
     {% include '_comment.html' %}<br>
 {% endfor %}
-
 <hr>
 
 <div class="row">

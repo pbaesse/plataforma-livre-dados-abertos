@@ -25,10 +25,17 @@
         </td>
     </tr>
 </table>
+
 <br>
-<h2>Semelhantes: </h2>
+<h2>Fontes Relacionadas com {{ software.title }}: </h2>
 <hr>
+<p>....</p>
+<br>
+<p>Relacione uma fonte parecida com o software {{ software.title }}: </p>
+<p><a href="{{ url_for('main.register_software') }}">{{ _('Relacionar fonte com um software existente') }}</a> |
+<a href="{{ url_for('main.register_software') }}">{{ _('Cadastrar uma nova fonte para relacionar com o software') }}</a></p>
 <br><br>
+
 <h2>Comentários:</h2>
 
 {% for comment in comments %}
