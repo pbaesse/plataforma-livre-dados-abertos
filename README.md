@@ -4,7 +4,7 @@ Plataforma Livre de Dados Abertos Governamentais para cadastramento e visualiza√
 
 [https://dadoslivres.org](https://dadoslivres.org)
 
-# GitLab do Projeto:
+# GitLab do Projeto
 
 Projeto continuado no GitLab! Acesse o Link para ter acesso ao c√≥digo-fonte atualizado do projeto:
 
