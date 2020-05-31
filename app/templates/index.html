@@ -2,33 +2,37 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-			<h1>{{ _('Dados Livres') }}</h1>
-			<p>{{ _('Plataforma Livre de Dados Abertos Governamentais que permite o compartilhamento
-					e a colobaração na identificação de fontes de dados abertos e aplicações
-					que fazem uso desse tipo de informação.') }}</p>
-			<a href="https://github.com/pbaesse/plataforma-livre-dados-abertos" target="_blank">{{ _('(Colabore no GitHub)') }}</a>
-			<br><br>
-			{% if g.search_form %}
-      		<form class="navbar-form navbar-left" method="get" action="{{ url_for('main.search') }}">
-          		<div class="form-group">
-              		{{ g.search_form.q(size=125, class='form-control',
-                  		placeholder=g.search_form.q.label.text) }}
-              </div>
-					</form>
-			{% endif %}
-			<br><br>
-			<p>Principais categorias: <a href="">esfera federal</a>,
-			<a href="">esfera estadual</a>, <a href="">esfera municipal</a>,
-			<a href="">saúde</a>, <a href="">educação</a>,
-			<a href="">segurança pública</a>, <a href="">meio ambiente</a></p>
+			<h1>{{ _('Dados Livres!') }}</h1>
+			<hr>
+			<p>{{ _('Plataforma Livre de Dados Abertos Governamentais para
+				cadastramento e visualização de fontes de dados abertos governamentais
+				 e aplicações que fazem uso desse tipo de informação. Afim de promover
+				 o controle social e gerar transparência governamental para o público.') }}</p>
+
+			<br>
+			<h2>Principais categorias para fontes/aplicações</h2>
+			<hr>
+			<p>Esfera Federal</p>
+			<p>Esfera Estadual</p>
+			<p>Esfera Municipal</p>
+			<p>Saúde</p>
+			<p>Educação</p>
+			<p>Ciência e Tecnologia</p>
+			<p>Segurança Pública</p>
+			<p>Meio Ambiente</p>
+			<p>Cultura</p>
+			<p>Países</p>
+			<p>IBGE</p>
+			<p>Música</p>
+			<p>Cinema</p>
+			<p>Clima</p>
 			<br>
 
-			<h2>Lista de fontes cadastradas:</h2>
+			<h2>Lista de fontes e aplicações já cadastradas</h2>
 			{% for post in posts %}
 				{% include '_post.html' %}<br>
 			{% endfor %}
 			<br>
-			<h2>Lista de softwares cadastrados:</h2>
 			{% for software in softwares %}
 				{% include '_software.html' %}<br>
 			{% endfor %}

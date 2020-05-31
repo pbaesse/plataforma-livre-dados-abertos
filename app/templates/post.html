@@ -5,9 +5,8 @@
 
 <table class="table table-hover">
     <tr valign="top">
-        <td width="256px"><img src="{{ post.avatar(256) }}"></td>
         <td>
-              <h1>{{ _('Fonte') }}: {{ post.title }}</h1>
+              <h1>{{ post.title }}</h1>
               {% if post.tag %}<p>{{ _('Palavras-chave') }}: {{ post.tag }}</p>{% endif %}
               {% if post.categorie %}<p>{{ _('Categoria') }}: {{ post.categorie }}</p>{% endif %}
               {% if post.sphere %}<p>{{ _('Esfera') }}: {{ post.sphere }}</p>{% endif %}
@@ -20,9 +19,8 @@
               <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a> |
                 <a href="{{ url_for('main.deletar_post', id=post.id) }}">{{ _('Excluir fonte') }}</a></p>
               {% endif %}
-
-                <p><a href="{{ url_for('main.favorite', title=post.title) }}">{{ _('Favoritar') }}</a> |
-                  <a href="{{ url_for('main.unfavorite', title=post.title) }}">{{ _('Deixar de favoritar') }}</a></p>
+              <!--  <p><a href="{{ url_for('main.favorite', title=post.title) }}">{{ _('Favoritar') }}</a> |
+                  <a href="{{ url_for('main.unfavorite', title=post.title) }}">{{ _('Deixar de favoritar') }}</a></p>-->
         </td>
     </tr>
 </table>

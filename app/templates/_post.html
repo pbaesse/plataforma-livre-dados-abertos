@@ -4,7 +4,6 @@
 {% endif %}
 <table>
   <tr valign="top">
-    <td><img src="{{ post.avatar(36) }}"></td>
     <td>
       <h3><a href="{{ url_for('main.post', title=post.title) }}"> {{ post.title }}</a><br></h3>
       {{ post.tag }}<br>

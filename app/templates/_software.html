@@ -4,7 +4,6 @@
 {% endif %}
 <table>
   <tr valign="top">
-    <td><img src="{{ software.avatar(36) }}"></td>
     <td>
       <h3><a href="{{ url_for('main.software', title=software.title) }}"> {{ software.title }}</a><br></h3>
       {{ software.categorie }}<br>
@@ -17,5 +16,6 @@
       {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
         {{ software.author.username }} </a>
     </td>
+    <hr>
   </tr>
 </table>
