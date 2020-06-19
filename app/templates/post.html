@@ -26,14 +26,15 @@
 </table>
 
 <br>
-<h2>Softwares Relacionados com {{ post.title }}: </h2>
+<h2>Softwares relacionados com {{ post.title }}: </h2>
 <hr>
 <p>....</p>
 <br>
-<p>Relacione um software parecido com a fonte {{ post.title }}: </p>
-<p><a href="{{ url_for('main.register_source') }}">{{ _('Relacionar fonte com um software existente') }}</a> |
-<a href="{{ url_for('main.register_source') }}">{{ _('Cadastrar um novo software para relacionar com a fonte') }}</a></p>
-<br><br>
+
+<p>Achou mais algum software parecido com {{ post.title }}? <br>
+  Escolha um software para se relacionar clicando em:
+<a href="{{ url_for('main.similar_software') }}" target="_blank">{{ _('relacionar com software') }}</a>
+</p><br><br>
 
 <h2>Comentários:</h2>
 {% for comment in comments %}

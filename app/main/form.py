@@ -61,6 +61,14 @@ class SoftwareForm(FlaskForm):
     submit = SubmitField(_l('Enviar'))
 
 
+class SourceSimilarForm(FlaskForm):
+    title1 = BooleanField(_l('Título'))
+    title2 = BooleanField(_l('Título'))
+    title3 = BooleanField(_l('Título'))
+    title4 = BooleanField(_l('Título'))
+    submit = SubmitField(_l('Concluir selecionados'))
+
+
 class CommentForm(FlaskForm):
     name = StringField(_l('Nome'), validators=[DataRequired()])
     email = StringField(_l('E-mail'), validators=[DataRequired()])

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+<h1>Selecione um software para assemelhar:</h1>
+
+<p>software</p>
+<p>software</p>
+<p>software</p>
+
+<br><br>
+<p>Não encontrou nenhum software semelhante com a fonte escolhida?<br>
+  Experimente cadastrar um novo software na plataforma agora:
+  <a href="{{ url_for('main.register_software') }}">{{ _('Cadastrar software') }}</a>
+</p>
+
+{% endblock %}
