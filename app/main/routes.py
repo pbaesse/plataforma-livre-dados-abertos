@@ -33,6 +33,12 @@ def before_request():
         g.search_form = SearchForm()
     g.locale = str(get_locale())
 
+# fonte e software separados por categorias
+@bp.route('/category', methods=['GET', 'POST'])
+def category():
+
+    return render_template('category.html', title=_('Categoria'))
+
 # exibição de posts
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
