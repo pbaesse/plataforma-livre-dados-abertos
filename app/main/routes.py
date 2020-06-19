@@ -5,7 +5,8 @@ from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
-from app.main.form import EditProfileForm, PostForm, SoftwareForm, SearchForm, CommentForm
+from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
+    SearchForm, SourceSimilarForm, CommentForm
 from app.models import User, Post, Software, Comment
 #from app.translate import translate
 from app.main import bp
@@ -371,6 +372,19 @@ def register_software():
 		flash(_('Parabéns, você acabou de registrar um software de dados!'))
 		return redirect(url_for('main.index'))
 	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
+
+
+# similar fontes
+@bp.route('/similar_source', methods=['GET', 'POST'])
+def similar_source():
+    form = SourceSimilarForm()
+    return render_template('similar_source.html', title=(_('Fonte semelhante')), form=form)
+
+#similar softwares
+@bp.route('/similar_software', methods=['GET', 'POST'])
+def similar_software():
+
+    return render_template('similar_software.html', title=(_('Software semelhante')))
 
 # favoritar post
 @bp.route('/favorite/<title>')
