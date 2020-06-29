@@ -6,11 +6,9 @@
 			<p>{{ _('Plataforma Livre de Dados Abertos Governamentais para
 				cadastramento e visualização de fontes de dados abertos governamentais
 				 e aplicações que fazem uso desse tipo de informação. Afim de promover
-				 o controle social e gerar transparência governamental para o público.') }}</p>
-			<hr><br>
+				 o controle social e gerar transparência governamental para o público.') }}</p><hr><br>
 
 			<h2>Principais categorias para fontes/aplicações</h2><br>
-
 			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Federal</a></p>
 			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Estadual</a></p>
 			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Municipal</a></p>
@@ -39,30 +37,4 @@
 			{% if next_url %}
 			<a href="{{ next_url }}">Mais antigas</a>
 			{% endif %}
-
-			<br><hr><br>
-	    <div id="footer">
-	    	{% block footer %}
-	       &copy; Copyright 2019 by <a href="">Dados Livres</a>.
-	      {% endblock %}
-	    </div><br><br>
-
-			<style media="screen">
-				#footer {
-						text-align: center;
-				}
-				a#font-color {
-						color: #9d0208;
-						text-decoration: underline;
-				}
-				h2 {
-					color: #03071e;
-					text-align: center;
-				}
-				a#color-titulo{
-				  color: #9d0208;
-				  text-decoration: underline;
-				}
-			</style>
-
 {% endblock %}
