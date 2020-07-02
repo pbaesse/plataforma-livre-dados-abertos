@@ -25,29 +25,30 @@
     </tr>
 </table>
 
-<br>
-<h2>Fontes relacionadas com {{ software.title }}: </h2>
-<hr>
-<p>....</p>
-<br>
-
-<p>Achou mais alguma fonte parecida com {{ software.title }}? <br>
-  Escolha uma fonte para se relacionar clicando em:
-<a href="{{ url_for('main.similar_source') }}" target="_blank">{{ _('relacionar com fonte') }}</a>
-</p><br><br>
-
-<h2>Comentários:</h2>
-
-{% for comment in comments %}
-    {% include '_comment.html' %}<br>
-{% endfor %}
+<h2>Semelhantes com {{ software.title }} </h2>
 <hr>
 
+(...)<br><br><br>
+
+<p>Acha que existe mais alguma fonte ou software semelhante à {{ software.title }}? <br>
+  Relacione com mais opções semelhantes digitando o seu título no formulário abaixo:
 <div class="row">
     <div class="col-md-4">
         {{ wtf.quick_form(form) }}
     </div>
-</div>
+</div></p><br>
+
+<p>Caso ainda não tenha encontrado a opção semelhante que deseja relacionar com
+  {{ software.title }}, <br> experimente procura-lá clicando neste link:
+  <a href="{{ url_for('main.similar') }}" target="_blank">{{ _('Encontrar Semelhantes') }}</a></p>
+
+<p><a href="{{ url_for('main.register_source') }}"> {{ _('Cadastrar Fonte') }}</a> |
+  <a href="{{ url_for('main.register_software') }}"> {{ _('Cadastrar Software') }}</a></p>
+
+<br><br>
+
+<h2>Comentários</h2><hr>
+<p>Aguarde! em breve você poderá fazer comentários aqui :)</p>
 
 {% if prev_url %}
 <a href="{{ prev_url }}">Mais recentes</a>
@@ -55,5 +56,5 @@
 {% if next_url %}
 <a href="{{ next_url }}">Mais antigas</a>
 {% endif %}
-
+<br><br>
 {% endblock %}

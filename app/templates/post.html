@@ -2,7 +2,6 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-
 <table class="table table-hover">
     <tr valign="top">
         <td>
@@ -25,28 +24,27 @@
     </tr>
 </table>
 
-<br>
-<h2>Softwares relacionados com {{ post.title }}: </h2>
-<hr>
-<p>....</p>
-<br>
+<h2>Semelhantes com {{ post.title }} </h2>
 
-<p>Achou mais algum software parecido com {{ post.title }}? <br>
-  Escolha um software para se relacionar clicando em:
-<a href="{{ url_for('main.similar_software') }}" target="_blank">{{ _('relacionar com software') }}</a>
-</p><br><br>
+(...)<br><br><br>
 
-<h2>Comentários:</h2>
-{% for comment in comments %}
-    {% include '_comment.html' %}<br>
-{% endfor %}
-<hr>
+<p>Acha que existe mais alguma fonte ou software semelhante à {{ post.title }}? <br>
+  Relacione com mais opções semelhantes digitando o seu título no formulário abaixo:</p><br>
 
 <div class="row">
     <div class="col-md-4">
         {{ wtf.quick_form(form) }}
     </div>
-</div>
+</div><br>
+
+<p>Caso ainda não tenha encontrado a opção semelhante que deseja relacionar com
+  {{ post.title }}, <br> experimente procura-lá clicando neste link:
+  <a href="{{ url_for('main.similar') }}" target="_blank">{{ _('Encontrar Semelhantes') }}</a></p>
+<p><a href="{{ url_for('main.register_source') }}"> {{ _('Cadastrar Fonte') }}</a> |
+  <a href="{{ url_for('main.register_software') }}"> {{ _('Cadastrar Software') }}</a></p><br><br>
+
+<h2>Comentários</h2>
+<p>Aguarde! em breve você poderá fazer comentários aqui :)</p>
 
 {% if prev_url %}
 <a href="{{ prev_url }}">Mais recentes</a>

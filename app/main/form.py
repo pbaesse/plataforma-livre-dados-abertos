@@ -1,6 +1,6 @@
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, DateField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, SelectField, TextField, TextAreaField, DateField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo, Regexp
 from flask_babel import _, lazy_gettext as _l
 from app.models import User, Post, Software
@@ -61,12 +61,17 @@ class SoftwareForm(FlaskForm):
     submit = SubmitField(_l('Enviar'))
 
 
-class SourceSimilarForm(FlaskForm):
+class AutoComplementeForm(FlaskForm):
+    autocomplete =  StringField('Título:', id='autocomplete', validators=[DataRequired()])
+    submit = SubmitField(_l('Concluir'))
+
+
+class SimilarForm(FlaskForm):
     title1 = BooleanField(_l('Título'))
     title2 = BooleanField(_l('Título'))
     title3 = BooleanField(_l('Título'))
     title4 = BooleanField(_l('Título'))
-    submit = SubmitField(_l('Concluir selecionados'))
+    submit = SubmitField(_l('Concluir'))
 
 
 class CommentForm(FlaskForm):

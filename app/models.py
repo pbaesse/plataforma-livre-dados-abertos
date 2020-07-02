@@ -158,6 +158,9 @@ class Post(SearchableMixin, db.Model):
     def __repr__(self):
     	return '<Post {}>'.format(self.title)
 
+    def as_dict(self):
+        return {'title': self.title}
+
     def avatar(self, size):
         digest = md5(self.title.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(

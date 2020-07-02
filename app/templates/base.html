@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- Style CSS -->
 {% block styles %}{{super()}}
-  <link rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/mystyle.css')}}">
+  <link rel="icon" href="data:;base64,=">
 {% endblock %}
 
 {% block navbar %}
@@ -72,9 +73,9 @@
 
 <!-- JavaScript, jQuery -->
 {% block scripts %}
-  <script src="{{url_for('static', filename='myscripts.js')}}"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript">window.jQuery || document.write('
-    <script src="{{ url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}">\x3C/script>')</script>
   <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/myscripts.js') }}"></script>
 {{super()}}{% endblock %}

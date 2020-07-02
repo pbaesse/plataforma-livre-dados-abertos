@@ -1,12 +1,13 @@
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, \
-    jsonify, current_app
+    jsonify, current_app, Response
+import json
 from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
-    SearchForm, SourceSimilarForm, CommentForm
+    SearchForm, AutoComplementeForm, SimilarForm, CommentForm
 from app.models import User, Post, Software, Comment
 #from app.translate import translate
 from app.main import bp
@@ -116,6 +117,14 @@ def explore():
     return render_template('explore.html', title='Explore', posts=posts.items,
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
+# semelhantes
+@bp.route('/_autocomplete', methods=['GET'])
+def autocomplete():
+    res = Post.query.all()
+    list_titles = [r.as_dict() for r in res]
+    return jsonify(list_titles)
+
+
 # perfil da fonte
 @bp.route('/post/<title>', methods=['GET', 'POST'])
 def post(title):
@@ -128,17 +137,10 @@ def post(title):
     prev_url = url_for('main.post', page=posts.prev_num) \
         if posts.has_prev else None
 
-    form = CommentForm()
-    if form.validate_on_submit():
-        comment = Comment(name=form.name.data, email=form.email.data,
-            text=form.text.data)
-        db.session.add(comment)
-        db.session.commit()
-
-    comments = post.comments.order_by(Comment.timestamp.desc()).all()
+    form = AutoComplementeForm(request.form)
 
     return render_template('post.html', post=post, form=form,
-        posts=posts.items, comments=comments, next_url=next_url, prev_url=prev_url)
+        posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 # editar a fonte
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
@@ -192,7 +194,8 @@ def software(title):
     prev_url = url_for('main.software', page=softwares.prev_num) \
         if softwares.has_prev else None
 
-    form = CommentForm()
+    form = AutoComplementeForm(request.form)
+
     if form.validate_on_submit():
         comment = Comment(name=name.form.data, email=email.form.data,
             comment=comment.form.data)
@@ -374,17 +377,11 @@ def register_software():
 	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
 
 
-# similar fontes
-@bp.route('/similar_source', methods=['GET', 'POST'])
-def similar_source():
-    form = SourceSimilarForm()
-    return render_template('similar_source.html', title=(_('Fonte semelhante')), form=form)
-
-#similar softwares
-@bp.route('/similar_software', methods=['GET', 'POST'])
-def similar_software():
-
-    return render_template('similar_software.html', title=(_('Software semelhante')))
+# encontrar mais similares
+@bp.route('/similar', methods=['GET', 'POST'])
+def similar():
+    form = SimilarForm()
+    return render_template('similar.html', title=(_('Semelhante')), form=form)
 
 # favoritar post
 @bp.route('/favorite/<title>')
