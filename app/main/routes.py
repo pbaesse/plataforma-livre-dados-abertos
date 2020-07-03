@@ -120,9 +120,11 @@ def explore():
 # semelhantes
 @bp.route('/_autocomplete', methods=['GET'])
 def autocomplete():
-    res = Post.query.all()
-    list_titles = [r.as_dict() for r in res]
-    return jsonify(list_titles)
+    res1 = Software.query.all()
+    res2 = Post.query.all()
+    list_titles1 = [r.as_dict() for r in res1]
+    list_titles2 = [r.as_dict() for r in res2]
+    return jsonify(list_titles1 + list_titles2)
 
 
 # perfil da fonte
