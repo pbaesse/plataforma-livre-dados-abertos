@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- Style CSS -->
 {% block styles %}{{super()}}
+  <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.min.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/mystyle.css')}}">
   <link rel="icon" href="data:;base64,=">
 {% endblock %}
@@ -66,16 +67,17 @@
     {% block app_content %}{% endblock %}
   </div><br><hr><br>
 
-    <footer id="footer">
-      <div><p>&copy; Copyright 2019 by <a href="">Dados Livres</a></p></div>
-    </footer><br><br>
+    <footer class="footer">
+      <div class="container">
+        <p class="text-center text-muted copyright"> &copy;  Copyright 2019 by <a href="">Dados Livres &nbsp;&#8226;&nbsp;
+          Data &amp; Statistics Division</p>
+      </div>
+    </footer><br>
 {% endblock %}
 
 <!-- JavaScript, jQuery -->
-{% block scripts %}
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script type="text/javascript">window.jQuery || document.write('
-    <script src="{{ url_for('static', filename='js/jquery.js') }}">\x3C/script>')</script>
-  <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+{% block scripts %}{{super()}}
+  <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
   <script type="text/javascript" src="{{url_for('static', filename='js/myscripts.js') }}"></script>
-{{super()}}{% endblock %}
+  <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+{% endblock %}
