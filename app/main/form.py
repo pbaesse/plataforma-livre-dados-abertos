@@ -62,8 +62,9 @@ class SoftwareForm(FlaskForm):
 
 
 class AutoComplementeForm(FlaskForm):
-    autocomplete =  StringField('Título:', id='autocomplete', validators=[DataRequired()])
-    submit = SubmitField(_l('Concluir'))
+    nome =  StringField(_l('Semelhante:'), id='autocomplete', validators=[DataRequired(),
+        Length(max=40)], render_kw={"placeholder": "Digite o nome de um título.."})
+    submit = SubmitField(_l('Salvar'))
 
 
 class SimilarForm(FlaskForm):

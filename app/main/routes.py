@@ -126,7 +126,6 @@ def autocomplete():
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
 
-
 # perfil da fonte
 @bp.route('/post/<title>', methods=['GET', 'POST'])
 def post(title):
@@ -140,6 +139,12 @@ def post(title):
         if posts.has_prev else None
 
     form = AutoComplementeForm(request.form)
+    if form.validate_on_submit():
+        semelhante = Semelhante(nome=form.nome.data)
+        db.session.add(semelhante)
+        db.session.commit()
+        flash(_('Your post is now live!'))
+        return redirect(url_for('main.post'))
 
     return render_template('post.html', post=post, form=form,
         posts=posts.items, next_url=next_url, prev_url=prev_url)

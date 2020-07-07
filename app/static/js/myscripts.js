@@ -12,7 +12,7 @@ $(document).ready(function () {
   };
 
   loadTitles();
-  
+
   $('#autocomplete').autocomplete({
     source: titles
   });
