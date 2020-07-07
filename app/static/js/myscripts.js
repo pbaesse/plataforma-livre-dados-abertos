@@ -17,3 +17,24 @@ $(document).ready(function () {
     source: titles
   });
 });
+
+
+$('form').on('submit', function(e){
+		$.ajax({
+			data: {
+				name:$('#name').val()
+			},
+			type: 'POST',
+			url : '/process'
+		})
+		.done(function(data1){
+			if (data.error){
+				$('#result').text(data.error).show();
+			}
+			else {
+				$('#result').html(data.country).show()
+			}
+		})
+
+		e.preventDefault();
+	});

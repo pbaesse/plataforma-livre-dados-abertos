@@ -1,3 +1,5 @@
+#!/usr/bin/env python# -*- coding: utf-8 -*-
+import sys
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, g, \
     jsonify, current_app, Response
@@ -7,8 +9,8 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
-    SearchForm, AutoComplementeForm, SimilarForm, CommentForm
-from app.models import User, Post, Software, Comment
+    SearchForm, SimilarForm, BooleanSimilarForm, CommentForm
+from app.models import User, Post, Software, Similar, Comment
 #from app.translate import translate
 from app.main import bp
 
@@ -92,8 +94,7 @@ def index():
         if softwares.has_prev else None
 
     return render_template('index.html', title=(_('Página Principal')), form=form,
-            next_url=next_url, prev_url=prev_url,
-            posts=posts.items, softwares=softwares.items)
+     next_url=next_url, prev_url=prev_url, posts=posts.items, softwares=softwares.items)
 
 # Encontre por mais fontes/softwares
 @bp.route('/explore')
@@ -138,13 +139,14 @@ def post(title):
     prev_url = url_for('main.post', page=posts.prev_num) \
         if posts.has_prev else None
 
-    form = AutoComplementeForm(request.form)
+    form = SimilarForm(request.form)
     if form.validate_on_submit():
-        semelhante = Semelhante(nome=form.nome.data)
-        db.session.add(semelhante)
+        similar = Similar(name=form.name.data)
+        db.session.add(similar)
         db.session.commit()
         flash(_('Your post is now live!'))
-        return redirect(url_for('main.post'))
+
+    similares = Similar.query.order_by(Similar.timestamp.desc()).all
 
     return render_template('post.html', post=post, form=form,
         posts=posts.items, next_url=next_url, prev_url=prev_url)
@@ -201,7 +203,7 @@ def software(title):
     prev_url = url_for('main.software', page=softwares.prev_num) \
         if softwares.has_prev else None
 
-    form = AutoComplementeForm(request.form)
+    form = SimilarForm(request.form)
 
     if form.validate_on_submit():
         comment = Comment(name=name.form.data, email=email.form.data,
@@ -387,7 +389,7 @@ def register_software():
 # encontrar mais similares
 @bp.route('/similar', methods=['GET', 'POST'])
 def similar():
-    form = SimilarForm()
+    form = BooleanSimilarForm()
     return render_template('similar.html', title=(_('Semelhante')), form=form)
 
 # favoritar post

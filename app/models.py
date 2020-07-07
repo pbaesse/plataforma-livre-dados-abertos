@@ -138,6 +138,16 @@ favorites_post = db.Table('favorites_post',
 )
 
 
+class Similar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    def __repr__(self):
+        return '<Semelhante {}>'.format(self.name)
+
+
 class Post(SearchableMixin, db.Model):
     __searchable__ = ['title']
 
@@ -150,6 +160,7 @@ class Post(SearchableMixin, db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    similar = db.relationship('Similar', backref='similar', lazy='dynamic')
     comments = db.relationship('Comment', backref='comment', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 

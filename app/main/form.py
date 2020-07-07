@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextField, TextAreaField, DateField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo, Regexp
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, Post, Software
+from app.models import User, Post, Software, SearchableMixin, Similar
 
 
 class SearchForm(FlaskForm):
@@ -41,7 +43,7 @@ class PostForm(FlaskForm):
         ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
     categorie = StringField(_l('Categoria'), validators=[DataRequired()])
-    description = TextAreaField(_l('Descrição:'), validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição:'), validators=[DataRequired(), Length(min=0, max=200)])
     officialLink = StringField(_l('Link Oficial:'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida')])
@@ -54,20 +56,20 @@ class SoftwareForm(FlaskForm):
     categorie = StringField(_l('Categoria'), validators=[DataRequired()])
     license = StringField(_l('Licença:'), validators=[DataRequired()])
     owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
-    activeDevelopment = StringField(_l('Desenvolvedor Ativo:'), validators=[DataRequired()])
+    activeDevelopment = StringField(_l('Desenvolvedor Ativo:'), validators=[DataRequired(), Length(min=0, max=200)])
     downloadLink = StringField(_l('Link para Download:'), validators=[DataRequired()])
     dateCreation = StringField(_l('Data de Criação:'), validators=[DataRequired()])
     description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
 
 
-class AutoComplementeForm(FlaskForm):
-    nome =  StringField(_l('Semelhante:'), id='autocomplete', validators=[DataRequired(),
-        Length(max=40)], render_kw={"placeholder": "Digite o nome de um título.."})
+class SimilarForm(FlaskForm):
+    name =  StringField(_l('Semelhante:'), id='autocomplete', validators=[DataRequired(),
+        Length(min=0, max=100)], render_kw={"placeholder": "Digite o nome de um título.."})
     submit = SubmitField(_l('Salvar'))
 
 
-class SimilarForm(FlaskForm):
+class BooleanSimilarForm(FlaskForm):
     title1 = BooleanField(_l('Título'))
     title2 = BooleanField(_l('Título'))
     title3 = BooleanField(_l('Título'))
