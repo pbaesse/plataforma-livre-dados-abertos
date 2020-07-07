@@ -3,7 +3,6 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from flask import Flask, request, current_app
 import threading
-from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -15,12 +14,11 @@ from flask_bootstrap import Bootstrap
 from elasticsearch import Elasticsearch
 from config import Config
 
-admin = Admin()
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = _l('Para acessar essa página entre como usuário')
+login.login_message = _l('Para acessar essa pagina entre como usuario')
 mail = Mail()
 moment = Moment()
 babel = Babel()
@@ -31,7 +29,6 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     db.init_app(app)
-    admin.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
     mail.init_app(app)

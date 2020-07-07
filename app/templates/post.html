@@ -2,48 +2,48 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<table class="table table-hover">
-    <tr valign="top">
-        <td>
-              <h1>{{ post.title }}</h1>
-              {% if post.tag %}<p>{{ _('Palavras-chave') }}: {{ post.tag }}</p>{% endif %}
-              {% if post.categorie %}<p>{{ _('Categoria') }}: {{ post.categorie }}</p>{% endif %}
-              {% if post.sphere %}<p>{{ _('Esfera') }}: {{ post.sphere }}</p>{% endif %}
-              {% if post.description %}<p>{{ _('Descrição') }}: {{ post.description }}</p>{% endif %}
-              {% if post.officialLink %}<p>{{ _('Link Oficial') }}: <a href="{{ post.officialLink }}" target="_blank"> {{ post.officialLink }}</a></p>{% endif %}
-              {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=post.author.username ) }}">
-                {{ post.author.username }} </a><br><br>
+  <h2>{{ post.title }}</h2><br>
+  {% if post.officialLink %}<p><a href="{{ post.officialLink }}" target="_blank">
+    {{ post.officialLink }}</a></p>{% endif %}
+  {% if post.tag %}<p>{{ post.tag }}</p>{% endif %}
+  <p>{% if post.categorie %}{{ _('Categoria') }}:<a href="#">{{ post.categorie }}</a>{% endif %} |
+  {% if post.sphere %}{{ _('Esfera') }}: {{ post.sphere }}{% endif %}</p>
+  {% if post.description %}<p>{{ post.description }}</p>{% endif %}<br>
 
-              {% if not current_user.is_anonymous %}
-              <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a> |
-                <a href="{{ url_for('main.deletar_post', id=post.id) }}">{{ _('Excluir fonte') }}</a></p>
-              {% endif %}
-              <!--  <p><a href="{{ url_for('main.favorite', title=post.title) }}">{{ _('Favoritar') }}</a> |
-                  <a href="{{ url_for('main.unfavorite', title=post.title) }}">{{ _('Deixar de favoritar') }}</a></p>-->
-        </td>
-    </tr>
-</table>
+  {% if not current_user.is_anonymous %}
+    <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a> |
+      <a href="{{ url_for('main.deletar_post', id=post.id) }}">{{ _('Excluir fonte') }}</a></p>
+  {% endif %}
+  <!--  <p><a href="{{ url_for('main.favorite', title=post.title) }}">{{ _('Favoritar') }}</a> |
+    <a href="{{ url_for('main.unfavorite', title=post.title) }}">{{ _('Deixar de favoritar') }}</a></p>-->
 
-<h2>Você também pode se interessar em: </h2>
+<hr>
+<h4>{{ _('Cadastrado por') }}:
+<a href="{{ url_for('main.user', username=post.author.username ) }}">
+  {{ post.author.username }}</a></h4><hr><br>
 
-{% for post in posts %}
-  {% include '_semelhantes.html' %}
-{% endfor %}
+<h2>Você também pode se interessar em: </h2><br>
 
-<br><div class="row">
-    <div class="col-md-4">
-        {{ wtf.quick_form(form) }}
-    </div>
-</div>
+<h4>Fonte Semelhante</h4>
+<h4>Fonte Semelhante</h4>
+<h4>Fonte Semelhante</h4><br>
 
-<br><p>Caso ainda não tenha encontrado a opção semelhante que deseja relacionar com
-  {{ post.title }}, <br> experimente procura-lá clicando neste link:
-  <a href="{{ url_for('main.similar') }}" target="_blank">{{ _('Encontrar Semelhantes') }}</a></p>
-<p><a href="{{ url_for('main.register_source') }}"> {{ _('Cadastrar Fonte') }}</a> |
-  <a href="{{ url_for('main.register_software') }}"> {{ _('Cadastrar Software') }}</a></p><br><br>
+<p>Formulário para semelhantes:</p>
+<form class="form-inline">
+	{{ form.csrf_token }}
+	<div class="form-group">
+	    {{form.name(class="form-control")}}
+	  </div>
+	  <button type="submit" class="btn btn-info">Salvar</button>
+</form>
+
+<br><br><p>Experimente <a href="{{ url_for('main.register_source') }}">
+  {{ _('Cadastrar uma nova fonte de dados') }}</a> |
+  <a href="{{ url_for('main.register_software') }}">
+  {{ _('Cadastrar um novo software') }}</a></p><br><br>
 
 <h2>Comentários</h2>
-<p>Aguarde! em breve você deixar comentários aqui :)</p>
+<p>Aguarde! em breve você poderá deixar comentários aqui :)</p>
 
 {% if prev_url %}
 <a href="{{ prev_url }}">Mais recentes</a>

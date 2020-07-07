@@ -2,28 +2,30 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-			<h1>{{ _('Dados Livres') }}</h1><br>
-			<p>{{ _('Plataforma Livre de Dados Abertos Governamentais para
-				cadastramento e visualização de fontes de dados abertos governamentais
-				 e aplicações que fazem uso desse tipo de informação. Afim de promover
-				 o controle social e gerar transparência governamental para o público.') }}</p><hr><br>
+		<div class="text-center">
+			<h1>{{ _('Dados Livres') }}</h1>
+			<p>{{ _('Plataforma Dados Livres que permite o compartilhamento e a
+				colaboração na identificação de fontes de dados abertos e aplicações
+				que fazem uso desse tipo de informação, de modo a gerar controle social
+				e transparência pública para a sociedade civil.') }}</p><hr><br>
 
-			<h2>Principais categorias para fontes/aplicações</h2><br>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Federal</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Estadual</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Esfera Municipal</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Saúde</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Educação</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Tecnologia</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Segurança Pública</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Meio Ambiente</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Cultura</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Países</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">IBGE</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Cinema</a></p>
-			<p><a href="{{ url_for('main.category') }}" id="font-color">Clima</a></p><br>
+			<h2>{{ _('Principais categorias de aplicações e fontes') }}</h2><br>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Esfera Federal</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Esfera Estadual</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Esfera Municipal</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Saúde</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Educação</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Tecnologia</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Segurança Pública</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Meio Ambiente</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Cultura</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Países</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">IBGE</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Cinema</a></p>
+			<p id="category"><a href="{{ url_for('main.category') }}" id="font-color">Clima</a></p><br>
 
-			<h2>Lista de fontes e aplicações já cadastradas</h2>
+			<h2>{{ _('Aplicações e fontes já cadastradas recentemente') }}</h2></div>
+
 			{% for post in posts %}
 				{% include '_post.html' %}<br>
 			{% endfor %}<br>

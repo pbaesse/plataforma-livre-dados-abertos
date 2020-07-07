@@ -1,7 +1,17 @@
 @charset "UTF-8";
 
-footer {
+div#center {
   text-align: center;
+}
+
+p#category {
+  width: 300px;
+	height: 50px;
+}
+
+a#color-titulo{
+  color: #9d0208;
+  text-decoration: underline;
 }
 
 a#font-color {
@@ -9,11 +19,6 @@ a#font-color {
   text-decoration: underline;
 }
 
-h2 {
-  color: #03071e;
-}
-
-a#color-titulo{
-  color: #9d0208;
-  text-decoration: underline;
+footer {
+  text-align: center;
 }
