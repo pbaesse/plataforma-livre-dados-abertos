@@ -10,7 +10,8 @@ from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
     SearchForm, SimilarForm, BooleanSimilarForm, CommentForm
-from app.models import User, Post, Software, Similar, Comment
+from app.models import User, Post, Software, Similar, Comment, Tag, \
+    Categoria, Denuncia
 #from app.translate import translate
 from app.main import bp
 
@@ -55,7 +56,7 @@ def index():
             language = ''
         post = Post(title=form.title.data, tag=form.tag.data,
             description=form.description.data, author=current_user,
-            language=language, comments=comments)
+            user_id=user.id, language=language, comments=comments)
         db.session.add(post)
         db.session.commit()
         flash(_('Your post is now live!'))
@@ -141,15 +142,22 @@ def post(title):
 
     form = SimilarForm(request.form)
     if form.validate_on_submit():
-        similar = Similar(name=form.name.data)
+        similar = Similar(name=form.name.data, post_id=post.id, software_id=software.id)
         db.session.add(similar)
         db.session.commit()
         flash(_('Your post is now live!'))
-
-    similares = Similar.query.order_by(Similar.timestamp.desc()).all
+    similar = Similar.query.filter_by(post_id=post.id).all()
+    page = request.args.get('page', 1, type=int)
+    similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
+        page, current_app.config['SIMILARES_PER_PAGE'], False)
+    next_url = url_for('main.post', page=similares.next_num) \
+        if similares.has_next else None
+    prev_url = url_for('main.post', page=similares.prev_num) \
+        if similares.has_prev else None
 
     return render_template('post.html', post=post, form=form,
-        posts=posts.items, next_url=next_url, prev_url=prev_url)
+        similar=similar, similares=similares.items, posts=posts.items,
+        next_url=next_url, prev_url=prev_url)
 
 # editar a fonte
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
@@ -193,7 +201,6 @@ def deletar_post(id):
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
-
     software = Software.query.filter_by(title=title).first_or_404()
     page = request.args.get('page', 1, type=int)
     softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
@@ -204,24 +211,18 @@ def software(title):
         if softwares.has_prev else None
 
     form = SimilarForm(request.form)
-
-    if form.validate_on_submit():
-        comment = Comment(name=name.form.data, email=email.form.data,
-            comment=comment.form.data)
-        db.session.add(comment)
-        db.session.commit()
-
+    similar = Similar.query.filter_by(software_id=software.id).all()
     page = request.args.get('page', 1, type=int)
-    comments = Comment.query.order_by(Comment.timestamp.desc()).paginate(
-        page, current_app.config['COMMENTS_PER_PAGE'], False)
-    next_url = url_for('main.software', page=comments.next_num) \
-        if comments.has_next else None
-    prev_url = url_for('main.software', page=comments.prev_num) \
-        if comments.has_prev else None
+    similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
+        page, current_app.config['SIMILARES_PER_PAGE'], False)
+    next_url = url_for('main.post', page=similares.next_num) \
+        if similares.has_next else None
+    prev_url = url_for('main.post', page=similares.prev_num) \
+        if similares.has_prev else None
 
-    return render_template('software.html', software=software, form=form,
-        softwares=softwares.items, comments=comments.items, next_url=next_url,
-        prev_url=prev_url)
+    return render_template('software.html', software=software, similar=similar,
+        form=form, softwares=softwares.items, similares=similares.items,
+        next_url=next_url, prev_url=prev_url)
 
 # Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])

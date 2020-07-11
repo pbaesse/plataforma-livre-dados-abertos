@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextField, TextAreaField, DateField, PasswordField, BooleanField, SubmitField

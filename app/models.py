@@ -8,7 +8,6 @@ import jwt
 from app import db, login
 from app.search import add_to_index, remove_from_index, query_index
 
-
 class SearchableMixin(object):
     @classmethod
     def search(cls, expression, page, per_page):
@@ -117,12 +116,12 @@ class User(UserMixin, db.Model):
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode( {'reset_password': self.id, 'exp': time() + expires_in},
-            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+            current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
 
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
         except:
             return
         return User.query.get(id)
@@ -143,6 +142,7 @@ class Similar(db.Model):
     name = db.Column(db.String(200), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
         return '<Semelhante {}>'.format(self.name)
@@ -171,11 +171,6 @@ class Post(SearchableMixin, db.Model):
 
     def as_dict(self):
         return {'title': self.title}
-
-    def avatar(self, size):
-        digest = md5(self.title.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
 
     def favorite(self, post):
         if not self.is_favorite(post):
@@ -217,6 +212,7 @@ class Software(SearchableMixin, db.Model):
     dateCreation = db.Column(db.String(300), index=True)
     dateRelease = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    similar = db.relationship('Similar', backref='similar_software', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 	#user = db.relationship('User', backref=db.backref('softwares', lazy=True))

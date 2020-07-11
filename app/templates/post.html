@@ -2,31 +2,27 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-  <h2>{{ post.title }}</h2><br>
+  <h1>{{ post.title }}</h1><br>
   {% if post.officialLink %}<p><a href="{{ post.officialLink }}" target="_blank">
     {{ post.officialLink }}</a></p>{% endif %}
   {% if post.tag %}<p>{{ post.tag }}</p>{% endif %}
   <p>{% if post.categorie %}{{ _('Categoria') }}:<a href="#">{{ post.categorie }}</a>{% endif %} |
   {% if post.sphere %}{{ _('Esfera') }}: {{ post.sphere }}{% endif %}</p>
   {% if post.description %}<p>{{ post.description }}</p>{% endif %}<br>
-
   {% if not current_user.is_anonymous %}
-    <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a> |
-      <a href="{{ url_for('main.deletar_post', id=post.id) }}">{{ _('Excluir fonte') }}</a></p>
+    <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a></p>
   {% endif %}
   <!--  <p><a href="{{ url_for('main.favorite', title=post.title) }}">{{ _('Favoritar') }}</a> |
     <a href="{{ url_for('main.unfavorite', title=post.title) }}">{{ _('Deixar de favoritar') }}</a></p>-->
-
-<hr>
-<h4>{{ _('Cadastrado por') }}:
+{% if current_user.is_anonymous %}
+<hr><h4>{{ _('Cadastrado por') }}:
 <a href="{{ url_for('main.user', username=post.author.username ) }}">
   {{ post.author.username }}</a></h4><hr><br>
+{% endif %}
 
 <h2>Você também pode se interessar em: </h2><br>
 
-<h4>Fonte Semelhante</h4>
-<h4>Fonte Semelhante</h4>
-<h4>Fonte Semelhante</h4><br>
+{{ similar.name }}
 
 <p>Formulário para semelhantes:</p>
 <form class="form-inline">

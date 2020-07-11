@@ -9,6 +9,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    BOOTSTRAP_SERVE_LOCAL = True
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = int(os.environ.get('MAIL_PORT') or 25)
@@ -20,5 +21,6 @@ class Config(object):
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
     POSTS_PER_PAGE = 25
     SOFTWARES_PER_PAGE = 25
+    SIMILARES_PER_PAGE = 25
     COMMENTS_PER_PAGE = 40
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
