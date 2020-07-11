@@ -2,53 +2,46 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
+  <h1>{{ software.title }}</h1>
+  {% if software.tag %}<p>{{ _('Palavras-chave') }}: {{ software.tag }}</p>{% endif %}
+  {% if software.categorie %}<p>{{ _('Categoria') }}: {{ software.categorie }}</p>{% endif %}
+  {% if software.downloadLink %}<p><a href="{{ software.officialLink }}" target="_blank">
+    {{ software.downloadLink }}</a></p>{% endif %}
+  {% if software.description %}<p>{{ _('Descrição') }}: {{ software.description }}</p>{% endif %}
+  {% if software.activeDevelopment %}<p>{{ _('Desenvolvedor ativo') }}: {{ software.activeDevelopment }}</p>{% endif %}
+  {% if software.license %}<p>{{ _('Licensa') }}: {{ software.license }}</p>{% endif %}
+  {% if software.owner %}<p>{{ _('Proprietário') }}: {{ software.owner }}</p>{% endif %}
+  {% if software.dateCreation %}<p>{{ _('Data de criação') }}: {{ software.dateCreation }}</p>{% endif %}
+  {% if not current_user.is_anonymous %}
+  <p><a href="{{ url_for('main.edit_software', id=software.id) }}">{{ _('Editar software') }}</a></p>
+  {% endif %}
 
-<table class="table table-hover">
-    <tr valign="top">
-        <td>
-              <h1>{{ _('Software') }}: {{ software.title }}</h1>
-              {% if software.tag %}<p>{{ _('Palavras-chave') }}: {{ software.tag }}</p>{% endif %}
-              {% if software.categorie %}<p>{{ _('Categoria') }}: {{ software.categorie }}</p>{% endif %}
-              {% if software.downloadLink %}<p>{{ _('Link de download') }}: {{ software.downloadLink }}</p>{% endif %}
-              {% if software.description %}<p>{{ _('Descrição') }}: {{ software.description }}</p>{% endif %}
-              {% if software.activeDevelopment %}<p>{{ _('Desenvolvedor ativo') }}: {{ software.activeDevelopment }}</p>{% endif %}
-              {% if software.license %}<p>{{ _('Licensa') }}: {{ software.license }}</p>{% endif %}
-              {% if software.owner %}<p>{{ _('Proprietário') }}: {{ software.owner }}</p>{% endif %}
-              {% if software.dateCreation %}<p>{{ _('Data de criação') }}: {{ software.dateCreation }}</p>{% endif %}
-              {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
-                {{ software.author.username }} </a><br><br>
-              {% if not current_user.is_anonymous %}
-              <p><a href="{{ url_for('main.edit_software', id=software.id) }}">{{ _('Editar software') }}</a>
-              | <a href="{{ url_for('main.deletar_software', id=software.id) }}">{{ _('Excluir software') }}</a></p>
-              {% endif %}
-        </td>
-    </tr>
-</table>
+  {% if current_user.is_anonymous %}
+  <hr><h4>{{ _('Cadastrado por') }}:
+    <a href="{{ url_for('main.user', username=software.author.username ) }}">
+      {{ software.author.username }}</a></h4><hr><br>
+  {% endif %}
 
-<h2>Semelhantes com {{ software.title }} </h2>
-<hr>
+  <h2>Você também pode se interessar em: </h2><br>
 
-(...)<br><br><br>
+    {{ similar.name }}
 
-<p>Acha que existe mais alguma fonte ou software semelhante à {{ software.title }}? <br>
-  Relacione com mais opções semelhantes digitando o seu título no formulário abaixo:
-<div class="row">
-    <div class="col-md-4">
-        {{ wtf.quick_form(form) }}
-    </div>
-</div></p><br>
+  <p>Formulário para semelhantes:</p>
+  <form class="form-inline">
+  	{{ form.csrf_token }}
+  	<div class="form-group">
+  	    {{form.name(class="form-control")}}
+  	  </div>
+  	  <button type="submit" class="btn btn-info">Salvar</button>
+  </form>
 
-<p>Caso ainda não tenha encontrado a opção semelhante que deseja relacionar com
-  {{ software.title }}, <br> experimente procura-lá clicando neste link:
-  <a href="{{ url_for('main.similar') }}" target="_blank">{{ _('Encontrar Semelhantes') }}</a></p>
+  <br><br><p>Experimente <a href="{{ url_for('main.register_source') }}">
+    {{ _('Cadastrar uma nova fonte de dados') }}</a> |
+    <a href="{{ url_for('main.register_software') }}">
+    {{ _('Cadastrar um novo software') }}</a></p><br><br>
 
-<p><a href="{{ url_for('main.register_source') }}"> {{ _('Cadastrar Fonte') }}</a> |
-  <a href="{{ url_for('main.register_software') }}"> {{ _('Cadastrar Software') }}</a></p>
-
-<br><br>
-
-<h2>Comentários</h2><hr>
-<p>Aguarde! em breve você poderá fazer comentários aqui :)</p>
+<h2>Comentários</h2>
+<p>Aguarde! em breve você poderá deixar comentários aqui :)</p>
 
 {% if prev_url %}
 <a href="{{ prev_url }}">Mais recentes</a>

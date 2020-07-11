@@ -4,11 +4,6 @@ div#center {
   text-align: center;
 }
 
-p#category {
-  width: 300px;
-	height: 50px;
-}
-
 a#color-titulo{
   color: #9d0208;
   text-decoration: underline;
@@ -21,4 +16,21 @@ a#font-color {
 
 footer {
   text-align: center;
+}
+
+p#italic {
+  font-style: italic;
+}
+
+div img#imagem_user {
+    float: left;
+    border-radius: 6px;
+    border: 1px solid #03071e;
+    margin: 0px 10px 10px 0;
+    max-width: 186px;
+}
+
+div#overflow {
+    max-height:400px;
+    overflow-y:auto;
 }
