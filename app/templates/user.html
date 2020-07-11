@@ -2,36 +2,38 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <table class="table table-hover">
-        <tr>
-              <td width="256px"><img src="{{ user.avatar(256) }}"></td>
-              <td>
-                  <h1>{{ user.username }}</h1>
-                  {% if user.nickname %}<p>{{ _('Apelido') }}: {{ user.nickname }}</p>{% endif %}
-  	              {% if user.about_me %}<p>{{ _('Descrição') }}: {{ user.about_me }}</p>{% endif %}
-                  <!--Link visto pela última vez-->
-                  <p>{{ user.followers.count() }} {{ _('seguidores') }}, {{ user.followed.count() }} {{ _('seguindo') }}.</p>
-                  {% if user == current_user %}
-                    <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Editar seu perfil') }}</a></p>
-                     <!--Link excluia seu perfil-->
-                  {% elif not current_user.is_following(user) %}
-                    <p><a href="{{ url_for('main.follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
-                  {% else %}
-                    <p><a href="{{ url_for('main.unfollow', username=user.username) }}">{{ _('Deixar de seguir') }}</a></p>
-                  {% endif %}
-              </td>
-          </tr>
-      </table>
-      <br>
+  <div>
+    <img src="{{ user.avatar(100) }}" align="left" id="imagem_user">
+    <h1>{{ user.username }}</h1>
+    {% if user.nickname %}<p id="italic">{{ user.nickname }}</p>{% endif %}
+  	{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}<br>
+    <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil') }}</a></p>
+    <hr><p>{{ user.followers.count() }} {{ _('seguidores') }}, {{ user.followed.count() }} {{ _('seguindo') }}</p>
+  </div>
+    {% if user == current_user %}
+    {% elif not current_user.is_following(user) %}
+      <p><a href="{{ url_for('main.follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
+    {% else %}
+      <p><a href="{{ url_for('main.unfollow', username=user.username) }}">{{ _('Parar de seguir') }}</a></p>
+    {% endif %}
+    <hr><br>
 
-      <h2>Fontes cadastradas por você</h2>
-      {% for post in posts %}
-        {% include '_post.html' %}
-      {% endfor %}<br>
-      <h2>Aplicações cadastradas por você</h2>
-      {% for software in softwares %}
-        {% include '_software.html' %}
-      {% endfor %}
+    <div id="center"><h2>Fontes que {{ user.username }} cadastrou</h2></div>
+    <div>
+      <table>
+        {% for post in posts %}
+          {% include '_post.html' %}
+        {% endfor %}
+      </table>
+    </div>
+      <div id="center"><h2>Aplicações que {{ user.username }} cadastrou</h2></div>
+      <div>
+        <table>
+          {% for software in softwares %}
+            {% include '_software.html' %}
+          {% endfor %}
+        </table>
+      </div>
 
       {% if prev_url %}
   		<a href="{{ prev_url }}">Fontes mais recentes</a>
@@ -39,5 +41,4 @@
 			{% if next_url %}
 			<a href="{{ next_url }}">Fontes mais antigas</a>
 			{% endif %}
-
 {% endblock %}
