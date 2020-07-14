@@ -47,7 +47,7 @@ class PostForm(FlaskForm):
         ('Internacional','Internacional')], validators=[DataRequired()])
     categorie = StringField(_l('Categoria'), validators=[DataRequired()])
     description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=150)], render_kw={"placeholder": "Digite uma descrição para a fonte de dados"})
+        Length(min=0, max=150)], render_kw={"placeholder": "Digite uma breve descrição sobre a fonte de dados"})
     officialLink = StringField(_l('Link Oficial'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida')], render_kw={"placeholder": "Digite a URL da fonte de dados \
