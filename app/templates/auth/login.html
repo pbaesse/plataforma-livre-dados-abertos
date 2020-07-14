@@ -5,11 +5,13 @@
 <div id="center"><h1>{{ _('Bem-vindo a Dados Livres') }}</h1>
 <p>Entre para acessar e colaborar com fontes de dados abertos e aplicações
   que fazem uso desse tipo de informação.</p></div><hr><br>
+  <div id="formCenter">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-14">
             {{ wtf.quick_form(form) }}
         </div>
-    </div></br>
+    </div>
+  </div></br><br>
     <div id="center">
     <p>{{ _('Esqueceu sua senha?') }}
       <a href="{{ url_for( 'auth.reset_password_request' ) }}">

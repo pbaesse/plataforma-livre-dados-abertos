@@ -4,6 +4,12 @@ div#center {
   text-align: center;
 }
 
+div#formCenter {
+  width: 460px;
+	margin: 0  auto;
+	text-align: left;
+}
+
 a#color-titulo{
   color: #9d0208;
   text-decoration: underline;

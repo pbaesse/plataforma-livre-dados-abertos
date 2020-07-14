@@ -5,10 +5,12 @@
     <div id="center"><h1>{{ _('Inscreva-se em Dados Livres') }}</h1>
     <p>Inscrever-se para acessar e colaborar com fontes de dados abertos e aplicações
       que fazem uso desse tipo de informação.</p></div><hr><br>
-    <div class="row">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
-    </div><br>
+        <div id="formCenter">
+          <div class="row">
+              <div class="col-md-14">
+                  {{ wtf.quick_form(form) }}
+              </div>
+          </div>
+        </div></br><br>
     <div id="center"><p>Já tem uma conta? <a href="{{ url_for('auth.login') }}">{{ _('Entre') }}</a></p></div>
 {% endblock %}
