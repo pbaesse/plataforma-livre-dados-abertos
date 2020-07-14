@@ -2,10 +2,13 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <h1>{{ _('Editar Perfil') }}</h1>
+<div class="text-center">
+  <h1>{{ _('Edite seu perfil de usuário') }}</h1></div><hr><br>
+  <div id="formCenter">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-14">
             {{ wtf.quick_form(form) }}
         </div>
     </div>
+  </div></br><br>
 {% endblock %}
