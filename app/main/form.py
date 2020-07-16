@@ -1,21 +1,13 @@
 #!/usr/bin/env python -*- coding: utf-8 -*-
 from flask import request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextField, TextAreaField, DateField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Length, Email, EqualTo, Regexp
+from wtforms import StringField, SelectField, TextField, TextAreaField, \
+    DateField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import ValidationError, DataRequired, Length, \
+    Email, EqualTo, Regexp
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, Post, Software, SearchableMixin, Similar
-
-
-class SearchForm(FlaskForm):
-    q = StringField(_l('Buscar'), validators=[DataRequired()])
-
-    def __init__(self, *args, **kwargs):
-        if 'formdata' not in kwargs:
-            kwargs['formdata'] = request.args
-        if 'csrf_enabled' not in kwargs:
-            kwargs['csrf_enabled'] = False
-        super(SearchForm, self).__init__(*args, **kwargs)
+from app.models import User, Post, Software, Similar, Tag, Category, \
+    Comment, Report
 
 
 class EditProfileForm(FlaskForm):
@@ -41,24 +33,21 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField(_l('Título'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite o título da fonte de dados"})
-    tag = StringField(_l('Palavra-Chave'), validators=[DataRequired()])
     sphere = SelectField('Esfera', choices=[('Municipal', 'Municipal'),
         ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
-    categorie = StringField(_l('Categoria'), validators=[DataRequired()])
     description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
         Length(min=0, max=150)], render_kw={"placeholder": "Digite uma breve descrição sobre a fonte de dados"})
     officialLink = StringField(_l('Link Oficial'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
-               'URL inválida')], render_kw={"placeholder": "Digite a URL da fonte de dados \
+               'URL inválida. Use https:// no início da URL')],
+               render_kw={"placeholder": "Digite a URL da fonte de dados \
 (https://www.exemplo.com/)"})
     submit = SubmitField(_l('Registrar'))
 
 
 class SoftwareForm(FlaskForm):
     title = StringField(_l('Título'), validators=[DataRequired()])
-    tag = StringField(_l('Palavra-Chave'), validators=[DataRequired()])
-    categorie = StringField(_l('Categoria'), validators=[DataRequired()])
     license = StringField(_l('Licença'), validators=[DataRequired()])
     owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
     activeDevelopment = StringField(_l('Desenvolvedor Ativo'), validators=[DataRequired(), Length(min=0, max=200)])
@@ -74,16 +63,24 @@ class SimilarForm(FlaskForm):
     submit = SubmitField(_l('Registrar'))
 
 
-class BooleanSimilarForm(FlaskForm):
-    title1 = BooleanField(_l('Título'))
-    title2 = BooleanField(_l('Título'))
-    title3 = BooleanField(_l('Título'))
-    title4 = BooleanField(_l('Título'))
-    submit = SubmitField(_l('Concluir'))
+class TagForm(FlaskForm):
+    tag = StringField(_l('Palavras-Chaves'))
+
+
+class CategoryForm(FlaskForm):
+    category = StringField(_l('Categoria'))
 
 
 class CommentForm(FlaskForm):
     name = StringField(_l('Nome'), validators=[DataRequired()])
     email = StringField(_l('E-mail'), validators=[DataRequired()])
     text = TextAreaField(_l('Comentário'), validators=[DataRequired()])
+    submit = SubmitField(_l('Enviar'))
+
+
+class ReportForm(FlaskForm):
+    name = StringField(_l('Nome'), validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
+        Length(min=0, max=150)])
+    type = StringField(_l('Tipo'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))

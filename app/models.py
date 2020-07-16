@@ -6,48 +6,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from app import db, login
-from app.search import add_to_index, remove_from_index, query_index
-
-class SearchableMixin(object):
-    @classmethod
-    def search(cls, expression, page, per_page):
-        ids, total = query_index(cls.__tablename__, expression, page, per_page)
-        if total == 0:
-            return cls.query.filter_by(id=0), 0
-        when = []
-        for i in range(len(ids)):
-            when.append((ids[i], i))
-        return cls.query.filter(cls.id.in_(ids)).order_by(
-            db.case(when, value=cls.id)), total
-
-    @classmethod
-    def before_commit(cls, session):
-        session._changes = {
-            'add': list(session.new),
-            'update': list(session.dirty),
-            'delete': list(session.deleted)
-        }
-
-    @classmethod
-    def after_commit(cls, session):
-        for obj in session._changes['add']:
-            if isinstance(obj, SearchableMixin):
-                add_to_index(obj.__tablename__, obj)
-        for obj in session._changes['update']:
-            if isinstance(obj, SearchableMixin):
-                add_to_index(obj.__tablename__, obj)
-        for obj in session._changes['delete']:
-            if isinstance(obj, SearchableMixin):
-                remove_from_index(obj.__tablename__, obj)
-        session._changes = None
-
-    @classmethod
-    def reindex(cls):
-        for obj in cls.query:
-            add_to_index(cls.__tablename__, obj)
-
-db.event.listen(db.session, 'before_commit', SearchableMixin.before_commit)
-db.event.listen(db.session, 'after_commit', SearchableMixin.after_commit)
 
 
 followers = db.Table('followers',
@@ -56,7 +14,7 @@ followers = db.Table('followers',
 )
 
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(200), index=True, unique=True)
@@ -65,6 +23,7 @@ class User(UserMixin, db.Model):
     about_me = db.Column(db.String(300))
     nickname = db.Column(db.String(150))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     softwares = db.relationship('Software', backref='author', lazy='dynamic')
 
@@ -137,34 +96,22 @@ favorites_post = db.Table('favorites_post',
 )
 
 
-class Similar(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), index=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
+class Post(db.Model):
 
-    def __repr__(self):
-        return '<Semelhante {}>'.format(self.name)
-
-
-class Post(SearchableMixin, db.Model):
-    __searchable__ = ['title']
-
-    language = db.Column(db.String(5))
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
-    tag = db.Column(db.String(200), index=True)
-    categorie = db.Column(db.String(200), index=True)
     sphere = db.Column(db.String(200), index=True)
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    similar = db.relationship('Similar', backref='similar', lazy='dynamic')
-    comments = db.relationship('Comment', backref='comment', lazy='dynamic')
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    #user = db.relationship('User', backref=db.backref('post', lazy=True))
+    similar = db.relationship('Similar', backref='similar_post', lazy='dynamic')
+    tag = db.relationship('Tag', backref='tag_post', lazy='dynamic')
+    category = db.relationship('Category', backref='category_post', lazy='dynamic')
+    comment = db.relationship('Comment', backref='comment_post', lazy='dynamic')
+    report = db.relationship('Report', backref='report_post', lazy='dynamic')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
     	return '<Post {}>'.format(self.title)
@@ -197,13 +144,10 @@ favorites_software = db.Table('favorites_software',
 )
 
 
-class Software(SearchableMixin, db.Model):
-    __searchable__ = ['title']
+class Software(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
-    tag = db.Column(db.String(800), index=True)
-    categorie = db.Column(db.String(800), index=True)
     description = db.Column(db.String(800), index=True)
     downloadLink = db.Column(db.String(300), index=True)
     activeDevelopment = db.Column(db.String(200), index=True)
@@ -212,10 +156,14 @@ class Software(SearchableMixin, db.Model):
     dateCreation = db.Column(db.String(300), index=True)
     dateRelease = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    similar = db.relationship('Similar', backref='similar_software', lazy='dynamic')
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-	#user = db.relationship('User', backref=db.backref('softwares', lazy=True))
+    similar = db.relationship('Similar', backref='similar_software', lazy='dynamic')
+    tag = db.relationship('Tag', backref='tag_software', lazy='dynamic')
+    category = db.relationship('Category', backref='category_software', lazy='dynamic')
+    comment = db.relationship('Comment', backref='comment_software', lazy='dynamic')
+    report = db.relationship('Report', backref='report_software', lazy='dynamic')
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Software {}>'.format(self.title)
@@ -229,37 +177,65 @@ class Software(SearchableMixin, db.Model):
             digest, size)
 
 
+class Similar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    postSimilar_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    softwareSimilar_id = db.Column(db.Integer, db.ForeignKey('software.id'))
+
+    def __repr__(self):
+        return '<Similar {}>'.format(self.name)
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tag = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    postTag_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    softwareTag_id = db.Column(db.Integer, db.ForeignKey('software.id'))
+
+    def __repr__(self):
+        return '<Tag{}>'.format(self.tag)
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    postCategory_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    softwareCategory_id = db.Column(db.Integer, db.ForeignKey('software.id'))
+
+    def __repr__(self):
+        return '<Category {}>'.format(self.category)
+
+
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), index=True)
     email = db.Column(db.String(200), index=True)
     text = db.Column(db.String(600), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    postComment_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    softwareComment_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
         return '<Comment {}>'.format(self.name)
 
 
-class Tag(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	palavraChave = db.Column(db.String(200), index=True)
+class Report(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), index=True)
+    description = db.Column(db.String(500), index=True)
+    type = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-	def __repr__(self):
-		return '<Tag{}>'.format(self.palavraChave)
+    postReport_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    softwareReport_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
-
-class Categoria(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-
-	def __repr__(self):
-		return '<Categoria {}>'.format(self.id)
-
-
-class Denuncia(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	descricao = db.Column(db.String(500), index=True)
-	tipo = db.Column(db.String(200), index=True)
-
-	def __repr__(self):
-		return '<Denuncia {}>'.format(self.tipo)
+    def __repr__(self):
+        return '<Report {}>'.format(self.name)

@@ -9,82 +9,31 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
-    SearchForm, SimilarForm, BooleanSimilarForm, CommentForm
-from app.models import User, Post, Software, Similar, Comment, Tag, \
-    Categoria, Denuncia
-#from app.translate import translate
+    SimilarForm, TagForm, CategoryForm, CommentForm, ReportForm
+from app.models import User, Post, Software, Similar, Tag, Category, \
+    Comment, Report
 from app.main import bp
-
-# barra de pesquisa
-@bp.route('/search')
-def search():
-    if not g.search_form.validate():
-        return redirect(url_for('main.explore'))
-    page = request.args.get('page', 1, type=int)
-    posts, total = Post.search(g.search_form.q.data, page,
-                               current_app.config['POSTS_PER_PAGE'])
-    next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
-        if total > page * current_app.config['POSTS_PER_PAGE'] else None
-    prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
-        if page > 1 else None
-    return render_template('search.html', title=_('Search'), posts=posts,
-                           next_url=next_url, prev_url=prev_url)
 
 @bp.before_request
 def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-        g.search_form = SearchForm()
     g.locale = str(get_locale())
-
-# fonte e software separados por categorias
-@bp.route('/category', methods=['GET', 'POST'])
-def category():
-
-    return render_template('category.html', title=_('Categoria'))
 
 # exibição de posts
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
-    # fontes
-    form = PostForm()
-    if form.validate_on_submit():
-        language = guess_language(form.post.data)
-        if language == 'UNKNOWN' or len(language) > 5:
-            language = ''
-        post = Post(title=form.title.data, tag=form.tag.data,
-            description=form.description.data, author=current_user,
-            user_id=user.id, language=language, comments=comments)
-        db.session.add(post)
-        db.session.commit()
-        flash(_('Your post is now live!'))
-        return redirect(url_for('main.index'))
-
+    page = request.args.get('page', 1, type=int)
     #posts = current_user.followed_posts().all() # usuários em comum
     #posts = Post.query.order_by(Post.timestamp.desc()).all
-
-    page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('main.index', page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('main.index', page=posts.prev_num) \
         if posts.has_prev else None
-
-    # softwares
-    form = SoftwareForm()
-    if form.validate_on_submit():
-        language = guess_language(form.post.data)
-        if language == 'UNKNOWN' or len(language) > 5:
-            language = ''
-        software = Software(title=form.title.data, tag=form.tag.data,
-            license=form.license.data, author=current_user, language=language)
-        db.session.add(software)
-        db.session.commit()
-        flash(_('Your post is now live!'))
-        return redirect(url_for('main.index'))
 
     page = request.args.get('page', 1, type=int)
     softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
@@ -94,30 +43,27 @@ def index():
     prev_url = url_for('main.index', page=softwares.prev_num) \
         if softwares.has_prev else None
 
-    return render_template('index.html', title=(_('Página Principal')), form=form,
+    return render_template('index.html', title=(_('Página Principal')),
      next_url=next_url, prev_url=prev_url, posts=posts.items, softwares=softwares.items)
 
-# Encontre por mais fontes/softwares
-@bp.route('/explore')
-def explore():
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.index', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.index', page=posts.prev_num) \
-        if posts.has_prev else None
+# fonte e software separados por categorias
+@bp.route('/category', methods=['GET', 'POST'])
+def category():
+    return render_template('category.html', title=_('Categoria'))
 
-    page = request.args.get('page', 1, type=int)
-    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
-        page, current_app.config['SOFTWARES_PER_PAGE'], False)
-    next_url = url_for('main.index', page=softwares.next_num) \
-        if softwares.has_next else None
-    prev_url = url_for('main.index', page=softwares.prev_num) \
-        if softwares.has_prev else None
-
-    return render_template('explore.html', title='Explore', posts=posts.items,
-        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
+# Cadastrar fontes
+@bp.route('/register_source', methods=['GET', 'POST'])
+def register_source():
+	form = PostForm()
+	if form.validate_on_submit():
+		sources = Post(title=form.title.data,
+            description=form.description.data, sphere=form.sphere.data,
+            officialLink=form.officialLink.data, author=current_user)
+		db.session.add(sources)
+		db.session.commit()
+		flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
+		return redirect(url_for('main.index'))
+	return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
 
 # semelhantes
 @bp.route('/_autocomplete', methods=['GET'])
@@ -142,11 +88,13 @@ def post(title):
 
     form = SimilarForm(request.form)
     if form.validate_on_submit():
-        similar = Similar(name=form.name.data, post_id=post.id, software_id=software.id)
+        similar = Similar(name=form.name.data, postSimilar_id=post.id)
         db.session.add(similar)
         db.session.commit()
-        flash(_('Your post is now live!'))
-    similar = Similar.query.filter_by(post_id=post.id).all()
+        flash(_('Você registrou uma nova opção de semelhante'))
+
+    similar_post = Similar.query.filter_by(postSimilar_id=post.id).all()
+
     page = request.args.get('page', 1, type=int)
     similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
         page, current_app.config['SIMILARES_PER_PAGE'], False)
@@ -156,7 +104,7 @@ def post(title):
         if similares.has_prev else None
 
     return render_template('post.html', post=post, form=form,
-        similar=similar, similares=similares.items, posts=posts.items,
+        similar_post=similar_post, posts=posts.items, similares=similares.items,
         next_url=next_url, prev_url=prev_url)
 
 # editar a fonte
@@ -168,22 +116,16 @@ def edit_post(id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.description = form.description.data
-        post.tag = form.tag.data
-        post.categorie = form.categorie.data
         post.sphere = form.sphere.data
         post.officialLink = form.officialLink.data
         db.session.add(post)
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
         return redirect(url_for('main.index'))
-
     form.title.data = post.title
     form.description.data = post.description
-    form.tag.data = post.tag
-    form.categorie.data = post.categorie
     form.sphere.data = post.sphere
     form.officialLink.data = post.officialLink
-
     return render_template('edit_post.html', title=(_('Editar Fonte')),
                            form=form, post=post)
 
@@ -191,12 +133,27 @@ def edit_post(id):
 @bp.route("/deletar_post/<int:id>")
 def deletar_post(id):
     post = Post.query.filter_by(id=id).first()
-
     db.session.delete(post)
     db.session.commit()
     flash(_('A fonte foi excluída!'))
-
     return redirect(url_for("main.index"))
+
+# Cadastrar softwares
+@bp.route('/register_software', methods=['GET', 'POST'])
+def register_software():
+	form = SoftwareForm()
+	if form.validate_on_submit():
+		software = Software(title=form.title.data,
+            description=form.description.data,
+            downloadLink=form.downloadLink.data,
+            activeDevelopment=form.activeDevelopment.data,
+            license=form.license.data, owner=form.owner.data,
+            dateCreation=form.dateCreation.data, author=current_user)
+		db.session.add(software)
+		db.session.commit()
+		flash(_('Parabéns, você acabou de registrar um software de dados!'))
+		return redirect(url_for('main.index'))
+	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
 
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
@@ -211,7 +168,13 @@ def software(title):
         if softwares.has_prev else None
 
     form = SimilarForm(request.form)
-    similar = Similar.query.filter_by(software_id=software.id).all()
+    if form.validate_on_submit():
+        similar = Similar(name=form.name.data, softwareSimilar_id=software.id)
+        db.session.add(similar)
+        db.session.commit()
+        flash(_('Você registrou uma nova opção de semelhante'))
+
+    similar_software = Similar.query.filter_by(softwareSimilar_id=software.id).first_or_404()
     page = request.args.get('page', 1, type=int)
     similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
         page, current_app.config['SIMILARES_PER_PAGE'], False)
@@ -220,9 +183,9 @@ def software(title):
     prev_url = url_for('main.post', page=similares.prev_num) \
         if similares.has_prev else None
 
-    return render_template('software.html', software=software, similar=similar,
-        form=form, softwares=softwares.items, similares=similares.items,
-        next_url=next_url, prev_url=prev_url)
+    return render_template('software.html', software=software, form=form,
+        similar_software=similar_software, similares=similares.items,
+        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
 # Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
@@ -232,8 +195,6 @@ def edit_software(id):
     if form.validate_on_submit():
         software.title = form.title.data
         software.description = form.description.data
-        software.tag = form.tag.data
-        software.categorie = form.categorie.data
         software.downloadLink = form.downloadLink.data
         software.activeDevelopment = form.activeDevelopment.data
         software.license = form.license.data
@@ -243,17 +204,13 @@ def edit_software(id):
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
         return redirect(url_for('main.index'))
-
     form.title.data = software.title
     form.description.data = software.description
-    form.tag.data = software.tag
-    form.categorie.data = software.categorie
     form.downloadLink.data = software.downloadLink
     form.activeDevelopment.data = software.activeDevelopment
     form.license.data = software.license
     form.owner.data = software.owner
     form.dateCreation.data = software.dateCreation
-
     return render_template('edit_software.html', title=(_('Editar Software')),
         form=form, software=software)
 
@@ -261,11 +218,9 @@ def edit_software(id):
 @bp.route("/deletar_software/<int:id>")
 def deletar_software(id):
     software = Software.query.filter_by(id=id).first()
-
     db.session.delete(software)
     db.session.commit()
     flash(_('O software foi excluído!'))
-
     return redirect(url_for("main.index"))
 
 # perfil do usuário mostrando suas fontes e softwares
@@ -274,7 +229,6 @@ def deletar_software(id):
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('user', title=user.username, page=posts.next_num) \
@@ -315,11 +269,9 @@ def edit_profile():
 @bp.route("/deletar_user/<int:id>")
 def deletar_user(id):
     user = User.query.filter_by(id=id).first()
-
     db.session.delete(user)
     db.session.commit()
     flash(_('O Usuário foi excluído!'))
-
     return redirect(url_for("main.index"))
 
 # seguir usuário
@@ -353,45 +305,6 @@ def unfollow(username):
     db.session.commit()
     flash(_('Você não está seguindo {}.').format(username))
     return redirect(url_for('main.user', username=username))
-
-# Cadastrar fontes
-@bp.route('/register_source', methods=['GET', 'POST'])
-def register_source():
-	form = PostForm()
-	if form.validate_on_submit():
-		sources = Post(title=form.title.data, description=form.description.data, \
-		      tag=form.tag.data, categorie=form.categorie.data,
-              sphere=form.sphere.data, officialLink=form.officialLink.data,
-              author=current_user)
-		db.session.add(sources)
-		db.session.commit()
-		flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
-		return redirect(url_for('main.index'))
-	return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
-
-# Cadastrar softwares
-@bp.route('/register_software', methods=['GET', 'POST'])
-def register_software():
-	form = SoftwareForm()
-	if form.validate_on_submit():
-		software = Software(title=form.title.data, tag=form.tag.data, \
-            categorie=form.categorie.data, description=form.description.data,
-            downloadLink=form.downloadLink.data,
-            activeDevelopment=form.activeDevelopment.data,
-            license=form.license.data, owner=form.owner.data,
-            dateCreation=form.dateCreation.data, author=current_user)
-		db.session.add(software)
-		db.session.commit()
-		flash(_('Parabéns, você acabou de registrar um software de dados!'))
-		return redirect(url_for('main.index'))
-	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
-
-
-# encontrar mais similares
-@bp.route('/similar', methods=['GET', 'POST'])
-def similar():
-    form = BooleanSimilarForm()
-    return render_template('similar.html', title=(_('Semelhante')), form=form)
 
 # favoritar post
 @bp.route('/favorite/<title>')
