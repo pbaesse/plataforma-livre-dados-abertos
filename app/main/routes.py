@@ -9,8 +9,8 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
-    SimilarForm, TagForm, CategoryForm, CommentForm, ReportForm
-from app.models import User, Post, Software, Similar, Tag, Category, \
+    SimilarForm, CommentForm, ReportForm
+from app.models import User, Post, Software, Similar, \
     Comment, Report
 from app.main import bp
 
@@ -46,24 +46,23 @@ def index():
     return render_template('index.html', title=(_('Página Principal')),
      next_url=next_url, prev_url=prev_url, posts=posts.items, softwares=softwares.items)
 
-# fonte e software separados por categorias
-@bp.route('/category', methods=['GET', 'POST'])
-def category():
-    return render_template('category.html', title=_('Categoria'))
-
 # Cadastrar fontes
 @bp.route('/register_source', methods=['GET', 'POST'])
 def register_source():
-	form = PostForm()
-	if form.validate_on_submit():
-		sources = Post(title=form.title.data,
-            description=form.description.data, sphere=form.sphere.data,
-            officialLink=form.officialLink.data, author=current_user)
-		db.session.add(sources)
-		db.session.commit()
-		flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
-		return redirect(url_for('main.index'))
-	return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
+    form = PostForm()
+    if form.validate_on_submit():
+        sources = Post(title=form.title.data, tag=form.tag.data,
+        category=form.category.data, city=form.city.data, state=form.state.data,
+        country=form.country.data, description=form.description.data,
+        sphere=form.sphere.data, officialLink=form.officialLink.data,
+        author=current_user)
+        db.session.add(sources)
+        db.session.commit()
+        flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
+        return redirect(url_for('main.index'))
+
+    return render_template('register_source.html',
+        title=(_('Cadastrar Fonte')), form=form)
 
 # semelhantes
 @bp.route('/_autocomplete', methods=['GET'])
@@ -73,6 +72,7 @@ def autocomplete():
     list_titles1 = [r.as_dict() for r in res1]
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
+
 
 # perfil da fonte
 @bp.route('/post/<title>', methods=['GET', 'POST'])
@@ -106,6 +106,14 @@ def post(title):
     return render_template('post.html', post=post, form=form,
         similar_post=similar_post, posts=posts.items, similares=similares.items,
         next_url=next_url, prev_url=prev_url)
+
+@bp.route("/deletar_similar/<int:id>")
+def deletar_similar(id):
+    similar = Similar.query.filter_by(id=id).first()
+    db.session.delete(similar)
+    db.session.commit()
+    flash(_('Semelhante foi excluído!'))
+    return redirect(url_for("main.index"))
 
 # editar a fonte
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
@@ -141,19 +149,21 @@ def deletar_post(id):
 # Cadastrar softwares
 @bp.route('/register_software', methods=['GET', 'POST'])
 def register_software():
-	form = SoftwareForm()
-	if form.validate_on_submit():
-		software = Software(title=form.title.data,
-            description=form.description.data,
-            downloadLink=form.downloadLink.data,
-            activeDevelopment=form.activeDevelopment.data,
-            license=form.license.data, owner=form.owner.data,
-            dateCreation=form.dateCreation.data, author=current_user)
-		db.session.add(software)
-		db.session.commit()
-		flash(_('Parabéns, você acabou de registrar um software de dados!'))
-		return redirect(url_for('main.index'))
-	return render_template('register_software.html', title=(_('Cadastrar Software')), form=form)
+    form = SoftwareForm()
+    if form.validate_on_submit():
+        software = Software(title=form.title.data, tag=form.tag.data,
+        category=form.category.data, description=form.description.data,
+        officialLink=form.officialLink.data, license=form.license.data,
+        owner=form.owner.data, dateCreation=form.dateCreation.data,
+        author=current_user)
+        db.session.add(software)
+        db.session.commit()
+        flash(_('Parabéns, você acabou de registrar um software de dados!'))
+        return redirect(url_for('main.index'))
+
+    return render_template('register_software.html',
+        title=(_('Cadastrar Software')), form=form)
+
 
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
@@ -167,24 +177,8 @@ def software(title):
     prev_url = url_for('main.software', page=softwares.prev_num) \
         if softwares.has_prev else None
 
-    form = SimilarForm(request.form)
-    if form.validate_on_submit():
-        similar = Similar(name=form.name.data, softwareSimilar_id=software.id)
-        db.session.add(similar)
-        db.session.commit()
-        flash(_('Você registrou uma nova opção de semelhante'))
 
-    similar_software = Similar.query.filter_by(softwareSimilar_id=software.id).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
-        page, current_app.config['SIMILARES_PER_PAGE'], False)
-    next_url = url_for('main.post', page=similares.next_num) \
-        if similares.has_next else None
-    prev_url = url_for('main.post', page=similares.prev_num) \
-        if similares.has_prev else None
-
-    return render_template('software.html', software=software, form=form,
-        similar_software=similar_software, similares=similares.items,
+    return render_template('software.html', software=software,
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
 # Editar software
@@ -195,8 +189,7 @@ def edit_software(id):
     if form.validate_on_submit():
         software.title = form.title.data
         software.description = form.description.data
-        software.downloadLink = form.downloadLink.data
-        software.activeDevelopment = form.activeDevelopment.data
+        software.officialLink = form.officialLink.data
         software.license = form.license.data
         software.owner = form.owner.data
         software.dateCreation = form.dateCreation.data
@@ -206,8 +199,7 @@ def edit_software(id):
         return redirect(url_for('main.index'))
     form.title.data = software.title
     form.description.data = software.description
-    form.downloadLink.data = software.downloadLink
-    form.activeDevelopment.data = software.activeDevelopment
+    form.officialLink.data = software.officialLink
     form.license.data = software.license
     form.owner.data = software.owner
     form.dateCreation.data = software.dateCreation

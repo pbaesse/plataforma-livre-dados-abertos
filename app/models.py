@@ -100,14 +100,17 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
+    tag = db.Column(db.String(200), index=True)
+    category = db.Column(db.String(200), index=True)
     sphere = db.Column(db.String(200), index=True)
+    city = db.Column(db.String(200), index=True)
+    state = db.Column(db.String(200), index=True)
+    country = db.Column(db.String(200), index=True)
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     similar = db.relationship('Similar', backref='similar_post', lazy='dynamic')
-    tag = db.relationship('Tag', backref='tag_post', lazy='dynamic')
-    category = db.relationship('Category', backref='category_post', lazy='dynamic')
     comment = db.relationship('Comment', backref='comment_post', lazy='dynamic')
     report = db.relationship('Report', backref='report_post', lazy='dynamic')
 
@@ -148,18 +151,16 @@ class Software(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
+    tag = db.Column(db.String(200), index=True)
+    category = db.Column(db.String(200), index=True)
     description = db.Column(db.String(800), index=True)
-    downloadLink = db.Column(db.String(300), index=True)
-    activeDevelopment = db.Column(db.String(200), index=True)
+    officialLink = db.Column(db.String(300), index=True)
     license = db.Column(db.String(200), index=True)
     owner = db.Column(db.String(200), index=True)
-    dateCreation = db.Column(db.String(300), index=True)
-    dateRelease = db.Column(db.String(300), index=True)
+    dateCreation = db.Column(db.String(200), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     similar = db.relationship('Similar', backref='similar_software', lazy='dynamic')
-    tag = db.relationship('Tag', backref='tag_software', lazy='dynamic')
-    category = db.relationship('Category', backref='category_software', lazy='dynamic')
     comment = db.relationship('Comment', backref='comment_software', lazy='dynamic')
     report = db.relationship('Report', backref='report_software', lazy='dynamic')
 
@@ -187,30 +188,6 @@ class Similar(db.Model):
 
     def __repr__(self):
         return '<Similar {}>'.format(self.name)
-
-
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    tag = db.Column(db.String(200), index=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-    postTag_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    softwareTag_id = db.Column(db.Integer, db.ForeignKey('software.id'))
-
-    def __repr__(self):
-        return '<Tag{}>'.format(self.tag)
-
-
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(200), index=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-
-    postCategory_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    softwareCategory_id = db.Column(db.Integer, db.ForeignKey('software.id'))
-
-    def __repr__(self):
-        return '<Category {}>'.format(self.category)
 
 
 class Comment(db.Model):
