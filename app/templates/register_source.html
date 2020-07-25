@@ -2,12 +2,13 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <div id="center"><h1>{{ _('Registre uma fonte de dados abertos') }}</h1></div><hr><br>
+    <div id="center"><h1>{{ _('Registrar uma fonte de dados abertos') }}</h1></div><hr><br><br>
       <div id="formCenter">
         <div class="row">
-            <div class="col-md-14">
+            <div class="col-md-12">
                 {{ wtf.quick_form(form) }}
             </div>
         </div>
-      </div></br><br>
+      </div>
+</br><br>
 {% endblock %}

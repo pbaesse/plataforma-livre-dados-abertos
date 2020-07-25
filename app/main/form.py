@@ -2,11 +2,12 @@
 from flask import request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextField, TextAreaField, \
-    DateField, PasswordField, BooleanField, SubmitField
+    DateField, PasswordField, RadioField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Length, \
     Email, EqualTo, Regexp
+from datetime import datetime
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, Post, Software, Similar, Tag, Category, \
+from app.models import User, Post, Software, Similar, \
     Comment, Report
 
 
@@ -32,43 +33,81 @@ class EditProfileForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField(_l('Título'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite o título da fonte de dados"})
-    sphere = SelectField('Esfera', choices=[('Municipal', 'Municipal'),
-        ('Estadual', 'Estadual'), ('Federal', 'Federal'),
-        ('Internacional','Internacional')], validators=[DataRequired()])
-    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=150)], render_kw={"placeholder": "Digite uma breve descrição sobre a fonte de dados"})
-    officialLink = StringField(_l('Link Oficial'), validators=[DataRequired('URL verificada!'),
+        Length(min=3)], render_kw={"placeholder": "Digite o título da fonte de dados abertos"})
+    tag = StringField(_l('Palavras-Chaves'), validators=[DataRequired()],
+        render_kw={"placeholder": "Digite quais são as palavras-chaves \
+                    (exemplo: palavra, palavra, palavra)"})
+    category = SelectField(_l('Categoria'), validators=[DataRequired()],
+        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'),
+        ('Educação', 'Educação'), ('Cinema', 'Cinema'), ('Música', 'Música'),
+        ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
+        ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'),
+        ('Cultura', 'Cultura'), ('Países', 'Países'), ('IBGE', 'IBGE'),
+        ('Clima', 'Clima')], default=1)
+    officialLink = StringField(_l('Página Oficial'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
-               render_kw={"placeholder": "Digite a URL da fonte de dados \
-(https://www.exemplo.com/)"})
+               render_kw={"placeholder": "Digite a URL da fonte de dados abertos \
+                            (https://www.exemplo.com/)"})
+    sphere = SelectField('Esfera', id="esfera", choices=[('Municipal', 'Municipal'),
+        ('Estadual', 'Estadual'), ('Federal', 'Federal'),
+        ('Internacional','Internacional')], validators=[DataRequired()])
+    city = StringField(_l('Município'), id="municipal",
+        render_kw={"placeholder": "Digite o Município da fonte de dados abertos"})
+    state = StringField(_l('Estado'), id="estadual",
+        render_kw={"placeholder": "Digite o Estato da fonte de dados abertos"})
+    country = StringField(_l('País'), id="internacional",
+        render_kw={"placeholder": "Digite o País da fonte de dados abertos"})
+    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
+        Length(min=0, max=150)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a fonte de dados abertos"})
     submit = SubmitField(_l('Registrar'))
 
 
 class SoftwareForm(FlaskForm):
-    title = StringField(_l('Título'), validators=[DataRequired()])
-    license = StringField(_l('Licença'), validators=[DataRequired()])
-    owner = StringField(_l('Proprietário:'), validators=[DataRequired()])
-    activeDevelopment = StringField(_l('Desenvolvedor Ativo'), validators=[DataRequired(), Length(min=0, max=200)])
-    downloadLink = StringField(_l('Link para Download'), validators=[DataRequired()])
-    dateCreation = StringField(_l('Data de Criação'), validators=[DataRequired()])
-    description = TextAreaField(_l('Descrição'), validators=[DataRequired()])
-    submit = SubmitField(_l('Enviar'))
+    title = StringField(_l('Título'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite o título da aplicação"})
+    tag = StringField(_l('Palavras-Chaves'), validators=[DataRequired()],
+        render_kw={"placeholder": "Digite quais são as palavras-chaves \
+                    (exemplo: palavra, palavra, palavra)"})
+    category = SelectField(_l('Categoria'), validators=[DataRequired()],
+        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'),
+        ('Educação', 'Educação'), ('Cinema', 'Cinema'), ('Música', 'Música'),
+        ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
+        ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'),
+        ('Cultura', 'Cultura'), ('Países', 'Países'), ('IBGE', 'IBGE'),
+        ('Clima', 'Clima')], default=1)
+    officialLink = StringField(_l('Página Oficial'),
+        validators=[DataRequired('URL verificada!'),
+        Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
+               'URL inválida. Use https:// no início da URL')],
+        render_kw={"placeholder": "Digite a URL para Página Oficial da aplicação \
+                    (https://www.exemplo.com/)"})
+    owner = StringField(_l('Proprietário/Empresa'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite o nome do Proprietário/da Empresa mantedor(a) da aplicação"})
+    dateCreation = DateField(_l('Data de Criação', format='%Y-%m-%d'),
+        render_kw={"placeholder": "Digite a data de criação da aplicação \
+                                    (formatação: ano-mês-dia)"})
+    license = SelectField('Licença', choices=[('Nenhuma', 'Nenhuma'),
+        ('Apache License 2.0', 'Apache License 2.0'),
+        ('GNU General Public License v3.0','GNU General Public License v3.0'),
+        ('MIT License','MIT License'), ('BSD 2-Clause "Simplified" License','BSD 2-Clause "Simplified" License'),
+        ('BSD 3-Clause "New" or "Revised" License','BSD 3-Clause "New" or "Revised" License'),
+        ('Boost Software License 1.0','Boost Software License 1.0'),
+        ('Creative Commons Zero v1.0 Universal','Creative Commons Zero v1.0 Universal'),
+        ('Eclipse Public License 2.0','Eclipse Public License 2.0'),
+        ('GNU Alffero General Public License v3.0','GNU Alffero General Public License v3.0'),
+        ('GNU General Public License v2.0','GNU General Public License v2.0'),
+        ('GNU Lesser General Public License v2.1','GNU Lesser General Public License v2.1'),
+        ('Mozilla Public License 2.0','Mozilla Public License 2.0')], validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
+        Length(min=0, max=150)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a aplicação"})
+    submit = SubmitField(_l('Registrar'))
 
 
 class SimilarForm(FlaskForm):
     name =  StringField(_l('Semelhante:'), id='autocomplete', validators=[DataRequired(),
         Length(min=0, max=100)], render_kw={"placeholder": "Digite o nome de um título.."})
     submit = SubmitField(_l('Registrar'))
-
-
-class TagForm(FlaskForm):
-    tag = StringField(_l('Palavras-Chaves'))
-
-
-class CategoryForm(FlaskForm):
-    category = StringField(_l('Categoria'))
 
 
 class CommentForm(FlaskForm):
