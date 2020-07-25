@@ -8,37 +8,28 @@
     {% if user.nickname %}<p id="italic">{{ user.nickname }}</p>{% endif %}
   	{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}<br>
     <p><a href="{{ url_for('main.edit_profile') }}">{{ _('Edite seu perfil') }}</a></p>
-    <hr><p>{{ user.followers.count() }} {{ _('seguidores') }}, {{ user.followed.count() }} {{ _('seguindo') }}</p>
-  </div>
-    {% if user == current_user %}
-    {% elif not current_user.is_following(user) %}
-      <p><a href="{{ url_for('main.follow', username=user.username) }}">{{ _('Seguir') }}</a></p>
-    {% else %}
-      <p><a href="{{ url_for('main.unfollow', username=user.username) }}">{{ _('Parar de seguir') }}</a></p>
-    {% endif %}
-    <hr><br>
+  </div><br><hr><br>
 
-    <div id="center"><h2>Fontes que {{ user.username }} cadastrou</h2></div>
-    <div>
-      <table>
-        {% for post in posts %}
-          {% include '_post.html' %}
-        {% endfor %}
-      </table>
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Fontes cadastradas por {{ user.username }}</h2><br>
+      {% for post in posts %}
+        {% include '_post.html' %}<br>
+      {% endfor %}
     </div>
-      <div id="center"><h2>Aplicações que {{ user.username }} cadastrou</h2></div>
-      <div>
-        <table>
-          {% for software in softwares %}
-            {% include '_software.html' %}
-          {% endfor %}
-        </table>
-      </div>
+    <div class="col-md-6">
+      <h2>Aplicações cadastradas por {{ user.username }}</h2><br>
+      {% for software in softwares %}
+        {% include '_software.html' %}<br>
+      {% endfor %}
+    </div>
+  </div>
 
-      {% if prev_url %}
-  		<a href="{{ prev_url }}">Fontes mais recentes</a>
-			{% endif %}
-			{% if next_url %}
-			<a href="{{ next_url }}">Fontes mais antigas</a>
-			{% endif %}
+  {% if prev_url %}
+  <a href="{{ prev_url }}">Fontes mais recentes</a>
+	{% endif %}
+	{% if next_url %}
+	<a href="{{ next_url }}">Fontes mais antigas</a>
+	{% endif %}
+
 {% endblock %}

@@ -5,7 +5,7 @@ div#center {
 }
 
 div#formCenter {
-  width: 460px;
+  width: 580px;
 	margin: 0  auto;
 	text-align: left;
 }
@@ -30,10 +30,12 @@ p#italic {
 
 div img#imagem_user {
     float: left;
-    border-radius: 6px;
-    border: 1px solid #03071e;
     margin: 0px 10px 10px 0;
     max-width: 186px;
+}
+
+img#logo {
+  border: 1px solid #03071e;
 }
 
 div#overflow {

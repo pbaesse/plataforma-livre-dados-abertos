@@ -26,14 +26,6 @@
   {% endfor %}
 
   <br><br>
-  <p>Formulário para semelhantes:</p>
-  <div class="row">
-      <div class="col-md-6">
-          {{ wtf.quick_form(form) }}
-      </div>
-  </div>
-
-  <br><br>
   <p>Experimente <a href="{{ url_for('main.register_source') }}">
     {{ _('Cadastrar uma nova fonte de dados') }}</a> |
     <a href="{{ url_for('main.register_software') }}">
