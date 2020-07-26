@@ -2,18 +2,20 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<div class="text-center"><h1>{{ _('Corona Vírus') }}</h1><hr></div><br><br>
+<div class="text-center"><h1>{{ _('Fontes de Dados Abertos e Aplicações sobre Corona Vírus') }}</h1>
+  <p class="lead">Encontre diversas fontes de dados abertos e aplicações sobre Corona Vírus</p><hr></div><br><br>
 
-{% for post in posts.items %}
-  <p><a href="{{ url_for('main.post', title=post.title) }}" > {{ post.title }} </a></p><br>
-{% endfor %}
-
-<br><br>
-{% if prev_url %}
-<a href="{{ prev_url }}">Ver mais recentes</a>
-{% endif %}
-{% if next_url %}
-<a href="{{ next_url }}">Ver mais antigos</a>
-{% endif %}
+  <div class="row">
+    <p><strong>Fontes de Dados Abertos</strong></p><br>
+    {% for post in posts %}
+      {% include '_post.html' %}<br>
+    {% endfor%}
+  </div><br><br><br>
+  <div class="row">
+    <p><strong>Aplicações</strong></p><br>
+    {% for software in softwares %}
+      {% include '_software.html' %}<br>
+    {% endfor%}<br>
+  </div><br><br>
 
 {% endblock %}
