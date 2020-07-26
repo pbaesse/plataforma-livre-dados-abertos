@@ -2,21 +2,17 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-			<h1>{{ _('Encontre por mais fontes e softwares!') }}</h1>
-
-			{% for post in posts %}
-				{% include '_post.html' %}<br>
-			{% endfor%}
-
-			{% for software in softwares %}
-				{% include '_software.html' %}<br>
-			{% endfor%}
-
-			{% if prev_url %}
-			<a href="{{ prev_url }}">Fontes mais recentes</a>
-			{% endif %}
-			{% if next_url %}
-			<a href="{{ next_url }}">Fontes mais antigas</a>
-			{% endif %}
-
+			<div class="text-center"><h1>{{ _('Descubra diversas Fontes de Dados Abertos e Aplicações') }}</h1><hr></div><br><br>
+			<div class="row">
+				<p><strong>Fontes de Dados Abertos</strong></p><br>
+				{% for post in posts %}
+					{% include '_post.html' %}<br>
+				{% endfor%}
+			</div><br><br><br>
+			<div class="row">
+				<p><strong>Aplicações</strong></p><br>
+				{% for software in softwares %}
+					{% include '_software.html' %}<br>
+				{% endfor%}<br>
+			</div>
 {% endblock %}
