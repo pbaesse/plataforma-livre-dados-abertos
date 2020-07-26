@@ -1,15 +1,9 @@
 <table>
   <tr valign="top">
     <td>
-      <h4><a href="{{ url_for('main.software', title=software.title) }}"> {{ software.title }}</a><br></h4>
-      {{ software.license }}<br>
-      {{ software.activeDevelopment }}<br>
-      {{ software.description }}<br>
-      <a href="{{ software.downloadLink }}" target="_blank">{{ software.downloadLink }}</a><br>
-      {{ software.owner }}<br>
-      {{ software.dateCreation }}<br>
-      {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
-        {{ software.author.username }} </a>
+      <h4><a href="{{ url_for('main.software', title=software.title) }}">{{ software.title }}</a>
+          <small><a href="{{ software.officialLink }}" target="_blank">({{ software.officialLink }})</a></small></h4>
+      {{ software.tag }} | <a href="#">{{ software.category }}</a><br>
     </td>
   </tr>
 </table>

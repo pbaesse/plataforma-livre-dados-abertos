@@ -1,12 +1,9 @@
 <table>
   <tr valign="top">
     <td>
-      <h4><a href="{{ url_for('main.post', title=post.title) }}"> {{ post.title }}</a><br></h4>
-      {{ post.sphere }}<br>
-      {{ post.description }}<br>
-      <a href="{{ post.officialLink }}" target="_blank">{{ post.officialLink }}</a><br>
-      {{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=post.author.username ) }}">
-        {{ post.author.username }} </a>
+      <h4><a href="{{ url_for('main.post', title=post.title) }}">{{ post.title }}</a>
+          <small><a href="{{ post.officialLink }}" target="_blank">({{ post.officialLink }})</a></small></h4>
+      {{ post.tag }} | <a href="#">{{ post.category }}</a><br>
     </td>
   </tr>
 </table>
