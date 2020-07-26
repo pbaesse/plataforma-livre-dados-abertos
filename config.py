@@ -19,8 +19,6 @@ class Config(object):
     ADMINS = ['m.carolina.soares1@gmail.com']
     LANGUAGES = ['en', 'pt']
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
-    POSTS_PER_PAGE = 25
-    SOFTWARES_PER_PAGE = 25
-    SIMILARES_PER_PAGE = 25
-    COMMENTS_PER_PAGE = 40
+    POSTS_PER_PAGE = 20
+    COMMENTS_PER_PAGE = 10
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
