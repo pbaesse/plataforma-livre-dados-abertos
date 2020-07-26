@@ -21,30 +21,23 @@ def before_request():
         db.session.commit()
     g.locale = str(get_locale())
 
-# exibição de posts
+# exibição de posts e softwares
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
     page = request.args.get('page', 1, type=int)
-    #posts = current_user.followed_posts().all() # usuários em comum
-    #posts = Post.query.order_by(Post.timestamp.desc()).all
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.index', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.index', page=posts.prev_num) \
-        if posts.has_prev else None
-
-    page = request.args.get('page', 1, type=int)
-    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
-        page, current_app.config['SOFTWARES_PER_PAGE'], False)
-    next_url = url_for('main.index', page=softwares.next_num) \
-        if softwares.has_next else None
-    prev_url = url_for('main.index', page=softwares.prev_num) \
-        if softwares.has_prev else None
-
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=1)
+    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(page=page, per_page=1)
     return render_template('index.html', title=(_('Página Principal')),
-     next_url=next_url, prev_url=prev_url, posts=posts.items, softwares=softwares.items)
+        posts=posts.items, softwares=softwares.items)
+
+# page explore posts e softwares
+@bp.route('/explore', methods=['GET', 'POST'])
+def explore():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    softwares = Software.query.order_by(Software.timestamp.desc()).all()
+    return render_template('explore.html', title=(_('Explorar')),
+        posts=posts, softwares=softwares)
 
 # Cadastrar fontes
 @bp.route('/register_source', methods=['GET', 'POST'])
@@ -78,13 +71,7 @@ def autocomplete():
 @bp.route('/post/<title>', methods=['GET', 'POST'])
 def post(title):
     post = Post.query.filter_by(title=title).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.post', page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.post', page=posts.prev_num) \
-        if posts.has_prev else None
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
 
     form = SimilarForm(request.form)
     if form.validate_on_submit():
@@ -92,20 +79,11 @@ def post(title):
         db.session.add(similar)
         db.session.commit()
         flash(_('Você registrou uma nova opção de semelhante'))
-
     similar_post = Similar.query.filter_by(postSimilar_id=post.id).all()
-
-    page = request.args.get('page', 1, type=int)
-    similares = Similar.query.order_by(Similar.timestamp.desc()).paginate(
-        page, current_app.config['SIMILARES_PER_PAGE'], False)
-    next_url = url_for('main.post', page=similares.next_num) \
-        if similares.has_next else None
-    prev_url = url_for('main.post', page=similares.prev_num) \
-        if similares.has_prev else None
+    similares = Similar.query.order_by(Similar.timestamp.desc()).all()
 
     return render_template('post.html', post=post, form=form,
-        similar_post=similar_post, posts=posts.items, similares=similares.items,
-        next_url=next_url, prev_url=prev_url)
+        similar_post=similar_post, posts=posts, similares=similares)
 
 @bp.route("/deletar_similar/<int:id>")
 def deletar_similar(id):
@@ -160,26 +138,15 @@ def register_software():
         db.session.commit()
         flash(_('Parabéns, você acabou de registrar um software de dados!'))
         return redirect(url_for('main.index'))
-
     return render_template('register_software.html',
         title=(_('Cadastrar Software')), form=form)
-
 
 # perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
     software = Software.query.filter_by(title=title).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(
-        page, current_app.config['SOFTWARES_PER_PAGE'], False)
-    next_url = url_for('main.software', page=softwares.next_num) \
-        if softwares.has_next else None
-    prev_url = url_for('main.software', page=softwares.prev_num) \
-        if softwares.has_prev else None
-
-
-    return render_template('software.html', software=software,
-        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
+    softwares = Software.query.order_by(Software.timestamp.desc()).all()
+    return render_template('software.html', software=software, softwares=softwares)
 
 # Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
@@ -217,24 +184,21 @@ def deletar_software(id):
 
 # perfil do usuário mostrando suas fontes e softwares
 @bp.route('/user/<username>', methods=['GET', 'POST'])
-@login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
     posts = user.posts.order_by(Post.timestamp.desc()).paginate(
         page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('user', title=user.username, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('user', username=user.username, page=posts.prev_num) \
-        if posts.has_prev else None
-
-    softwares = user.softwares.order_by(Software.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('main.user', title=user.username, page=posts.next_num) \
         if posts.has_next else None
     prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
         if posts.has_prev else None
-
+    softwares = user.softwares.order_by(Software.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.user', title=user.username, page=softwares.next_num) \
+        if softwares.has_next else None
+    prev_url = url_for('main.user', username=user.username, page=softwares.prev_num) \
+        if softwares.has_prev else None
     return render_template('user.html', user=user, posts=posts.items,
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
