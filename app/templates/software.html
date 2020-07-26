@@ -5,7 +5,7 @@
   <h1>{{ software.title }}</h1>
   {% if software.downloadLink %}<p><a href="{{ software.officialLink }}" target="_blank">
     {{ software.downloadLink }}</a></p>{% endif %}
-  {% if software.description %}<p>{{ _('Descrição') }}: {{ software.description }}</p>{% endif %}
+  {% if software.description %}<p class="lead">{{ _('Descrição') }}: {{ software.description }}</p>{% endif %}
   {% if software.activeDevelopment %}<p>{{ _('Desenvolvedor ativo') }}: {{ software.activeDevelopment }}</p>{% endif %}
   {% if software.license %}<p>{{ _('Licensa') }}: {{ software.license }}</p>{% endif %}
   {% if software.owner %}<p>{{ _('Proprietário') }}: {{ software.owner }}</p>{% endif %}

@@ -14,8 +14,8 @@
 {% endblock %}
 
 {% block navbar %}
-  <nav class="navbar navbar-inverse">
-    <div class="container">
+  <nav class="navbar navbar-inverse" role="navigation" style="border-radius: 0;">
+    <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
           <span class="sr-only">Toggle navigation</span>
@@ -29,6 +29,7 @@
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="{{ url_for('main.index') }}">{{ _('Página Inicial') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}">{{ _('Explorar') }}</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_anonymous %}

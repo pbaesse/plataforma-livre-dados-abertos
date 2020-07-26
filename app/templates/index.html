@@ -4,12 +4,12 @@
 {% block app_content %}
 		<div class="text-center">
 			<h1>{{ _('Dados Livres') }}</h1>
-			<p>{{ _('Plataforma Dados Livres que permite o compartilhamento e a
-				colaboração na identificação de fontes de dados abertos e aplicações
-				que fazem uso desse tipo de informação, de modo a gerar controle social
-				e transparência pública para a sociedade civil.') }}</p><hr><br>
+			<p class="lead">{{ _('Plataforma Dados Livres que permite o <strong>compartilhamento</strong> e a
+				<strong>colaboração</strong> na <strong>identificação de Fontes de Dados Abertos e Aplicações
+				que fazem uso desse tipo de informação</strong>, de modo a gerar <strong>controle social</strong>
+				e <strong>transparência pública</strong> para a sociedade civil.') }}</p><hr><br><br>
 
-			<h2>{{ _('Principais categorias de aplicações e fontes') }}</h2><br><br>
+			<h2>{{ _('Encontre as principais categorias em Fontes de Dados Abertos e Aplicações') }}</h2><br><br>
 			<div class="row">
 				<div class="category">
 					<a class="category" href="{{ url_for('category.CoronaVirus') }}" id="font-color">Corona Vírus</a>
@@ -27,27 +27,40 @@
 					<a class="category" href="{{ url_for('category.Clima') }}" id="font-color">Clima</a>
 					<br><br>
 				</div>
-			</div>
+			</div><br><br>
 
-			<h2>{{ _('Aplicações e fontes já cadastradas recentemente') }}</h2></div><br><br>
+			<h2>{{ _('Fontes de Dados Abertos e Aplicações cadastradas recentemente') }}</h2></div><br><br>
 			<div id="formCenter">
 				<div class="row">
 						{% for post in posts %}
-							{% include '_post.html' %}<br>
-						{% endfor %}<br>
+								<h4><a href="{{ url_for('main.post', title=post.title) }}">{{ post.title }}</a>
+										<small><a href="{{ post.officialLink }}" target="_blank">({{ post.officialLink }})</a></small></h4>
+								{{ post.tag }}<br>
+								{{ post.category }}<br>
+								{{ post.sphere }}<br>
+								{{ post.description }}<br><br>
+								{{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=post.author.username ) }}">
+										{{ post.author.username }}</a>
+						{% endfor %}<br><br>
 						{% for software in softwares %}
-							{% include '_software.html' %}<br>
+								<h4><a href="{{ url_for('main.software', title=software.title) }}">{{ software.title }}</a>
+										<small><a href="{{ software.officialLink }}" target="_blank">({{ software.officialLink }})</a></small></h4>
+								{{ software.tag }}<br>
+								{{ software.category }}<br>
+								{{ software.license }}<br>
+								{{ software.description }}<br>
+								{{ software.owner }}<br>
+								{{ software.dateCreation }}<br><br>
+								{{ _('Cadastrado por') }}: <a href="{{ url_for('main.user', username=software.author.username ) }}">
+										{{ software.author.username }}</a>
 						{% endfor %}
-					</div>
-				</div></div><br><br>
+						<br><br><br><br>
+						<div class="text-center"><h4><a href="{{ url_for('main.explore') }}">Descubra mais Fontes de Dados Abertos e outras Aplicações</a></h4></div>
+				</div>
+			</div><br><br><br>
+
 			<div class="text-center">
 				<img src="../static/image/logoprovisoria.png" alt="Logo de DadosLivres.org" id="logo">
 			</div>
 
-			{% if prev_url %}
-			<a href="{{ prev_url }}">Mais recentes</a>
-			{% endif %}
-			{% if next_url %}
-			<a href="{{ next_url }}">Mais antigas</a>
-			{% endif %}
 {% endblock %}

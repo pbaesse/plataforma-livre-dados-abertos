@@ -2,13 +2,13 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-  <h1>{{ post.title }}
-  {% if post.officialLink %}<a href="{{ post.officialLink }}" id="font-color" target="_blank">
-    ({{ post.officialLink }})</a>{% endif %}</h1><br>
+  <h1>{{ post.title }}<small>
+  {% if post.officialLink %}<a href="{{ post.officialLink }}" target="_blank">
+    ({{ post.officialLink }})</a>{% endif %}</small></h1><br>
   {% if post.tag %}<p>{{ post.tag }}</p>{% endif %}
   {% if post.category %}<p>{{ post.category }}</p>{% endif %}
   {% if post.sphere %}<p>{{ _('Esfera') }} {{ post.sphere }}</p>{% endif %}
-  {% if post.description %}<p>{{ post.description }}</p>{% endif %}<br>
+  {% if post.description %}<p class="lead">{{ post.description }}</p>{% endif %}<br>
   {% if not current_user.is_anonymous %}
     <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a></p>
   {% endif %}
