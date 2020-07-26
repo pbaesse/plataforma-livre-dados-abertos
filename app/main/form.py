@@ -59,7 +59,7 @@ class PostForm(FlaskForm):
     country = StringField(_l('País'), id="internacional",
         render_kw={"placeholder": "Digite o País da fonte de dados abertos"})
     description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=150)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a fonte de dados abertos"})
+        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a fonte de dados abertos"})
     submit = SubmitField(_l('Registrar'))
 
 
@@ -100,7 +100,7 @@ class SoftwareForm(FlaskForm):
         ('GNU Lesser General Public License v2.1','GNU Lesser General Public License v2.1'),
         ('Mozilla Public License 2.0','Mozilla Public License 2.0')], validators=[DataRequired()])
     description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=150)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a aplicação"})
+        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a aplicação"})
     submit = SubmitField(_l('Registrar'))
 
 
