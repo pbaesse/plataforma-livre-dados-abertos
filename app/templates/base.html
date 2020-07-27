@@ -35,7 +35,19 @@
           {% if current_user.is_anonymous %}
             <li><a href="{{ url_for('auth.login') }}">{{ _('Entrar') }}</a></li>
             <li><a href="{{ url_for('auth.register') }}">{{ _('Inscrever-se') }}</a></li>
-          {% else %}
+          {% else %}<div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Dropdown
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="#">Ação</a></li>
+              <li><a href="#">Outra ação</a></li>
+              <li><a href="#">Algo mais aqui</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Link separado</a></li>
+            </ul>
+          </div>
             <li><a href="{{ url_for('main.register_source') }}">{{ _('Registrar fonte de dados abertos') }}</a></li>
             <li><a href="{{ url_for('main.register_software') }}">{{ _('Registrar aplicação') }}</a></li>
             <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Usuário') }}</a></li>
@@ -71,6 +83,7 @@
 <!-- JavaScript, jQuery -->
 {% block scripts %}{{super()}}
   <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
   <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
   <script type="text/javascript" src="{{url_for('static', filename='js/myscripts.js') }}"></script>
