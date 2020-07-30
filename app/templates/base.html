@@ -1,18 +1,16 @@
 {% extends "bootstrap/base.html" %}
 {% block html_attribs %} lang="pt-br"{% endblock %}
 {% block title %}{{ _('Dados Livres') }}{% endblock %}
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- meta -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Style CSS -->
 {% block styles %}{{super()}}
   <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.min.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-tagsinput-latest/src/bootstrap-tagsinput.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/mystyle.css')}}">
   <link rel="icon" href="data:;base64,=">
 {% endblock %}
-
 {% block navbar %}
   <nav class="navbar navbar-inverse" role="navigation" style="border-radius: 0;">
     <div class="container-fluid">
@@ -23,34 +21,26 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ _('DadosLivres.org') }}</a>
+        <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ _('dadoslivres.org') }}</a>
       </div>
-
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
           <li><a href="{{ url_for('main.index') }}">{{ _('Página Inicial') }}</a></li>
-          <li><a href="{{ url_for('main.explore') }}">{{ _('Explorar') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}">{{ _('Fontes e Aplicações') }}</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_anonymous %}
             <li><a href="{{ url_for('auth.login') }}">{{ _('Entrar') }}</a></li>
-            <li><a href="{{ url_for('auth.register') }}">{{ _('Inscrever-se') }}</a></li>
-          {% else %}<div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Dropdown
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="#">Ação</a></li>
-              <li><a href="#">Outra ação</a></li>
-              <li><a href="#">Algo mais aqui</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Link separado</a></li>
-            </ul>
-          </div>
-            <li><a href="{{ url_for('main.register_source') }}">{{ _('Registrar fonte de dados abertos') }}</a></li>
-            <li><a href="{{ url_for('main.register_software') }}">{{ _('Registrar aplicação') }}</a></li>
-            <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Usuário') }}</a></li>
+            <li><a href="{{ url_for('auth.register') }}">{{ _('Inscreva-se') }}</a></li>
+          {% else %}
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ _('Registrar Fonte/Aplicação') }}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url_for('main.register_source') }}">{{ _('Registrar fonte de dados abertos') }}</a>
+                <a class="dropdown-item" href="{{ url_for('main.register_software') }}">{{ _('Registrar aplicação') }}</a>
+              </div>
+            </li>
+            <li><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Perfil') }}</a></li>
             <li><a href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
           {% endif %}
         </ul>
@@ -58,7 +48,6 @@
     </div>
   </nav>
 {% endblock %}
-
 {% block content %}
   <div class="container">
     {% with messages = get_flashed_messages() %}
@@ -68,23 +57,38 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-
     {# application content needs to be provided in the app_content block #}
-    {% block app_content %}{% endblock %}
-  </div><br><hr><br>
-
-    <footer class="footer">
-      <div class="container">
-        <p class="text-center text-muted copyright"> &copy;  Copyright 2019 by <a href="">Dados Livres</p>
+    {% block app_content %}{% endblock %}<br><hr><br>
+  <footer class="footer">
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+         <img src="../static/image/logoprovisoria.png" alt="Logo de DadosLivres.org"><br><br>
+      </div><br>
+      <div class="col-md-6 col-sm-12">
+        <p class="lead">Colabore no GitLab</p>
+        <p class="lead">Grupo no Telegram</p>
+        <p><a href="#" id="color-red">dadoslivre@gmail.com</a></p>
       </div>
-    </footer><br>
+    </div><br>
+    <div class="row">
+    	<div class="col-md-3"></div>
+    		<div class="col-md-12 text-center">
+          <p class="text-muted copyright"> &copy; <a href="{{ url_for('main.index') }}" id="color-black">Dados Livres</a> 2019.
+            Este projeto é fundado por <a href="https://t.me/pbaesse" target="_blank" id="color-black">Pedro Baesse</a>,
+            desenvolvido por <a href="https://t.me/carols0" target="_blank" id="color-black">Carolina Soares</a> e
+            <a href="#" id="color-black">contribuidores</a>. <a href="{{ url_for('main.sobre') }}" target="_blank" id="color-black">Saiba mais sobre dadoslivres.org</a>. <br>
+            Dados Livres é licenciado com licença Creative Commons.</p>
+        </div>
+      <div class="col-md-3"></div>
+    </div>
+  </footer>
+</div>
 {% endblock %}
-
-<!-- JavaScript, jQuery -->
+<!-- JavaScript, jQuery, popper -->
 {% block scripts %}{{super()}}
   <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
-  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
   <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
   <script type="text/javascript" src="{{url_for('static', filename='js/myscripts.js') }}"></script>
   <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>

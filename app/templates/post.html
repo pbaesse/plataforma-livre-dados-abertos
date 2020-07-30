@@ -1,52 +1,42 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
 {% block app_content %}
-  <h1>{{ post.title }}<small>
-  {% if post.officialLink %}<a href="{{ post.officialLink }}" target="_blank">
-    ({{ post.officialLink }})</a>{% endif %}</small></h1><br>
-  {% if post.tag %}<p>{{ post.tag }}</p>{% endif %}
-  {% if post.category %}<p>{{ post.category }}</p>{% endif %}
-  {% if post.sphere %}<p>{{ _('Esfera') }} {{ post.sphere }}</p>{% endif %}
-  {% if post.description %}<p class="lead">{{ post.description }}</p>{% endif %}<br>
-  {% if not current_user.is_anonymous %}
-    <p><a href="{{ url_for('main.edit_post', id=post.id) }}">{{ _('Editar fonte') }}</a></p>
-  {% endif %}
-  {% if current_user.is_anonymous %}
-    <hr><h4>{{ _('Cadastrado por') }}:
-      <a href="{{ url_for('main.user', username=post.author.username ) }}">
-    {{ post.author.username }}</a></h4><hr><br>
-  {% endif %}
-<br>
-<h2>Você também pode se interessar em: </h2><br>
-
-{% for similar in similares %}
-  {% include '_similarPost.html' %}
-  <a href="#">{{ _('Editar semelhante') }}</a> |
-  <a href="{{ url_for('main.deletar_similar', id=similar.id) }}">{{ _('Excluir semelhante') }}</a><br><br>
-{% endfor %}
-
-<br>
-<div class="row">
-    <div class="col-md-6">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-justify">
+      <h1>{{ post.title }}<small>{% if post.officialLink %}
+        <a href="{{ post.officialLink }}" target="_blank" id="color-red">({{ post.officialLink }})
+        </a>{% endif %}</small></h1><br>
+      {% if post.tag %}<p>Palavras-Chaves: {{ post.tag }}</p>{% endif %}
+      {% if post.category %}<p>Categoria: <a href="url_for('main.category')"
+          id="color-red">{{ post.category }}</a>{% endif %} |
+      {% if post.sphere %}Esfera: {{ post.sphere }}</p>{% endif %}<br>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}<br>
+      {% if not current_user.is_anonymous %}
+        <p><a href="{{ url_for('main.edit_post', id=post.id) }}" id="color-black">{{ _('Editar fonte') }}</a></p>
+      {% endif %}<br>
+      <hr><h4>{{ _('Fonte registrada por') }}:
+        <a href="{{ url_for('main.user', username=post.author.username ) }}" id="color-red">
+        {{ post.author.username }}</a></h4><hr>
+      </div>
+    </div><br><br>
+    <h2>Veja as fontes e aplicações semelhantes</h2><br>
+    {% for similar in similares %}
+      {% include '_similarPost.html' %}
+      <a href="#">{{ _('Editar semelhante') }}</a> |
+      <a href="{{ url_for('main.deletar_similar', id=similar.id) }}">{{ _('Excluir semelhante') }}</a><br><br>
+    {% endfor %}<br>
+    <div class="row">
+      <div class="col-md-6">
         {{ wtf.quick_form(form) }}
-    </div>
-</div>
+      </div>
+    </div><br><br>
+    <p><a href="{{ url_for('main.register_source') }}" id="color-red">
+        {{ _('Cadastrar uma nova fonte de dados') }}</a> |
+        <a href="{{ url_for('main.register_software') }}" id="color-red">
+        {{ _('Cadastrar um novo software') }}</a></p><br><br>
 
-<br><br>
-<p>Experimente <a href="{{ url_for('main.register_source') }}">
-  {{ _('Cadastrar uma nova fonte de dados') }}</a> |
-  <a href="{{ url_for('main.register_software') }}">
-  {{ _('Cadastrar um novo software') }}</a></p><br><br>
-
-<h2>Comentários</h2>
-<p>Aguarde! em breve você poderá deixar comentários aqui :)</p>
-
-{% if prev_url %}
-<a href="{{ prev_url }}">Mais recentes</a>
-{% endif %}
-{% if next_url %}
-<a href="{{ next_url }}">Mais antigas</a>
-{% endif %}
-
+    <h2>Comentários</h2>
+    <p>Aguarde! em breve você poderá deixar comentários aqui :)</p>
+  </div>
 {% endblock %}

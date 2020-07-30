@@ -41,6 +41,7 @@ def explore():
 
 # Cadastrar fontes
 @bp.route('/register_source', methods=['GET', 'POST'])
+@login_required
 def register_source():
     form = PostForm()
     if form.validate_on_submit():
@@ -66,7 +67,6 @@ def autocomplete():
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
 
-
 # perfil da fonte
 @bp.route('/post/<title>', methods=['GET', 'POST'])
 def post(title):
@@ -86,6 +86,7 @@ def post(title):
         similar_post=similar_post, posts=posts, similares=similares)
 
 @bp.route("/deletar_similar/<int:id>")
+@login_required
 def deletar_similar(id):
     similar = Similar.query.filter_by(id=id).first()
     db.session.delete(similar)
@@ -117,6 +118,7 @@ def edit_post(id):
 
 # deletar fonte
 @bp.route("/deletar_post/<int:id>")
+@login_required
 def deletar_post(id):
     post = Post.query.filter_by(id=id).first()
     db.session.delete(post)
@@ -126,6 +128,7 @@ def deletar_post(id):
 
 # Cadastrar softwares
 @bp.route('/register_software', methods=['GET', 'POST'])
+@login_required
 def register_software():
     form = SoftwareForm()
     if form.validate_on_submit():
@@ -150,6 +153,7 @@ def software(title):
 
 # Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_software(id):
     software = Software.query.get_or_404(id)
     form = SoftwareForm()
@@ -175,6 +179,7 @@ def edit_software(id):
 
 # deletar software
 @bp.route("/deletar_software/<int:id>")
+@login_required
 def deletar_software(id):
     software = Software.query.filter_by(id=id).first()
     db.session.delete(software)
@@ -223,6 +228,7 @@ def edit_profile():
 
 # Deletar usuário
 @bp.route("/deletar_user/<int:id>")
+@login_required
 def deletar_user(id):
     user = User.query.filter_by(id=id).first()
     db.session.delete(user)
@@ -287,3 +293,7 @@ def unfavorite(title):
     db.session.commit()
     flash(_('Você parou de favoritar {}!').format(title))
     return redirect(url_for('main.post', title=title))
+
+@bp.route('/sobre', methods=['GET', 'POST'])
+def sobre():
+    return render_template('sobre.html', title=(_('Sobre')))

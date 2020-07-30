@@ -8,8 +8,8 @@ from app.models import Post, Software
 
 @bp.route('/CoronaVirus', methods=['GET', 'POST'])
 def CoronaVirus():
-    posts = Post.query.filter_by(category='Corona Vírus').all()
-    softwares = Software.query.filter_by(category='Corona Vírus').all()
+    posts = Post.query.filter_by(category='1').all()
+    softwares = Software.query.filter_by(category=1).all()
     return render_template('category/CoronaVirus.html', title=_('Corona Vírus'),
         posts=posts, softwares=softwares)
 
@@ -95,4 +95,11 @@ def Clima():
     posts = Post.query.filter_by(category='Clima').all()
     softwares = Software.query.filter_by(category='Clima').all()
     return render_template('category/Clima.html', title=_('Clima'),
+        softwares=softwares, posts=posts)
+
+@bp.route('/Lazer', methods=['GET', 'POST'])
+def Lazer():
+    posts = Post.query.filter_by(category='Lazer').all()
+    softwares = Software.query.filter_by(category='Lazer').all()
+    return render_template('category/Lazer.html', title=_('Lazer'),
         softwares=softwares, posts=posts)

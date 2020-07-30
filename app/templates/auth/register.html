@@ -2,15 +2,17 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-    <div id="center"><h1>{{ _('Inscreva-se em Dados Livres') }}</h1>
-    <p>Inscrever-se para acessar e colaborar com fontes de dados abertos e aplicações
-      que fazem uso desse tipo de informação.</p></div><hr><br>
-        <div id="formCenter">
-          <div class="row">
-              <div class="col-md-14">
-                  {{ wtf.quick_form(form) }}
-              </div>
-          </div>
-        </div></br><br>
-    <div id="center"><p>Já tem uma conta? <a href="{{ url_for('auth.login') }}">{{ _('Entre') }}</a></p></div>
+  <div class="container">
+    <h1 class="text-center">{{ _('Inscreva-se em Dados Livres') }}</h1>
+    <p class="lead text-center">Inscrever-se para acessar e colaborar com fontes de dados abertos e aplicações
+      que fazem uso desse tipo de informação.</p><hr><br><br><br>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            {{ wtf.quick_form(form) }}
+        </div>
+        <div class="col-md-3"></div>
+      </div><br><br>
+    <p class="text-center">Já tem uma conta? <a href="{{ url_for('auth.login') }}" id="color-red">{{ _('Entre') }}</a></p><br>
+  </div>
 {% endblock %}

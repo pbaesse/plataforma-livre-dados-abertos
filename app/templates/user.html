@@ -1,36 +1,27 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
 {% block app_content %}
-  <div>
-    <img src="{{ user.avatar(100) }}" align="left" id="imagem_user">
-    <h1>{{ user.username }}</h1>
-    {% if user.nickname %}<p id="italic">{{ user.nickname }}</p>{% endif %}
-  	{% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}<br><br><br><br>
-    {% if not current_user.is_anonymous %}
-    <p><button type="button" class="btn btn-default">
-      <a href="{{ url_for('main.edit_profile') }}">
-        {{ _('Edite seu perfil') }}</a></button></p>
+  <div class="container">
+    <div class="">
+      <img src="{{ user.avatar(100) }}" align="left" id="imagem_user">
+      <h1>{{ user.username }}</h1>
+      {% if user.nickname %}<p id="italic">{{ user.nickname }}</p>{% endif %}
+  	   {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}<br>
+       {% if not current_user.is_anonymous %}
+       <p><a href="{{ url_for('main.edit_profile') }}" id="color-black">  {{ _('Edite seu perfil') }}</a></p>
     {% endif %}
-  </div><br><br><br>
-
-  <div class="row">
-    <div class="col-md-8">
-      <p><strong>Fontes de Dados Abertos cadastradas por {{ user.username }}</strong></p><br>
-      {% for post in posts %}
-        {% include '_post.html' %}<br>
-      {% if prev_url %}<a href="{{ prev_url }}">Mais recentes</a>{% endif %}
-      {% if next_url %}<a href="{{ next_url }}">Mais antigas</a>{% endif %}
-      {% endfor %}<br><br><br>
-    </div>
-    <div class="col-md-8">
-      <p><strong>Aplicações cadastradas por {{ user.username }}</strong></p><br>
-      {% for software in softwares %}
-        {% include '_software.html' %}<br>
-      {% if prev_url %}<a href="{{ prev_url }}">Mais recentes</a>{% endif %}
-      {% if next_url %}<a href="{{ next_url }}">Mais antigas</a>{% endif %}
+    </div><br><br><br>
+    <div class="row">
+      <div class="col-md-8 text-justify">
+        <p><strong>Fontes de Dados Abertos cadastradas por {{ user.username }}</strong></p><br>
+        {% for post in posts %}
+          {% include '_post.html' %}<br>
+        {% endfor %}<br><br>
+        <p><strong>Aplicações cadastradas por {{ user.username }}</strong></p><br>
+        {% for software in softwares %}
+          {% include '_software.html' %}<br>
         {% endfor %}
+      </div>
     </div>
   </div>
-
 {% endblock %}

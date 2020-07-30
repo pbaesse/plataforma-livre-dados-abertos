@@ -2,17 +2,19 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-			<div class="text-center"><h1>{{ _('Descubra diversas Fontes de Dados Abertos e Aplicações') }}</h1><hr></div><br><br>
-			<div class="row">
+	<div class="container">
+		<div class="row">
+			<h1 class="text-center">{{ _('Descubra diversas Fontes de Dados Abertos e Aplicações') }}</h1><hr><br><br>
+			<div class="col-md-8 text-justify">
 				<p><strong>Fontes de Dados Abertos</strong></p><br>
 				{% for post in posts %}
 					{% include '_post.html' %}<br>
-				{% endfor%}
-			</div><br><br><br>
-			<div class="row">
+				{% endfor%}<br><br><br>
 				<p><strong>Aplicações</strong></p><br>
 				{% for software in softwares %}
 					{% include '_software.html' %}<br>
 				{% endfor%}<br>
 			</div>
+		</div>
+	</div>
 {% endblock %}
