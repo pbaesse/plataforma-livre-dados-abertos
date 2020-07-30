@@ -11,6 +11,11 @@
   float: none !important;
 }
 
+.img-fluid {
+  width: 70%;
+  height: auto;
+}
+
 p {
   font-size: 12pt;
 }
