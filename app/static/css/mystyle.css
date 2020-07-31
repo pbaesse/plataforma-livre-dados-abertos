@@ -16,6 +16,12 @@
   height: auto;
 }
 
+div img#imagem_user {
+  float: left;
+  margin: 10px 20px 20px 0;
+  max-width: 120px;
+}
+
 p {
   font-size: 12pt;
 }
@@ -25,10 +31,19 @@ p {
   padding: 15px;
   display: flex;
   align-items: center;
-  border: 1px solid black;
+  border: 1px solid #370617;
   background-color: #FFFFFF;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-bottom: 17px;
   border-radius: 6px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.topic-grid-item:hover {
+  transform: scale(1.001);
+  cursor: pointer;
+  transition: linear 20s all;
 }
 
 a#category-link {
@@ -55,14 +70,4 @@ a#color-black{
 a#color-black:hover {
  border-bottom: dotted 1px rgba(88,88,88,0.5);
  color: #9d0208;
-}
-
-p#italic {
-  font-style: italic;
-}
-
-div img#imagem_user {
-  float: left;
-  margin: 0px 10px 10px 0;
-  max-width: 186px;
 }
