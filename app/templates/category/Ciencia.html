@@ -2,28 +2,32 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-<div class="text-center"><h1>{{ _('Fontes de Dados Abertos e Aplicações sobre Ciência') }}</h1>
-<p class="lead">Encontre diversas fontes de dados abertos e aplicações sobre Ciência</p><hr></div><br><br>
-
+<div class="container">
+  <h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações sobre Ciência') }}</h1>
+<p class="lead text-center">Encontre diversas fontes de dados abertos e aplicações sobre Ciência</p><hr><br><br>
 <div class="row">
-  <p><strong>Fontes de Dados Abertos</strong></p><br>
-  {% for post in posts %}
-    {% include '_post.html' %}<br>
-  {% endfor%}
+  <div class="col-md-8 text-justify">
+    <p><strong>Fontes de Dados Abertos</strong></p><br>
+    {% for post in posts %}
+      {% include '_post.html' %}<br>
+    {% endfor%}<br><br><br>
+    <p><strong>Aplicações</strong></p><br>
+    {% for software in softwares %}
+      {% include '_software.html' %}<br>
+    {% endfor%}<br>
+  </div>
 </div><br><br><br>
 <div class="row">
-  <p><strong>Aplicações</strong></p><br>
-  {% for software in softwares %}
-    {% include '_software.html' %}<br>
-  {% endfor%}<br>
+  <h2 class="text-center">Descubra outras categorias</h2><br><br>
+  <div class="col-md-4 col-sm-12">
+    <h4><a class="topic-grid-item" href="{{ url_for('category.Tecnologia') }}" id="category-link">Tecnologia</a></h4>
+  </div>
+  <div class="col-md-4 col-sm-12">
+    <h4><a class="topic-grid-item" href="{{ url_for('category.IBGE') }}" id="category-link">IBGE</a></h4>
+  </div>
+  <div class="col-md-4 col-sm-12">
+    <h4><a class="topic-grid-item" href="{{ url_for('category.Paises') }}" id="category-link">Países</a></h4>
+  </div>
+</div>
 </div><br><br>
-
-<br><br>
-{% if prev_url %}
-<a href="{{ prev_url }}">Ver mais recentes</a>
-{% endif %}
-{% if next_url %}
-<a href="{{ next_url }}">Ver mais antigos</a>
-{% endif %}
-
 {% endblock %}
