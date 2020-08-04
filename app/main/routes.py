@@ -72,18 +72,15 @@ def autocomplete():
 def post(title):
     post = Post.query.filter_by(title=title).first_or_404()
     posts = Post.query.order_by(Post.timestamp.desc()).all()
-
     form = SimilarForm(request.form)
     if form.validate_on_submit():
-        similar = Similar(name=form.name.data, postSimilar_id=post.id)
+        similar = Similar(name=form.name.data, post_id=post.id)
         db.session.add(similar)
         db.session.commit()
         flash(_('Você registrou uma nova opção de semelhante'))
-    similar_post = Similar.query.filter_by(postSimilar_id=post.id).all()
-    similares = Similar.query.order_by(Similar.timestamp.desc()).all()
-
+    similares = Similar.query.filter_by(post_id=post.id).all()
     return render_template('post.html', post=post, form=form,
-        similar_post=similar_post, posts=posts, similares=similares)
+        similares=similares, posts=posts)
 
 @bp.route("/deletar_similar/<int:id>")
 @login_required
@@ -102,17 +99,28 @@ def edit_post(id):
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.description = form.description.data
-        post.sphere = form.sphere.data
+        post.tag = form.tag.data
+        post.category = form.category.data
         post.officialLink = form.officialLink.data
+        post.sphere = form.sphere.data
+        post.city = form.city.data
+        post.state = form.state.data
+        post.country = form.country.data
+        post.description = form.description.data
         db.session.add(post)
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
         return redirect(url_for('main.index'))
     form.title.data = post.title
-    form.description.data = post.description
-    form.sphere.data = post.sphere
+    form.tag.data = post.tag
+    form.category.data = post.category
     form.officialLink.data = post.officialLink
+    form.sphere.data = post.sphere
+    form.city.data = post.city
+    form.state.data = post.state
+    form.country.data = post.country
+    form.description.data = post.description
+
     return render_template('edit_post.html', title=(_('Editar Fonte')),
                            form=form, post=post)
 
@@ -149,7 +157,18 @@ def register_software():
 def software(title):
     software = Software.query.filter_by(title=title).first_or_404()
     softwares = Software.query.order_by(Software.timestamp.desc()).all()
-    return render_template('software.html', software=software, softwares=softwares)
+
+    form = SimilarForm(request.form)
+    if form.validate_on_submit():
+        similar = Similar(name=form.name.data, software_id=software.id)
+        db.session.add(similar)
+        db.session.commit()
+        flash(_('Você registrou uma nova opção de semelhante'))
+
+    similares = Similar.query.filter_by(software_id=software.id).all()
+
+    return render_template('software.html', software=software, form=form,
+        similares=similares, softwares=softwares)
 
 # Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
@@ -159,21 +178,25 @@ def edit_software(id):
     form = SoftwareForm()
     if form.validate_on_submit():
         software.title = form.title.data
-        software.description = form.description.data
+        software.tag = form.tag.data
+        software.category = form.category.data
         software.officialLink = form.officialLink.data
-        software.license = form.license.data
         software.owner = form.owner.data
         software.dateCreation = form.dateCreation.data
+        software.license = form.license.data
+        software.description = form.description.data
         db.session.add(software)
         db.session.commit()
         flash(_('Suas alterações foram salvas.'))
         return redirect(url_for('main.index'))
     form.title.data = software.title
-    form.description.data = software.description
+    form.tag.data = software.tag
+    form.category.data = software.category
     form.officialLink.data = software.officialLink
-    form.license.data = software.license
     form.owner.data = software.owner
     form.dateCreation.data = software.dateCreation
+    form.license.data = software.license
+    form.description.data = software.description
     return render_template('edit_software.html', title=(_('Editar Software')),
         form=form, software=software)
 
@@ -235,64 +258,6 @@ def deletar_user(id):
     db.session.commit()
     flash(_('O Usuário foi excluído!'))
     return redirect(url_for("main.index"))
-
-# seguir usuário
-@bp.route('/follow/<username>')
-@login_required
-def follow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash(_('usuário {} Página não encontrada.').format(username))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash(_('Você não pode seguir a si mesmo!'))
-        return redirect(url_for('main.user', username=username))
-    current_user.follow(user)
-    db.session.commit()
-    flash(_('Você está seguindo {}!').format(username))
-    return redirect(url_for('main.user', username=username))
-
-# deixar de seguir usuário
-@bp.route('/unfollow/<username>')
-@login_required
-def unfollow(username):
-    user = User.query.filter_by(username=username).first()
-    if user is None:
-        flash(_('Usuário {} Página não encontrada.'.format(username)))
-        return redirect(url_for('main.index'))
-    if user == current_user:
-        flash(_('Você não pode deixar de seguir a si mesmo!'))
-        return redirect(url_for('main.user', username=username))
-    current_user.unfollow(user)
-    db.session.commit()
-    flash(_('Você não está seguindo {}.').format(username))
-    return redirect(url_for('main.user', username=username))
-
-# favoritar post
-@bp.route('/favorite/<title>')
-@login_required
-def favorite(title):
-    post = Post.query.filter_by(title=title).first()
-    if post is None:
-        flash(_('Fonte {} não encontrada.').format(title))
-        return redirect(url_for('main.index'))
-    db.session.add(post)
-    db.session.commit()
-    flash(_('Você favoritou {}!').format(title))
-    return redirect(url_for('main.post', title=title))
-
-# deixar de favoritar post
-@bp.route('/unfavorite/<title>')
-@login_required
-def unfavorite(title):
-    post = Post.query.filter_by(title=title).first()
-    if post is None:
-        flash(_('Fonte {} não encontrada.').format(title))
-        return redirect(url_for('main.index'))
-    db.session.add(post)
-    db.session.commit()
-    flash(_('Você parou de favoritar {}!').format(title))
-    return redirect(url_for('main.post', title=title))
 
 @bp.route('/sobre', methods=['GET', 'POST'])
 def sobre():
