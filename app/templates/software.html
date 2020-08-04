@@ -4,9 +4,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12 text-justify">
-      <h1>{{ software.title }}{% if software.officialLink %}
-        <small><a href="{{ software.officialLink }}" target="_blank" id="color-red">
-        ({{ software.officialLink }})</a></small>{% endif %}</h1><br>
+      <h1>{{ software.title }}</h1><br>
+      <p><a href="{{ software.officialLink }}" target="_blank" id="color-red">{{ software.officialLink }}</a></p>
       {% if software.tag %}<p>Palavras-Chaves: {{ software.tag }}</p>{% endif %}
       {% if software.category %}<p>Categoria: <a href="url_for('main.category')"
           id="color-red">{{ software.category }}</a></p>{% endif %}
@@ -14,23 +13,30 @@
       {% if software.owner %}<p>{{ _('Proprietário') }}: {{ software.owner }}</p>{% endif %}
       {% if software.dateCreation %}<p>{{ _('Data de criação') }}: {{ software.dateCreation }}</p>{% endif %} <br>
       {% if software.description %}<p>{{ software.description }}</p>{% endif %}<br>
-      {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-black">{{ _('Editar software') }}</a></p>
-      {% endif %}<br>
-      <hr><h4>{{ _('Aplicação registrada por') }}:
+      <p>{{ _('Aplicação registrada por') }}:
         <a href="{{ url_for('main.user', username=software.author.username ) }}" id="color-red">
-          {{ software.author.username }}</a></h4><hr>
+          {{ software.author.username }}</a></p><br>
+      {% if not current_user.is_anonymous %}
+        <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-black">{{ _('Edite a Aplicação') }}</a></p>
+      {% endif %}<hr>
     </div>
-  </div><br><br>
-  <h2>Veja as fontes e aplicações semelhantes</h2><br>
-    {% for similar in similares %}
-      {% include '_similarSoftware.html' %}<br>
-    {% endfor %}<br><br>
-  <p><a href="{{ url_for('main.register_source') }}" id="color-red">
-    {{ _('Cadastrar uma nova fonte de dados') }}</a> |
-    <a href="{{ url_for('main.register_software') }}" id="color-red">
-    {{ _('Cadastrar um novo software') }}</a></p><br><br>
-  <h2>Comentários</h2>
-  <p>Aguarde! em breve você poderá deixar comentários aqui :)</p><br>
+  </div><br><br><br>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 text-justify">
+      <h2>Veja as fontes e aplicações que são semelhantes em <a href="{{ software.title }}" id="color-black">{{ software.title }}</a></h2><br><br>
+      {% for similar in similares %}
+        {% include '_similarSoftware.html' %}<br>
+      {% endfor %}<br><br>
+    </div>
+    <div class="col-md-2"></div>
   </div>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      {{ wtf.quick_form(form) }}
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div><br><br>
 {% endblock %}
