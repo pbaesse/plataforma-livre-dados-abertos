@@ -11,14 +11,19 @@
   float: none !important;
 }
 
+.dropdown-menu {
+  padding: 15px;
+  min-width: 320px;
+}
+
 .img-fluid {
-  width: 70%;
+  width: 40%;
   height: auto;
 }
 
 div img#imagem_user {
   float: left;
-  margin: 10px 20px 20px 0;
+  margin: 20px 20px 20px 0;
   max-width: 120px;
 }
 
@@ -70,4 +75,29 @@ a#color-black{
 a#color-black:hover {
  border-bottom: dotted 1px rgba(88,88,88,0.5);
  color: #9d0208;
+}
+
+ul.separator {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+ul.separator li {
+  padding: .8em 0;
+  border-bottom: 1px solid #CCC;
+}
+
+ul.separator li:last-child {
+  border-bottom: 0;
+}
+
+ul.separator a {
+  text-decoration: none;
+  color: #03071E;
+}
+
+ul.separator a:hover {
+  text-decoration: none;
+  color: #9d0208;
 }

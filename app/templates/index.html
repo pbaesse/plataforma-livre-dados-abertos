@@ -2,7 +2,7 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
 <div class="container">
-	<h1 class="text-center">{{ _('Dados Livres') }} <small><a href="{{ url_for('main.index') }}" id="color-red">(dadoslivres.org)</a></small></h1><br>
+	<h1 class="text-center">{{ _('Dados Livres') }} <small>(<a href="{{ url_for('main.index') }}" id="color-red">dadoslivres.org</a>)</small></h1><br>
 	<p class="lead text-center">{{ _('Plataforma Dados Livres que permite o <strong>compartilhamento</strong> e a
 	<strong>colaboração</strong> na <strong>identificação de Fontes de Dados Abertos e Aplicações
 	que fazem uso desse tipo de informação</strong>, de modo a gerar <strong>controle social</strong>
@@ -38,7 +38,7 @@
 		<div class="col-md-6 text-justify">
 			{% for post in posts %}
 				<h4><strong><a href="{{ url_for('main.post', title=post.title) }}" id="color-black">{{ post.title }}</a></strong>
-					<small><a href="{{ post.officialLink }}" target="_blank" id="color-red">({{ post.officialLink }})</a></small></h4>
+					<small>(<a href="{{ post.officialLink }}" target="_blank" id="color-red">{{ post.officialLink }}</a>)</small></h4>
 				<p>Palavras-Chaves: {{ post.tag }} | Categoria: <a href="category/{{ post.category }}" id="color-red">{{ post.category }}</a> |
 				Esfera: {{ post.sphere }}<br>
 				Descrição: {{ post.description }}</p>
@@ -47,7 +47,7 @@
 			{% endfor %}<br>
 			{% for software in softwares %}
 				<h4><strong><a href="{{ url_for('main.software', title=software.title) }}" id="color-black">{{ software.title }}</a></strong>
-					<small><a href="{{ software.officialLink }}" id="color-red" target="_blank">({{ software.officialLink }})</a></small></h4>
+					<small>(<a href="{{ software.officialLink }}" id="color-red" target="_blank">{{ software.officialLink }}</a>)</small></h4>
 				<p>Palavras-Chaves: {{ software.tag }} | Categoria: <a href="category/{{ software.category }}" id="color-red">{{ software.category }}</a> |
 				Licença: {{ software.license }}<br>
 				Proprietário/Empresa mantedora: {{ software.owner }} | Data de criação: {{ software.dateCreation }} <br>

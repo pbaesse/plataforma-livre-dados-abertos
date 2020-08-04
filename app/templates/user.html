@@ -7,12 +7,14 @@
         <img src="{{ user.avatar(100) }}" class="img-fluid" align="left" id="imagem_user" alt="perfil do usuario">
         <h1>{{ user.username }} <small>{% if user.nickname %}{{ user.nickname }}{% endif %}</small></h1>
   	    {% if user.about_me %}<p class="text-justify">{{ user.about_me }}</p>{% endif %}<br><br>
-        {% if not current_user.is_anonymous %}
-          <p><a href="{{ url_for('main.edit_profile') }}" id="color-black">  {{ _('Edite seu perfil') }}</a></p>
-        {% endif %}
       </div>
-    </div><br><br><br>
+    </div><br>
+    {% if not current_user.is_anonymous %}
+      <p><a href="{{ url_for('main.edit_profile') }}" id="color-black">  {{ _('Edite seu perfil') }}</a></p>
+    {% endif %}
+    <hr><br><br><br>
     <div class="row">
+      <div class="col-md-2"></div>
       <div class="col-md-8 text-justify">
         <p><strong>Fontes de Dados Abertos cadastradas por {{ user.username }}</strong></p><br>
         {% for post in posts %}
@@ -23,6 +25,7 @@
           {% include '_software.html' %}<br>
         {% endfor %}
       </div>
+      <div class="col-md-2"></div>
     </div>
-  </div>
+  </div><br><br>
 {% endblock %}

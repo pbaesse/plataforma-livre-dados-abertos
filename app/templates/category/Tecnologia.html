@@ -3,9 +3,10 @@
 
 {% block app_content %}
 <div class="container">
-><h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações sobre Tecnologia') }}</h1>
+<h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações sobre Tecnologia') }}</h1>
   <p class="lead text-center">Encontre diversas fontes de dados abertos e aplicações sobre segurança Tecnologia</p><hr><br><br>
   <div class="row">
+    <div class="col-md-2"></div>
     <div class="col-md-8 text-justify">
       <p><strong>Fontes de Dados Abertos</strong></p><br>
       {% for post in posts %}
@@ -14,8 +15,9 @@
       <p><strong>Aplicações</strong></p><br>
       {% for software in softwares %}
         {% include '_software.html' %}<br>
-      {% endfor%}<br>
+      {% endfor%}
     </div>
+    <div class="col-md-2"></div>
   </div><br><br><br>
 <div class="row">
   <h2 class="text-center">Descubra outras categorias</h2><br><br>

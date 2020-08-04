@@ -2,7 +2,7 @@
   <tr valign="top">
     <td>
       <h4><a href="{{ url_for('main.software', title=software.title) }}" id="color-black">{{ software.title }}</a>
-          <small><a href="{{ software.officialLink }}" target="_blank" id="color-red">({{ software.officialLink }})</a></small></h4>
+          <small>(<a href="{{ software.officialLink }}" target="_blank" id="color-red">{{ software.officialLink }}</a>)</small></h4>
       {{ software.tag }} | <a href="category/{{ software.category }}" id="color-red">{{ software.category }}</a><br>
     </td>
   </tr>
