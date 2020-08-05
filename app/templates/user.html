@@ -14,18 +14,16 @@
     {% endif %}
     <hr><br><br><br>
     <div class="row">
-      <div class="col-md-2"></div>
       <div class="col-md-8 text-justify">
-        <p><strong>Fontes de Dados Abertos cadastradas por {{ user.username }}</strong></p><br>
+        <p class="lead"><strong>Fontes de Dados Abertos registradas por {{ user.username }}</strong></p><br>
         {% for post in posts %}
-          {% include '_post.html' %}<br>
+          {% include '_post.html' %}<br><br><br>
         {% endfor %}<br><br>
-        <p><strong>Aplicações cadastradas por {{ user.username }}</strong></p><br>
+        <p class="lead"><strong>Aplicações registradas por {{ user.username }}</strong></p><br>
         {% for software in softwares %}
-          {% include '_software.html' %}<br>
+          {% include '_software.html' %}<br><br><br>
         {% endfor %}
       </div>
-      <div class="col-md-2"></div>
     </div>
   </div><br><br>
 {% endblock %}

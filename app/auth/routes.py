@@ -19,7 +19,7 @@ def login():
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
 		if user is None or not user.check_password(form.password.data):
-			flash(_('Nome de usuário ou senha inválidos'))
+			flash(_('Usuário ou senha inválido'))
 			return redirect(url_for('auth.login'))
 		login_user(user, remember=form.remember_me.data)
 		next_page = request.args.get('next')
@@ -28,11 +28,6 @@ def login():
 		return redirect(next_page)
 	return render_template('auth/login.html', title=_('Entrar'), form=form)
 
-@bp.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('main.index'))
-
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -40,12 +35,17 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        user.set_password(form.senha.data)
         db.session.add(user)
         db.session.commit()
-        flash(_('Parabéns, agora você é um usuário registrado!'))
+        flash(_('Novo usuário registrado com sucesso'))
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', title=_('Registrar'), form=form)
+
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main.index'))
 
 @bp.route('/reset_password_request', methods=['GET', 'POST'])
 def reset_password_request():

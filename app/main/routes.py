@@ -21,7 +21,6 @@ def before_request():
         db.session.commit()
     g.locale = str(get_locale())
 
-# exibição de posts e softwares
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
@@ -31,7 +30,6 @@ def index():
     return render_template('index.html', title=(_('Página Principal')),
         posts=posts.items, softwares=softwares.items)
 
-# page explore posts e softwares
 @bp.route('/explore', methods=['GET', 'POST'])
 def explore():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
@@ -39,26 +37,6 @@ def explore():
     return render_template('explore.html', title=(_('Explorar')),
         posts=posts, softwares=softwares)
 
-# Cadastrar fontes
-@bp.route('/register_source', methods=['GET', 'POST'])
-@login_required
-def register_source():
-    form = PostForm()
-    if form.validate_on_submit():
-        sources = Post(title=form.title.data, tag=form.tag.data,
-        category=form.category.data, city=form.city.data, state=form.state.data,
-        country=form.country.data, description=form.description.data,
-        sphere=form.sphere.data, officialLink=form.officialLink.data,
-        author=current_user)
-        db.session.add(sources)
-        db.session.commit()
-        flash(_('Parabéns, você acabou de registrar uma fonte de dados!'))
-        return redirect(url_for('main.index'))
-
-    return render_template('register_source.html',
-        title=(_('Cadastrar Fonte')), form=form)
-
-# semelhantes
 @bp.route('/_autocomplete', methods=['GET'])
 def autocomplete():
     res1 = Software.query.all()
@@ -67,7 +45,22 @@ def autocomplete():
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
 
-# perfil da fonte
+@bp.route('/register_source', methods=['GET', 'POST'])
+@login_required
+def register_source():
+    form = PostForm()
+    if form.validate_on_submit():
+        sources = Post(title=form.title.data, tag=form.tag.data,
+        category=form.category.data, city=form.city.data,
+        state=form.state.data, country=form.country.data,
+        description=form.description.data, sphere=form.sphere.data,
+        officialLink=form.officialLink.data, author=current_user)
+        db.session.add(sources)
+        db.session.commit()
+        flash(_('Você registrou uma nova Fonte de Dados Abertos'))
+        return redirect(url_for('main.explore'))
+    return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
+
 @bp.route('/post/<title>', methods=['GET', 'POST'])
 def post(title):
     post = Post.query.filter_by(title=title).first_or_404()
@@ -77,21 +70,11 @@ def post(title):
         similar = Similar(name=form.name.data, post_id=post.id)
         db.session.add(similar)
         db.session.commit()
-        flash(_('Você registrou uma nova opção de semelhante'))
+        flash(_('Você registrou um semelhante'))
     similares = Similar.query.filter_by(post_id=post.id).all()
     return render_template('post.html', post=post, form=form,
         similares=similares, posts=posts)
 
-@bp.route("/deletar_similar/<int:id>")
-@login_required
-def deletar_similar(id):
-    similar = Similar.query.filter_by(id=id).first()
-    db.session.delete(similar)
-    db.session.commit()
-    flash(_('Semelhante foi excluído!'))
-    return redirect(url_for("main.index"))
-
-# editar a fonte
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_post(id):
@@ -109,8 +92,8 @@ def edit_post(id):
         post.description = form.description.data
         db.session.add(post)
         db.session.commit()
-        flash(_('Suas alterações foram salvas.'))
-        return redirect(url_for('main.index'))
+        flash(_('As alterações foram salvas'))
+        return redirect(url_for('main.explore'))
     form.title.data = post.title
     form.tag.data = post.tag
     form.category.data = post.category
@@ -120,11 +103,9 @@ def edit_post(id):
     form.state.data = post.state
     form.country.data = post.country
     form.description.data = post.description
-
     return render_template('edit_post.html', title=(_('Editar Fonte')),
                            form=form, post=post)
 
-# deletar fonte
 @bp.route("/deletar_post/<int:id>")
 @login_required
 def deletar_post(id):
@@ -134,7 +115,6 @@ def deletar_post(id):
     flash(_('A fonte foi excluída!'))
     return redirect(url_for("main.index"))
 
-# Cadastrar softwares
 @bp.route('/register_software', methods=['GET', 'POST'])
 @login_required
 def register_software():
@@ -147,30 +127,25 @@ def register_software():
         author=current_user)
         db.session.add(software)
         db.session.commit()
-        flash(_('Parabéns, você acabou de registrar um software de dados!'))
-        return redirect(url_for('main.index'))
+        flash(_('Você registrou uma nova aplicação'))
+        return redirect(url_for('main.explore'))
     return render_template('register_software.html',
         title=(_('Cadastrar Software')), form=form)
 
-# perfil do software
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
     software = Software.query.filter_by(title=title).first_or_404()
     softwares = Software.query.order_by(Software.timestamp.desc()).all()
-
     form = SimilarForm(request.form)
     if form.validate_on_submit():
         similar = Similar(name=form.name.data, software_id=software.id)
         db.session.add(similar)
         db.session.commit()
-        flash(_('Você registrou uma nova opção de semelhante'))
-
+        flash(_('Você registrou um semelhante'))
     similares = Similar.query.filter_by(software_id=software.id).all()
-
     return render_template('software.html', software=software, form=form,
         similares=similares, softwares=softwares)
 
-# Editar software
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_software(id):
@@ -187,8 +162,8 @@ def edit_software(id):
         software.description = form.description.data
         db.session.add(software)
         db.session.commit()
-        flash(_('Suas alterações foram salvas.'))
-        return redirect(url_for('main.index'))
+        flash(_('Suas alterações foram salvas'))
+        return redirect(url_for('main.explore'))
     form.title.data = software.title
     form.tag.data = software.tag
     form.category.data = software.category
@@ -200,7 +175,6 @@ def edit_software(id):
     return render_template('edit_software.html', title=(_('Editar Software')),
         form=form, software=software)
 
-# deletar software
 @bp.route("/deletar_software/<int:id>")
 @login_required
 def deletar_software(id):
@@ -210,7 +184,6 @@ def deletar_software(id):
     flash(_('O software foi excluído!'))
     return redirect(url_for("main.index"))
 
-# perfil do usuário mostrando suas fontes e softwares
 @bp.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
@@ -230,7 +203,6 @@ def user(username):
     return render_template('user.html', user=user, posts=posts.items,
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
-# edite o perfil do usuário
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -240,8 +212,8 @@ def edit_profile():
         current_user.nickname = form.nickname.data
         current_user.about_me = form.about_me.data
         db.session.commit()
-        flash(_('Suas alterações foram salvas.'))
-        return redirect(url_for('main.edit_profile'))
+        flash(_('Suas alterações foram salvas'))
+        return redirect(url_for('main.user', username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.nickname.data = current_user.nickname
@@ -249,7 +221,6 @@ def edit_profile():
     return render_template('edit_profile.html', title=(_('Editar Perfil')),
                            form=form)
 
-# Deletar usuário
 @bp.route("/deletar_user/<int:id>")
 @login_required
 def deletar_user(id):
@@ -259,6 +230,6 @@ def deletar_user(id):
     flash(_('O Usuário foi excluído!'))
     return redirect(url_for("main.index"))
 
-@bp.route('/sobre', methods=['GET', 'POST'])
-def sobre():
-    return render_template('sobre.html', title=(_('Sobre')))
+@bp.route('/about', methods=['GET', 'POST'])
+def about():
+    return render_template('about.html', title=(_('Sobre')))

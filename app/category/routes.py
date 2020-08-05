@@ -8,8 +8,8 @@ from app.models import Post, Software
 
 @bp.route('/CoronaVirus', methods=['GET', 'POST'])
 def CoronaVirus():
-    posts = Post.query.filter_by(category='1').all()
-    softwares = Software.query.filter_by(category=1).all()
+    posts = Post.query.filter_by(category='Corona Vírus').all()
+    softwares = Software.query.filter_by(category='Corona Vírus').all()
     return render_template('category/CoronaVirus.html', title=_('Corona Vírus'),
         posts=posts, softwares=softwares)
 

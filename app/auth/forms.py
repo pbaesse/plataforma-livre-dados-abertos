@@ -21,11 +21,11 @@ class RegistrationForm(FlaskForm):
         Length(min=3)], render_kw={"placeholder": "Digite um nome de usuário"})
     email = StringField(_l('E-mail'), validators=[DataRequired(), Email()],
         render_kw={"placeholder": "Digite seu endereço de e-mail"})
-    password = PasswordField(_l('Senha'), validators=[DataRequired(),
+    senha = PasswordField(_l('Senha'), validators=[DataRequired(),
         Length(min=8)], render_kw={"placeholder": "Digite uma senha \
 (mínimo 8 caracteres)"})
     password2 = PasswordField(_l('Repetir senha'), validators=[DataRequired(),
-        EqualTo('password'), Length(min=8)],
+        EqualTo('senha'), Length(min=8)],
         render_kw={"placeholder": "Repita a senha anterior (mínimo 8 caracteres)"})
     submit = SubmitField(_('Inscrever'))
 
