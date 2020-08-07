@@ -1,29 +1,29 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-  <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <img src="{{ user.avatar(100) }}" class="img-fluid" align="left" id="imagem_user" alt="perfil do usuario">
-        <h1>{{ user.username }} <small>{% if user.nickname %}{{ user.nickname }}{% endif %}</small></h1>
-  	    {% if user.about_me %}<p class="text-justify">{{ user.about_me }}</p>{% endif %}<br><br>
+        <img src="{{ user.avatar(100) }}" align="left" id="imagem_user" alt="perfil do usuario">
+        <h1>{% if user.username %}{{ user.username }}{% endif %}</h1>
+        <p>{% if user.nickname %}{{ user.nickname }}{% endif %}</p>
+  	    <p class="text-justify">{% if user.about_me %}{{ user.about_me }}{% endif %}</p>
+        {% if not current_user.is_anonymous %}
+          <button type="button"class="btn btn-default">
+            <a href="{{ url_for('main.edit_profile') }}"
+              id="color-red">{{ _('Editar Perfil') }}</a></button>
+        {% endif %}
       </div>
-    </div><br>
-    {% if not current_user.is_anonymous %}
-      <p><a href="{{ url_for('main.edit_profile') }}" id="color-black">  {{ _('Edite seu perfil') }}</a></p>
-    {% endif %}
-    <hr><br><br><br>
+    </div><br><br><br><br>
     <div class="row">
-      <div class="col-md-8 text-justify">
+      <div class="col-md-12">
         <p class="lead"><strong>Fontes de Dados Abertos registradas por {{ user.username }}</strong></p><br>
         {% for post in posts %}
-          {% include '_post.html' %}<br><br><br>
+          {% include '_post.html' %}<hr><br>
         {% endfor %}<br><br>
         <p class="lead"><strong>Aplicações registradas por {{ user.username }}</strong></p><br>
         {% for software in softwares %}
-          {% include '_software.html' %}<br><br><br>
+          {% include '_software.html' %}<hr><br>
         {% endfor %}
       </div>
     </div>
-  </div><br><br>
 {% endblock %}
