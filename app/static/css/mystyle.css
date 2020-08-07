@@ -20,11 +20,6 @@
   float: none !important;
 }
 
-.navbar-default {
-  border-radius: 0;
-  border-bottom: none;
-}
-
 .dropdown-menu {
   padding: 10px;
   border-radius: 4px;
