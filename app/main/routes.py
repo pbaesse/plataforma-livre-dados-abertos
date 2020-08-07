@@ -8,8 +8,8 @@ from flask_login import current_user, login_required
 from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
-from app.main.form import EditProfileForm, PostForm, SoftwareForm, \
-    SimilarForm, CommentForm, ReportForm
+from app.main.form import EditProfileForm, EditPasswordForm, \
+    PostForm, SoftwareForm, SimilarForm, CommentForm, ReportForm
 from app.models import User, Post, Software, Similar, \
     Comment, Report
 from app.main import bp
@@ -67,10 +67,13 @@ def post(title):
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     form = SimilarForm(request.form)
     if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            return redirect(url_for('auth.login'))
         similar = Similar(name=form.name.data, post_id=post.id)
         db.session.add(similar)
         db.session.commit()
         flash(_('Você registrou um semelhante'))
+        return redirect(url_for('main.post', title=post.title))
     similares = Similar.query.filter_by(post_id=post.id).all()
     return render_template('post.html', post=post, form=form,
         similares=similares, posts=posts)
@@ -93,7 +96,7 @@ def edit_post(id):
         db.session.add(post)
         db.session.commit()
         flash(_('As alterações foram salvas'))
-        return redirect(url_for('main.explore'))
+        return redirect(url_for('main.post', title=post.title))
     form.title.data = post.title
     form.tag.data = post.tag
     form.category.data = post.category
@@ -112,8 +115,8 @@ def deletar_post(id):
     post = Post.query.filter_by(id=id).first()
     db.session.delete(post)
     db.session.commit()
-    flash(_('A fonte foi excluída!'))
-    return redirect(url_for("main.index"))
+    flash(_('A fonte foi deletada'))
+    return redirect(url_for("main.explore"))
 
 @bp.route('/register_software', methods=['GET', 'POST'])
 @login_required
@@ -138,10 +141,13 @@ def software(title):
     softwares = Software.query.order_by(Software.timestamp.desc()).all()
     form = SimilarForm(request.form)
     if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            return redirect(url_for('auth.login'))
         similar = Similar(name=form.name.data, software_id=software.id)
         db.session.add(similar)
         db.session.commit()
         flash(_('Você registrou um semelhante'))
+        return redirect(url_for('main.software', title=software.title))
     similares = Similar.query.filter_by(software_id=software.id).all()
     return render_template('software.html', software=software, form=form,
         similares=similares, softwares=softwares)
@@ -163,7 +169,7 @@ def edit_software(id):
         db.session.add(software)
         db.session.commit()
         flash(_('Suas alterações foram salvas'))
-        return redirect(url_for('main.explore'))
+        return redirect(url_for('main.software', title=software.title))
     form.title.data = software.title
     form.tag.data = software.tag
     form.category.data = software.category
@@ -181,8 +187,8 @@ def deletar_software(id):
     software = Software.query.filter_by(id=id).first()
     db.session.delete(software)
     db.session.commit()
-    flash(_('O software foi excluído!'))
-    return redirect(url_for("main.index"))
+    flash(_('A aplicação foi deletada'))
+    return redirect(url_for("main.explore"))
 
 @bp.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
@@ -221,15 +227,36 @@ def edit_profile():
     return render_template('edit_profile.html', title=(_('Editar Perfil')),
                            form=form)
 
-@bp.route("/deletar_user/<int:id>")
+@bp.route('/deletar_user/<int:id>')
 @login_required
 def deletar_user(id):
     user = User.query.filter_by(id=id).first()
     db.session.delete(user)
     db.session.commit()
-    flash(_('O Usuário foi excluído!'))
+    flash(_('O Usuário foi excluído'))
     return redirect(url_for("main.index"))
+
+@bp.route('/edit_password', methods=["GET", "POST"])
+@login_required
+def edit_password():
+    form = EditPasswordForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.password_hash = form.senha
+        db.session.commit()
+        flash(_('Sua nova senha foi salva'))
+        return redirect(url_for('main.user', username=current_user.username))
+    elif request.method == 'GET':
+        form.senha = current_user.password_hash
+    return render_template('edit_password.html', title=(_('Editar Senha')), form=form)
 
 @bp.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html', title=(_('Sobre')))
+
+@bp.route('/how_to_contribute', methods=['GET', 'POST'])
+def how_to_contribute():
+    return render_template('how_to_contribute.html', title=(_('Como contribuir?')))
+
+@bp.route('/contact', methods=['GET', 'POST'])
+def contact():
+    return render_template('contact.html', title=(_('Contato')))
