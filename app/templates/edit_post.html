@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-  <div class="container">
-    <h1 class="text-center">{{ _('Edite as informações da fonte de dados') }}</h1><hr><br>
+    <h1 class="text-center">{{ _('Edite as informações da fonte de dados') }}</h1><br><br><br>
     <div class="row">
       <div class="col-md-3"></div>
       <div class="col-md-6">
         {{ wtf.quick_form(form) }}
       </div>
       <div class="col-md-3"></div>
-    </div><br><br>
-  </div>
+    </div>
 {% endblock %}
