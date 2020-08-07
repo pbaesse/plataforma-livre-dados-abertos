@@ -31,6 +31,16 @@ class EditProfileForm(FlaskForm):
 				raise ValidationError(_('Escolha um nome diferente'))
 
 
+class EditPasswordForm(FlaskForm):
+    senha = PasswordField(_l('Senha'), validators=[DataRequired(),
+        Length(min=8)], render_kw={"placeholder": "Digite sua nova senha \
+(mínimo 8 caracteres)"})
+    password2 = PasswordField(_l('Repetir senha'), validators=[DataRequired(),
+        EqualTo('senha'), Length(min=8)],
+        render_kw={"placeholder": "Repita a senha anterior (mínimo 8 caracteres)"})
+    submit = SubmitField(_('Salvar'))
+
+
 class PostForm(FlaskForm):
     title = StringField(_l('Título'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite o título da fonte de dados abertos"})
@@ -100,7 +110,7 @@ class SoftwareForm(FlaskForm):
 
 
 class SimilarForm(FlaskForm):
-    name = StringField(_l('Adicione mais opções semelhantes (que se parecem)'), id='autocomplete', validators=[DataRequired(),
+    name = StringField(_l('Título'), id='autocomplete', validators=[DataRequired(),
         Length(min=0, max=100)], render_kw={"placeholder": "Digite o título de uma Fonte ou Aplicação registrada em Dados Livres"})
     submit = SubmitField(_l('Registrar'))
 
