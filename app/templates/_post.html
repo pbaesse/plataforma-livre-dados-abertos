@@ -1,9 +1,11 @@
 <table>
   <tr valign="top">
     <td>
-      <h4><a href="{{ url_for('main.post', title=post.title) }}" id="color-black">{{ post.title }}</a>
-          <small>(<a href="{{ post.officialLink }}" target="_blank" id="color-red">{{ post.officialLink }}</a>)</small></h4>
-      {{ post.tag }} | <a href="category/{{ post.category }}" id="color-red">{{ post.category }}</a> | {{ post.sphere }}<br>
+      <h4><a href="{{ url_for('main.post', title=post.title) }}"
+        id="color-black">{{ post.title }}</a></h4>
+      <p>Categoria: <a href="category/{{ post.category }}"
+        id="color-red">{{ post.category }}</a> | Esfera: {{ post.sphere }} <br>
+        <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"></p>
     </td>
   </tr>
 </table>
