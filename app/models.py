@@ -28,11 +28,11 @@ class User(db.Model, UserMixin):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+    def set_password(self, senha):
+        self.password_hash = generate_password_hash(senha)
 
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    def check_password(self, senha):
+        return check_password_hash(self.password_hash, senha)
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode( {'reset_password': self.id, 'exp': time() + expires_in},
