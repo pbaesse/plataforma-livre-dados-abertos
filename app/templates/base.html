@@ -6,13 +6,13 @@
 <!-- Style CSS -->
 {% block styles %}{{super()}}
   <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.min.css')}}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-tagsinput-latest/src/bootstrap-tagsinput.css')}}">
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{url_for('static', filename='css/mystyle.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-tagsinput-latest/src/bootstrap-tagsinput.css')}}">
   <link rel="icon" href="data:;base64,=">
 {% endblock %}
 {% block navbar %}
-  <nav class="navbar navbar-inverse" role="navigation" style="border-radius: 0;">
+  <nav class="navbar navbar-fixed-top navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -21,39 +21,56 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">{{ _('dadoslivres.org') }}</a>
+        <a href="{{ url_for('main.index') }}">
+          <img class="navbar-brand" src="../static/image/logoprovisoria.png" alt="Logo de dadoslivres.org"></a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="{{ url_for('main.index') }}">{{ _('Página Inicial') }}</a></li>
-          <li><a href="{{ url_for('main.explore') }}">{{ _('Explorar') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}" id="color-black">{{ _('Encontrar Fontes e Aplicações') }}</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ _('+ Registrar Fonte / Aplicação') }}</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="{{ url_for('main.register_source') }}" id="color-black">{{ _('Registre uma nova Fonte de Dados Abertos') }}</a><br><br>
-              <a class="dropdown-item" href="{{ url_for('main.register_software') }}" id="color-black">{{ _('Registre uma nova Aplicação') }}</a>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Registrar Fonte / Aplicação') }}</a>
+            <div class="dropdown-menu" style="background-color: #F1F2EE;">
+              <ul class="separator">
+                <li class="text-center"><a href="{{ url_for('main.register_source') }}">{{ _('Registrar Fonte de Dados Abertos') }}</a></li>
+                <li class="text-center"><a href="{{ url_for('main.register_software') }}">{{ _('Registrar Aplicação') }}</a></li>
+              </ul>
             </div>
           </li>
           {% if current_user.is_anonymous %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ _('Entrar / Inscreva-se') }}</a>
-            <div class="dropdown-menu">
-              <a href="{{ url_for('auth.login') }}" id="color-black">{{ _('Entre com sua conta em Dados Livres') }}</a><br><br>
-              <a href="{{ url_for('auth.register') }}" id="color-black">{{ _('Ainda não tem conta? Inscreva-se') }}</a>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Entrar / Inscreva-se') }}</a>
+            <div class="dropdown-menu" style="background-color: #F1F2EE;">
+              <ul class="separator">
+                <li class="text-center"><a href="{{ url_for('auth.login') }}">{{ _('Entre com sua conta em Dados Livres') }}</a></li>
+                <li class="text-center"><a href="{{ url_for('auth.register') }}">{{ _('Ainda não tem conta? Inscreva-se') }}</a></li>
+              </ul>
             </div>
           </li>
           {% else %}
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{{ _('Usuário') }}</a>
-              <div class="dropdown-menu">
-                <a href="{{ url_for('main.user', username=current_user.username) }}" id="color-black">{{ _('Meu Perfil') }}</a><br><br>
-                <a href="{{ url_for('main.edit_profile') }}" id="color-black"> {{ _('Editar Perfil') }}</a><br><br>
-                <a href="{{ url_for('auth.logout') }}" id="color-black">{{ _('Sair') }}</a>
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Usuário') }}</a>
+              <div class="dropdown-menu" style="background-color: #F1F2EE;">
+                <ul class="separator">
+                  <li class="text-center"><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Ver Perfil') }}</a></li>
+                  <li class="text-center"><a href="{{ url_for('main.edit_profile') }}"> {{ _('Editar Perfil') }}</a></li>
+                  <!-- <li class="text-center"><a href="{{ url_for('main.edit_password') }}"> {{ _('Editar Senha') }}</a></li>-->
+                  <li class="text-center"><a href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
+                </ul>
               </div>
             </li>
           {% endif %}
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Saiba Mais') }}</a>
+            <div class="dropdown-menu" style="background-color: #F1F2EE;">
+              <ul class="separator">
+                <li class="text-center"><a href="{{ url_for('main.about') }}" target="_blank">{{ _('Sobre Dados Livres') }}</a></li>
+                <li class="text-center"><a href="{{ url_for('main.how_to_contribute') }}" target="_blank">{{ _('Como Contribuir?') }}</a></li>
+                <li class="text-center"><a href="{{ url_for('main.contact') }}" target="_blank">{{ _('Contato') }}</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -61,56 +78,25 @@
 {% endblock %}
 {% block content %}
   <div class="container">
-    <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-12">
-      {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
-            <br><div class="alert alert-info text-center" role="alert">{{ message }}</div>
+            <br><div class="alert alert-info text-center" role="alert">{{ message }}</div><br>
           {% endfor %}
         {% endif %}
       {% endwith %}
       {# application content needs to be provided in the app_content block #}
       {% block app_content %}{% endblock %}
-      </div>
-      <div class="col-md-3"></div>
-    </div><br><hr><br>
-    <footer class="footer">
-      <div class="row">
-        <div class="col-md-8 col-sm-12"><br><br>
-           <img src="../static/image/logoprovisoria.png" class="img-fluid" alt="Logo de dadoslivres.org"><br><br>
-           <p class="text-muted copyright text-justify">
-             &copy; Dados Livres 2019. Licenciado com licença Creative Commons.
-             Este projeto é fundado por <a href="https://t.me/pbaesse" target="_blank" id="color-black">Pedro Baesse</a> e
-             desenvolvido por <a href="https://t.me/carols0" target="_blank" id="color-black">Carolina Soares</a>.
-             Entre em contato em dadoslivre@gmail.com.</p><br>
-        </div><br>
-        <div class="col-md-4 col-sm-12">
-          <br><p class="head">MENU</p><br>
-          <ul class="separator">
-            <li><a href="{{ url_for('main.about') }}" target="_blank">Saiba mais sobre dadoslivres.org</a></li>
-            <li><a href="https://gitlab.com/pbaesse/dados-livres" target="_blank">Colabore com o código-fonte no GitLab
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M4.844.904a1.007 1.007 0 0 0-.955.692l-2.53 7.783c0 .007-.005.012-.007.02L.07 13.335a1.437 1.437 0 0 0 .522 1.607l11.072 8.045a.566.566 0 0 0 .67-.004l11.074-8.04a1.436 1.436 0 0 0 .522-1.61l-1.26-3.867a.547.547 0 0 0-.031-.104l-2.526-7.775a1.004 1.004 0 0 0-.957-.684a.987.987 0 0 0-.949.69l-2.406 7.408H8.203l-2.41-7.408a.987.987 0 0 0-.943-.69h-.006zm-.006 1.42l2.174 6.678H2.674l2.164-6.678zm14.328 0l2.168 6.678h-4.342l2.174-6.678zm-10.594 7.81h6.862l-2.15 6.618L12 20.693L8.572 10.135zm-5.515.005h4.322l3.086 9.5l-7.408-9.5zm13.568 0h4.326l-6.703 8.588l-.709.914l2.959-9.108l.127-.394zM2.1 10.762l6.978 8.947l-7.818-5.682a.305.305 0 0 1-.112-.341l.952-2.924zm19.8 0l.952 2.922a.305.305 0 0 1-.11.341v.002l-7.82 5.68l.025-.035l6.953-8.91z" fill="black"/></svg></a></li>
-            <li><a href="https://t.me/dadoslivres" target="_blank">Entre para o grupo Dados Livres no Telegram
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42l10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001l-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15l4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z" fill="black"/></svg></a></li>
-          </ul>
-        </div>
-      </div>
-  </footer>
-</div>
+    </div>
+    <!-- footer -->
+    <hr><p class="text-muted copyright text-center">
+       &copy; Dados Livres 2019. Licenciado com licença Creative Commons.</p><br>
 {% endblock %}
-
-
-<!-- JavaScript, jQuery, popper -->
 {% block scripts %}{{super()}}
-  <script src="static/node_modules/jquery/dist/jquery.js"></script>
-  <script src="static/node_modules/popper.js/dist/umd/popper.js"></script>
-  <script src="static/node_modules/bootstrap/dist/js/bootstrap.js"></script>
-  <script src="{{url_for('static', filename='js/jquery.min.js')}}"></script>
+<!-- JavaScript, JQuery-ui -->
   <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
-  <script src="{{url_for('static', filename='js/popper.min.js')}}"></script>
-  <script src="{{url_for('static', filename='bootstrap/js/bootstrap.min.js')}}"></script>
   <script type="text/javascript" src="{{url_for('static', filename='js/myscripts.js') }}"></script>
-  <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+<!-- bootstrap-tagsinput -->
+  <script src="{{url_for('static', filename='bootstrap-tagsinput-latest/src/bootstrap-tagsinput-angular.js')}}"></script>
+  <script src="{{url_for('static', filename='bootstrap-tagsinput-latest/src/bootstrap-tagsinput.js')}}"></script>
 {% endblock %}
