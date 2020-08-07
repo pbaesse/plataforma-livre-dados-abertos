@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-<div class="container">
   <div class="row">
-    <h1 class="text-center">{{ _('Ocorreu um erro inesperado') }}</h1><hr><br><br><br>
+    <h1 class="text-center">{{ _('Ocorreu um erro inesperado') }}</h1><br><br><br>
     <div class="col-md-3"></div>
     <div class="col-md-6">
       <p><strong>Erro: 505</strong><br>
@@ -11,6 +10,5 @@
       <p><a href="{{ url_for('main.index') }}" id="color-red">{{ _('Voltar para Dados Livres') }}</a></p>
     </div>
     <div class="col-md-3"></div>
-  </div>
-</div><br><br><br><br><br>
+  </div><br><br><br><br><br>
 {% endblock %}

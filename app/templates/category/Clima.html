@@ -1,26 +1,21 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
-
 {% block app_content %}
-<div class="container">
 <h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações sobre Clima') }}</h1>
-  <p class="lead">Encontre diversas fontes de dados abertos e aplicações sobre Clima</p><hr><br><br>
+  <p class="lead">Encontre diversas fontes de dados abertos e aplicações sobre Clima</p><br><br><br>
   <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8 text-justify">
-      <p><strong>Fontes de Dados Abertos</strong></p><br>
+    <div class="col-md-12 text-justify">
+      <p class="lead"><strong>Fontes de Dados Abertos</strong></p><br>
       {% for post in posts %}
-        {% include '_post.html' %}<br>
+        {% include '_post.html' %}<hr><br>
       {% endfor%}<br><br><br>
-      <p><strong>Aplicações</strong></p><br>
+      <p class="lead"><strong>Aplicações</strong></p><br>
       {% for software in softwares %}
-        {% include '_software.html' %}<br>
+        {% include '_software.html' %}<hr><br>
       {% endfor%}
-      <div class="col-md-2"></div>
     </div>
-  </div><br><br><br>
+  </div><br><br><br><br>
 <div class="row">
-  <h2 class="text-center">Descubra outras categorias</h2><br><br>
   <div class="col-md-4 col-sm-12">
     <h4><a class="topic-grid-item" href="{{ url_for('category.MeioAmbiente') }}" id="category-link">Meio Ambiente</a></h4>
   </div>
@@ -30,6 +25,5 @@
   <div class="col-md-4 col-sm-12">
     <h4><a class="topic-grid-item" href="{{ url_for('category.Paises') }}" id="category-link">Países</a></h4>
   </div>
-</div>
 </div>
 {% endblock %}
