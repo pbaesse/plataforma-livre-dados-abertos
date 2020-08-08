@@ -8,7 +8,7 @@
           id="color-red">{% if post.category %}{{ post.category }}{% endif %}</a> |
           Esfera: {% if post.sphere %}{{ post.sphere }}{% endif %}</p>
           <p class="text-justify">{% if post.description %}{{ post.description }}{% endif %}</p>
-          <p>{% if post.tag %}{{ post.tag }}{% endif %}</p><br>
+          <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
       {% if not current_user.is_anonymous %}
         <p><a href="{{ url_for('main.edit_post', id=post.id) }}" id="color-red">{{ _('Editar Fonte de Dados Abertos') }}</a> |
           <a href="{{ url_for('main.deletar_post', id=post.id) }}" id="color-red">{{ _('Excluir Fonte de Dados Abertos') }}</a></p><br>
@@ -28,11 +28,11 @@
         {% endfor %}
       </div>
     </div><br><br><br>
-    <p>Adicione um novo semelhante digitando o título dele no formulário abaixo: <br>
-      <em style="color:#9d0208">(Você precisa está inscrito na plataforma e o título precisa está cadastrado em Dados Livres)</em></p><br>
+    <ul><p>Adicione um novo semelhante digitando o título dele no formulário abaixo: <br>
+      <em style="color:#9d0208">(Você precisa está inscrito na plataforma e o título precisa está cadastrado em Dados Livres)</em></p></ul><br>
     <div class="row">
       <div class="col-md-8">
-        {{ wtf.quick_form(form) }}
+        <ul>{{ wtf.quick_form(form) }}</ul>
       </div>
     </div><br><br><br><br>
     <div class="row">

@@ -3,6 +3,7 @@
 {% block title %}{{ _('Dados Livres') }}{% endblock %}
 <!-- meta -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
 <!-- Style CSS -->
 {% block styles %}{{super()}}
   <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.min.css')}}">
@@ -22,15 +23,15 @@
           <span class="icon-bar"></span>
         </button>
         <a href="{{ url_for('main.index') }}">
-          <img class="navbar-brand" src="../static/image/logoprovisoria.png" alt="Logo de dadoslivres.org"></a>
+          <img class="navbar-brand" src="../static/image/Logo-Dados-Livres.png" alt="Logo Dados Livres (dadoslivres.org)"></a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="{{ url_for('main.explore') }}" id="color-black">{{ _('Encontrar Fontes e Aplicações') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}" id="color-red">{{ _('Encontrar Fontes e Aplicações') }}</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Registrar Fonte / Aplicação') }}</a>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Registrar Fonte / Aplicação') }}</a>
             <div class="dropdown-menu" style="background-color: #F1F2EE;">
               <ul class="separator">
                 <li class="text-center"><a href="{{ url_for('main.register_source') }}">{{ _('Registrar Fonte de Dados Abertos') }}</a></li>
@@ -40,7 +41,7 @@
           </li>
           {% if current_user.is_anonymous %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Entrar / Inscreva-se') }}</a>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Entrar / Inscreva-se') }}</a>
             <div class="dropdown-menu" style="background-color: #F1F2EE;">
               <ul class="separator">
                 <li class="text-center"><a href="{{ url_for('auth.login') }}">{{ _('Entre com sua conta em Dados Livres') }}</a></li>
@@ -50,7 +51,7 @@
           </li>
           {% else %}
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Usuário') }}</a>
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Usuário') }}</a>
               <div class="dropdown-menu" style="background-color: #F1F2EE;">
                 <ul class="separator">
                   <li class="text-center"><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Ver Perfil') }}</a></li>
@@ -62,7 +63,7 @@
             </li>
           {% endif %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-black">{{ _('Saiba Mais') }}</a>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Saiba Mais') }}</a>
             <div class="dropdown-menu" style="background-color: #F1F2EE;">
               <ul class="separator">
                 <li class="text-center"><a href="{{ url_for('main.about') }}" target="_blank">{{ _('Sobre Dados Livres') }}</a></li>

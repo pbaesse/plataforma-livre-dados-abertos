@@ -10,7 +10,7 @@
       <p>{{ _('Licença') }}: {% if software.license %}{{ software.license }}{% endif %} |
         {{ _('Data de criação') }}: {% if software.dateCreation %}{{ software.dateCreation }}{% endif %}</p>
       <p>{% if software.description %}{{ software.description }}{% endif %}</p>
-      <p>{% if software.tag %}{{ software.tag }}{% endif %}</p><br>
+      {% if software.tag %}<input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">{% endif %}<br><br> 
       {% if not current_user.is_anonymous %}
         <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-red">{{ _('Editar a Aplicação') }}</a> |
           <a href="{{ url_for('main.deletar_software', id=software.id) }}" id="color-red">{{ _('Excluir a Aplicação') }}</a></p><br>
@@ -30,11 +30,11 @@
       {% endfor %}
     </div>
   </div><br><br><br>
-  <p>Adicione um novo semelhante digitando o título dele no formulário abaixo: <br>
-    <em style="color:#9d0208">(Você precisa está inscrito na plataforma e o título precisa está cadastrado em Dados Livres)</em></p><br>
+  <ul><p>Adicione um novo semelhante digitando o título dele no formulário abaixo: <br>
+    <em style="color:#9d0208">(Você precisa está inscrito na plataforma e o título precisa está cadastrado em Dados Livres)</em></p></ul><br>
   <div class="row">
     <div class="col-md-8">
-      {{ wtf.quick_form(form) }}
+      <ul>{{ wtf.quick_form(form) }}</ul>
     </div>
   </div><br><br><br><br>
   <div class="row">
