@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-<h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações sobre Ciência') }}</h1>
-<p class="text-center">Encontre diversas fontes de dados abertos e aplicações sobre Ciência</p><hr><br><br><br>
+<h1 class="text-center">{{ _('Fontes de Dados Abertos e Aplicações em Ciência') }}</h1><br><br><br>
 <div class="row">
-  <div class="col-md-12 text-justify">
+  <div class="col-md-12">
     <p class="lead"><strong>Fontes de Dados Abertos</strong></p><br>
     {% for post in posts %}
       {% include '_post.html' %}<hr><br>

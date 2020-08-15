@@ -2,7 +2,7 @@
   <tr valign="top">
     <td>
       <h4><a href="{{ url_for('main.software', title=software.title) }}"
-        id="color-black">{{ software.title }}</a></h4>
+        id="color-red">{{ software.title }}</a></h4><br>
         <p>Categoria: <a href="category/{{ software.category }}"
           id="color-red">{{ software.category }}</a> |
           Desenvolvedor: {{ software.owner }} <br>Licença: {{ software.license }} </p>
