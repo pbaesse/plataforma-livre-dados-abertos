@@ -9,7 +9,7 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, EditPasswordForm, \
-    PostForm, SoftwareForm, SimilarForm, CommentForm, ReportForm
+    PostForm, SoftwareForm, SimilarForm, CommentForm, ReportForm, ContactForm
 from app.models import User, Post, Software, Similar, \
     Comment, Report
 from app.main import bp
@@ -34,7 +34,7 @@ def index():
 def explore():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     softwares = Software.query.order_by(Software.timestamp.desc()).all()
-    return render_template('explore.html', title=(_('Explorar')),
+    return render_template('explore.html', title=(_('Fontes e Aplicações')),
         posts=posts, softwares=softwares)
 
 @bp.route('/_autocomplete', methods=['GET'])
@@ -75,7 +75,7 @@ def post(title):
         flash(_('Você registrou um semelhante'))
         return redirect(url_for('main.post', title=post.title))
     similares = Similar.query.filter_by(post_id=post.id).all()
-    return render_template('post.html', post=post, form=form,
+    return render_template('post.html', title=(_('Perfil da Fonte')), post=post, form=form,
         similares=similares, posts=posts)
 
 @bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
@@ -133,7 +133,7 @@ def register_software():
         flash(_('Você registrou uma nova aplicação'))
         return redirect(url_for('main.explore'))
     return render_template('register_software.html',
-        title=(_('Cadastrar Software')), form=form)
+        title=(_('Cadastrar Aplicação')), form=form)
 
 @bp.route('/software/<title>', methods=['GET', 'POST'])
 def software(title):
@@ -149,8 +149,8 @@ def software(title):
         flash(_('Você registrou um semelhante'))
         return redirect(url_for('main.software', title=software.title))
     similares = Similar.query.filter_by(software_id=software.id).all()
-    return render_template('software.html', software=software, form=form,
-        similares=similares, softwares=softwares)
+    return render_template('software.html', title=(_('Perfil da Aplicação')),
+        software=software, form=form, similares=similares, softwares=softwares)
 
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -178,7 +178,7 @@ def edit_software(id):
     form.dateCreation.data = software.dateCreation
     form.license.data = software.license
     form.description.data = software.description
-    return render_template('edit_software.html', title=(_('Editar Software')),
+    return render_template('edit_software.html', title=(_('Editar Aplicação')),
         form=form, software=software)
 
 @bp.route("/deletar_software/<int:id>")
@@ -206,7 +206,7 @@ def user(username):
         if softwares.has_next else None
     prev_url = url_for('main.user', username=user.username, page=softwares.prev_num) \
         if softwares.has_prev else None
-    return render_template('user.html', user=user, posts=posts.items,
+    return render_template('user.html', title=(_('Perfil do Usuário')), user=user, posts=posts.items,
         softwares=softwares.items, next_url=next_url, prev_url=prev_url)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -255,8 +255,19 @@ def about():
 
 @bp.route('/how_to_contribute', methods=['GET', 'POST'])
 def how_to_contribute():
-    return render_template('how_to_contribute.html', title=(_('Como contribuir?')))
+    return render_template('how_to_contribute.html', title=(_('Como contribuir')))
 
 @bp.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html', title=(_('Contato')))
+    if current_user.is_authenticated:
+        form = ContactForm(current_user.username)
+        if form.validate_on_submit():
+            current_user.username = form.username.data
+            flash(_('Sua mensagem foi enviada'))
+        elif request.method == 'GET':
+            form.username.data = current_user.username
+    else:
+        form = ContactForm()
+        if form.validate_on_submit():
+            flash(_('Sua mensagem foi enviada'))
+    return render_template('contact.html', title=(_('Contato')), form=form, current_user=current_user)

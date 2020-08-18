@@ -40,7 +40,7 @@ def register():
         db.session.commit()
         flash(_('Novo usuário registrado com sucesso'))
         return redirect(url_for('auth.login'))
-    return render_template('auth/register.html', title=_('Registrar'), form=form)
+    return render_template('auth/register.html', title=_('Inscreva-se'), form=form)
 
 @bp.route('/logout')
 def logout():
