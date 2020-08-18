@@ -9,14 +9,15 @@ from datetime import datetime
 from flask_babel import _, lazy_gettext as _l
 from app.models import User, Post, Software, Similar, \
     Comment, Report
+import unicodedata
 
 
 class EditProfileForm(FlaskForm):
-	username = StringField(_l('Nome'), validators=[DataRequired(),
+	username = StringField(_l('Nome: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite um nome de usuário"})
-	nickname = StringField(_l('Apelido'), validators=[Length(max=10)],
+	nickname = StringField(_l('Apelido:'), validators=[Length(max=10)],
         render_kw={"placeholder": "Digite seu apelido de usuário"})
-	about_me = TextAreaField(_l('Sobre mim'), validators=[Length(max=250)],
+	about_me = TextAreaField(_l('Sobre mim:'), validators=[Length(max=250)],
         render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre você"})
 	submit = SubmitField(_l('Salvar'))
 
@@ -32,67 +33,76 @@ class EditProfileForm(FlaskForm):
 
 
 class EditPasswordForm(FlaskForm):
-    senha = PasswordField(_l('Senha'), validators=[DataRequired(),
+    senha = PasswordField(_l('Senha: *'), validators=[DataRequired(),
         Length(min=8)], render_kw={"placeholder": "Digite sua nova senha \
 (mínimo 8 caracteres)"})
-    password2 = PasswordField(_l('Repetir senha'), validators=[DataRequired(),
+    password2 = PasswordField(_l('Repetir senha: *'), validators=[DataRequired(),
         EqualTo('senha'), Length(min=8)],
         render_kw={"placeholder": "Repita a senha anterior (mínimo 8 caracteres)"})
     submit = SubmitField(_('Salvar'))
 
 
 class PostForm(FlaskForm):
-    title = StringField(_l('Título'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite o título da fonte de dados abertos"})
-    tag = StringField(_l('Palavras-Chaves'), validators=[DataRequired()],
-        render_kw={"placeholder": "Digite quais são as palavras-chaves \
-(exemplo: palavra, palavra, palavra)"})
-    category = SelectField(_l('Categoria'), validators=[DataRequired()],
+    title = StringField(_l('Título: *'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite o título da Fonte de Dados Abertos"})
+    tag = StringField(_l('Palavras-Chaves: *'), validators=[DataRequired()],
+        render_kw={"placeholder": "Digite as palavras-chaves da fonte"})
+    category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
         choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
         ('Cinema', 'Cinema'), ('Música', 'Música'), ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
         ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'), ('Cultura', 'Cultura'),
         ('Países', 'Países'), ('IBGE', 'IBGE'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
-    officialLink = StringField(_l('Página Oficial'), validators=[DataRequired('URL verificada!'),
+    officialLink = StringField(_l('Página Oficial: *'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
                render_kw={"placeholder": "Digite a URL da fonte de dados abertos \
 (https://www.exemplo.com/)"})
-    sphere = SelectField('Esfera', id="esfera", choices=[('Municipal', 'Municipal'),
+    sphere = SelectField('Esfera: *', id="esfera", choices=[('Municipal', 'Municipal'),
         ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
-    city = StringField(_l('Município'), id="municipal",
-        render_kw={"placeholder": "Digite o Município da fonte de dados abertos"})
-    state = StringField(_l('Estado'), id="estadual",
-        render_kw={"placeholder": "Digite o Estato da fonte de dados abertos"})
-    country = StringField(_l('País'), id="internacional",
-        render_kw={"placeholder": "Digite o País da fonte de dados abertos"})
-    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a fonte de dados abertos"})
+    city = StringField(_l('Município:'), id="municipal",
+        render_kw={"placeholder": "Digite o município da fonte de dados abertos"})
+    state = StringField(_l('Estado:'), id="estadual",
+        render_kw={"placeholder": "Digite o estato da fonte de dados abertos"})
+    country = StringField(_l('País:'), id="internacional",
+        render_kw={"placeholder": "Digite o país da fonte de dados abertos"})
+    description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
+        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Fonte de Dados Abertos"})
     submit = SubmitField(_l('Registrar'))
+
+    def remove_accents(category):
+        try:
+            category = unicode(category, 'utf-8')
+        except NameError: # unicode is a default on python 3
+            pass
+
+        category = unicodedata.normalize('NFD', category)\
+            .encode('ascii', 'ignore')\
+            .decode("utf-8")
+        return str(category)
 
 
 class SoftwareForm(FlaskForm):
-    title = StringField(_l('Título'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite o título da aplicação"})
-    tag = StringField(_l('Palavras-Chaves'), validators=[DataRequired()],
-        render_kw={"placeholder": "Digite quais são as palavras-chaves \
-(exemplo: palavra, palavra, palavra)"})
-    category = SelectField(_l('Categoria'), validators=[DataRequired()],
+    title = StringField(_l('Título: *'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite o título da Aplicação"})
+    tag = StringField(_l('Palavras-Chaves: *'), validators=[DataRequired()],
+        render_kw={"placeholder": "Digite as palavras-chaves da Aplicação"})
+    category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
         choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
         ('Cinema', 'Cinema'), ('Música', 'Música'), ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
         ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'), ('Cultura', 'Cultura'),
         ('Países', 'Países'), ('IBGE', 'IBGE'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
-    officialLink = StringField(_l('Página Oficial'),
+    officialLink = StringField(_l('Página Oficial: *'),
         validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
         render_kw={"placeholder": "Digite a URL para Página Oficial da aplicação \
 (https://www.exemplo.com/)"})
-    owner = StringField(_l('Desenvolvedor'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite o nome da pessoa desenvolvedora/empresa mantedora da aplicação"})
-    dateCreation = StringField(_l('Data de Criação'),
-        render_kw={"placeholder": "Digite a data de criação da aplicação"})
-    license = SelectField('Licença', validators=[DataRequired()],
+    owner = StringField(_l('Desenvolvedor: *'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite qual a pessoa desenvolvedora/empresa mantedora da Aplicação"})
+    dateCreation = StringField(_l('Data de Criação:'),
+        render_kw={"placeholder": "Digite a data de criação da Aplicação"})
+    license = SelectField('Licença: *', validators=[DataRequired()],
         choices=[('Apache License 2.0', 'Apache License 2.0'),
         ('GNU General Public License v3.0','GNU General Public License v3.0'),
         ('MIT License','MIT License'), ('BSD 2-Clause "Simplified" License','BSD 2-Clause "Simplified" License'),
@@ -104,14 +114,25 @@ class SoftwareForm(FlaskForm):
         ('GNU General Public License v2.0','GNU General Public License v2.0'),
         ('GNU Lesser General Public License v2.1','GNU Lesser General Public License v2.1'),
         ('Mozilla Public License 2.0','Mozilla Public License 2.0')], default=1)
-    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
-        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a aplicação"})
+    description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
+        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Aplicação"})
     submit = SubmitField(_l('Registrar'))
+
+    def remove_accents(category):
+        try:
+            category = unicode(category, 'utf-8')
+        except NameError: # unicode is a default on python 3
+            pass
+
+        category = unicodedata.normalize('NFD', category)\
+            .encode('ascii', 'ignore')\
+            .decode("utf-8")
+        return str(category)
 
 
 class SimilarForm(FlaskForm):
-    name = StringField(_l('Título'), id='autocomplete', validators=[DataRequired(),
-        Length(min=0, max=100)], render_kw={"placeholder": "Digite o título de uma Fonte ou Aplicação registrada em Dados Livres"})
+    name = StringField(_l('Título: *'), id='autocomplete', validators=[DataRequired(),
+        Length(min=0, max=100)], render_kw={"placeholder": "Digite o nome de um título registrado em Dados Livres"})
     submit = SubmitField(_l('Registrar'))
 
 
@@ -127,4 +148,14 @@ class ReportForm(FlaskForm):
     description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
         Length(min=0, max=150)])
     type = StringField(_l('Tipo'), validators=[DataRequired()])
+    submit = SubmitField(_l('Enviar'))
+
+
+class ContactForm(FlaskForm):
+    username = StringField(_l('Nome: *'), validators=[DataRequired(),
+        Length(min=3)], render_kw={"placeholder": "Digite seu nome"})
+    email = StringField(_l('E-mail: *'), validators=[DataRequired()],
+        render_kw={"placeholder": "Digite seu e-mail"})
+    message = TextAreaField(_l('Mensagem: *'), validators=[DataRequired(),
+        Length(min=4, max=500)], render_kw={"rows": 6, "placeholder": "Digite sua mensagem"})
     submit = SubmitField(_l('Enviar'))
