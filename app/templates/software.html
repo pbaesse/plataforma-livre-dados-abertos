@@ -4,42 +4,40 @@
   <div class="row">
     <div class="col-md-12">
       <h1>{% if software.title %}{{ software.title }}{% endif %}</h1><br><br>
-      <p>Categoria: <a href="url_for('main.category')"
-        id="color-red">{% if software.category %}{{ software.category }}{% endif %}</a> | Desenvolvedor:
-        {% if software.owner %}{{ software.owner }}{% endif %}</p>
-      <p>{{ _('Licença') }}: {% if software.license %}{{ software.license }}{% endif %} |
-        {{ _('Data de criação') }}: {% if software.dateCreation %}{{ software.dateCreation }}{% endif %}</p>
-      <p>{% if software.description %}{{ software.description }}{% endif %}</p>
-      {% if software.tag %}<input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">{% endif %}<br><br> 
+      <p>{% if software.category %}{{ _('Categoria') }}: <a href="url_for('main.category')"
+        id="color-red">{{ software.category }}</a> | {% endif %}{% if software.owner %}{{ _('Desenvolvedor') }}:
+        {{ software.owner }}{% endif %} | {% if software.license %}{{ _('Licença') }}: {{ software.license }}{% endif %}
+        {% if software.dateCreation %} | {{ _('Data de criação') }}: {{ software.dateCreation }}{% endif %}</p>
+      <p class="text-justify">{% if software.description %}{{ software.description }}{% endif %}</p>
+      {% if software.tag %}<input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">{% endif %}<br><br>
       {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-red">{{ _('Editar a Aplicação') }}</a> |
-          <a href="{{ url_for('main.deletar_software', id=software.id) }}" id="color-red">{{ _('Excluir a Aplicação') }}</a></p><br>
+        <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-red">{{ _('Editar Aplicação') }}</a> |
+          <a href="{{ url_for('main.deletar_software', id=software.id) }}" id="color-red">{{ _('Excluir Aplicação') }}</a></p><br>
       {% endif %}
       <button type="button"class="btn btn-default">
-        <a href="{{ software.officialLink }}" target="_blank" id="color-red">Visitar Página Oficial da Aplicação</a></button><br><br>
-      <hr><h4>{{ _('Aplicação registrada por') }}:
+        <a href="{{ software.officialLink }}" target="_blank" id="color-red">Visitar Página Oficial da Aplicação</a></button>
+      <br><br><h4>{{ _('Aplicação registrada por') }}:
         <a href="{{ url_for('main.user', username=software.author.username ) }}" id="color-red">
-          {{ software.author.username }}</a></h4><hr>
+          {{ software.author.username }}</a></h4>
     </div>
   </div><br><br><br>
-  <h2>Confira abaixo as fontes e aplicações semelhantes</h2><br><br>
+  <h2>Fontes de Dados Abertos e Aplicações semelhantes</h2><br><br>
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
       {% for similar in similares %}
-        <ul>{% include '_similarSoftware.html' %}</ul><br>
+        {% include '_similarSoftware.html' %}<hr>
       {% endfor %}
     </div>
-  </div><br><br><br>
-  <ul><p>Adicione um novo semelhante digitando o título dele no formulário abaixo: <br>
-    <em style="color:#9d0208">(Você precisa está inscrito na plataforma e o título precisa está cadastrado em Dados Livres)</em></p></ul><br>
+  </div><br><br><br><br>
+  <p>Adicione uma nova fonte ou aplicação que seja semelhante, digitando o seu título no formulário abaixo:</p><br>
   <div class="row">
-    <div class="col-md-8">
-      <ul>{{ wtf.quick_form(form) }}</ul>
+    <div class="col-md-12">
+      {{ wtf.quick_form(form) }}
     </div>
   </div><br><br><br><br>
   <div class="row">
     <div class="col-md-12">
-    <h2>A fonte ou aplicação que gostaria ainda não está registrada em Dados Livres?</h2><br><br>
+    <p>A fonte ou aplicação que gostaria ainda não está registrada em Dados Livres?</p><br><br>
     <ul><li><p><a href="{{ url_for('main.register_source') }}" id="color-black">
       {{ _('Cadastrar uma nova Fonte de Dados Abertos') }}</a></li></p>
         <li><p><a href="{{ url_for('main.register_software') }}" id="color-black">
