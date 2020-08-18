@@ -1,6 +1,7 @@
 {% extends "bootstrap/base.html" %}
 {% block html_attribs %} lang="pt-br"{% endblock %}
-{% block title %}{{ _('Dados Livres') }}{% endblock %}
+{% block title %}{% if title %}{{ title }} - {{ _('Dados Livres') }}
+{% else %}{{ _('Bem-vindo a Dados Livres') }}{% endif %}{% endblock %}
 <!-- meta -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
