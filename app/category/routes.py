@@ -83,7 +83,7 @@ def MeioAmbiente():
 
 @bp.route('/Cultura', methods=['GET', 'POST'])
 def Cultura():
-    sources = Post.query.filter_by(category='Cultura').all()
+    sources = Source.query.filter_by(category='Cultura').all()
     softwares = Software.query.filter_by(category='Cultura').all()
     return render_template('category/Cultura.html', title=_('Cultura'),
         sources=sources, softwares=softwares, remove_accents=remove_accents)
