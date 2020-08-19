@@ -17,11 +17,11 @@ class User(db.Model, UserMixin):
     about_me = db.Column(db.String(300))
     nickname = db.Column(db.String(150))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    sources = db.relationship('Source', backref='author', lazy='dynamic')
     softwares = db.relationship('Software', backref='author', lazy='dynamic')
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '{}'.format(self.username)
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -52,7 +52,7 @@ def load_user(id):
 	return User.query.get(int(id))
 
 
-class Post(db.Model):
+class Source(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
@@ -65,14 +65,12 @@ class Post(db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    similares = db.relationship('Similar', backref='post', lazy='dynamic')
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
-    reports = db.relationship('Report', backref='post', lazy='dynamic')
+    similares = db.relationship('Similar', backref='source', lazy='dynamic')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.title)
+        return '<Source {}>'.format(self.title)
 
     def as_dict(self):
         return {'title': self.title}
@@ -91,8 +89,6 @@ class Software(db.Model):
     dateCreation = db.Column(db.String(200), index=True, default=datetime.utcnow)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     similares = db.relationship('Similar', backref='software', lazy='dynamic')
-    comments = db.relationship('Comment', backref='software', lazy='dynamic')
-    reports = db.relationship('Report', backref='software', lazy='dynamic')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -109,7 +105,7 @@ class Similar(db.Model):
     name = db.Column(db.String(200), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
@@ -119,16 +115,12 @@ class Similar(db.Model):
 class Comment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), index=True)
-    email = db.Column(db.String(200), index=True)
+    username = db.Column(db.String(200), index=True)
     text = db.Column(db.String(600), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
-    software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
-
     def __repr__(self):
-        return '<Comment {}>'.format(self.name)
+        return '<Comment {}>'.format(self.username)
 
 
 class Report(db.Model):
@@ -139,7 +131,7 @@ class Report(db.Model):
     type = db.Column(db.String(200), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
