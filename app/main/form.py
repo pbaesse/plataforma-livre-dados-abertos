@@ -1,15 +1,14 @@
 #!/usr/bin/env python -*- coding: utf-8 -*-
 from flask import request
-from flask_wtf import FlaskForm
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, SelectField, TextField, TextAreaField, \
     DateField, PasswordField, RadioField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Length, \
     Email, EqualTo, Regexp
 from datetime import datetime
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, Post, Software, Similar, \
+from app.models import User, Source, Software, Similar, \
     Comment, Report
-import unicodedata
 
 
 class EditProfileForm(FlaskForm):
@@ -42,7 +41,7 @@ class EditPasswordForm(FlaskForm):
     submit = SubmitField(_('Salvar'))
 
 
-class PostForm(FlaskForm):
+class SourceForm(FlaskForm):
     title = StringField(_l('Título: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite o título da Fonte de Dados Abertos"})
     tag = StringField(_l('Palavras-Chaves: *'), validators=[DataRequired()],
@@ -69,17 +68,6 @@ class PostForm(FlaskForm):
     description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
         Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Fonte de Dados Abertos"})
     submit = SubmitField(_l('Registrar'))
-
-    def remove_accents(category):
-        try:
-            category = unicode(category, 'utf-8')
-        except NameError: # unicode is a default on python 3
-            pass
-
-        category = unicodedata.normalize('NFD', category)\
-            .encode('ascii', 'ignore')\
-            .decode("utf-8")
-        return str(category)
 
 
 class SoftwareForm(FlaskForm):
@@ -118,17 +106,6 @@ class SoftwareForm(FlaskForm):
         Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Aplicação"})
     submit = SubmitField(_l('Registrar'))
 
-    def remove_accents(category):
-        try:
-            category = unicode(category, 'utf-8')
-        except NameError: # unicode is a default on python 3
-            pass
-
-        category = unicodedata.normalize('NFD', category)\
-            .encode('ascii', 'ignore')\
-            .decode("utf-8")
-        return str(category)
-
 
 class SimilarForm(FlaskForm):
     name = StringField(_l('Título: *'), id='autocomplete', validators=[DataRequired(),
@@ -137,25 +114,25 @@ class SimilarForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    name = StringField(_l('Nome'), validators=[DataRequired()])
-    email = StringField(_l('E-mail'), validators=[DataRequired()])
-    text = TextAreaField(_l('Comentário'), validators=[DataRequired()])
+    username = StringField(_l('Nome: *'), validators=[DataRequired()])
+    text = TextAreaField(_l('Comentário: *'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
 
 
 class ReportForm(FlaskForm):
-    name = StringField(_l('Nome'), validators=[DataRequired()])
-    description = TextAreaField(_l('Descrição'), validators=[DataRequired(),
+    name = StringField(_l('Nome: *'), validators=[DataRequired()])
+    description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
         Length(min=0, max=150)])
-    type = StringField(_l('Tipo'), validators=[DataRequired()])
+    type = StringField(_l('Tipo: *'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
 
 
 class ContactForm(FlaskForm):
     username = StringField(_l('Nome: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite seu nome"})
-    email = StringField(_l('E-mail: *'), validators=[DataRequired()],
+    email = StringField(_l('E-mail: *'), validators=[DataRequired(), Email()],
         render_kw={"placeholder": "Digite seu e-mail"})
     message = TextAreaField(_l('Mensagem: *'), validators=[DataRequired(),
         Length(min=4, max=500)], render_kw={"rows": 6, "placeholder": "Digite sua mensagem"})
+    recaptcha = RecaptchaField()
     submit = SubmitField(_l('Enviar'))

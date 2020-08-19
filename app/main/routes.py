@@ -9,8 +9,8 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, EditPasswordForm, \
-    PostForm, SoftwareForm, SimilarForm, CommentForm, ReportForm, ContactForm
-from app.models import User, Post, Software, Similar, \
+    SourceForm, SoftwareForm, SimilarForm, CommentForm, ReportForm, ContactForm
+from app.models import User, Source, Software, Similar, \
     Comment, Report
 from app.main import bp
 
@@ -21,26 +21,38 @@ def before_request():
         db.session.commit()
     g.locale = str(get_locale())
 
+import unicodedata
+def remove_accents(category):
+    try:
+        category = unicode(category, 'utf-8')
+    except NameError: # unicode is a default on python 3
+        pass
+    category = unicodedata.normalize('NFD', category)\
+        .encode('ascii', 'ignore')\
+        .decode("utf-8")
+    category.strip()
+    return str(category.replace(" ", ""))
+
 @bp.route('/', methods=['GET', 'POST'])
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.timestamp.desc()).paginate(page=page, per_page=1)
+    sources = Source.query.order_by(Source.timestamp.desc()).paginate(page=page, per_page=1)
     softwares = Software.query.order_by(Software.timestamp.desc()).paginate(page=page, per_page=1)
     return render_template('index.html', title=(_('Página Principal')),
-        posts=posts.items, softwares=softwares.items)
+        sources=sources.items, softwares=softwares.items, remove_accents=remove_accents)
 
 @bp.route('/explore', methods=['GET', 'POST'])
 def explore():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    sources = Source.query.order_by(Source.timestamp.desc()).all()
     softwares = Software.query.order_by(Software.timestamp.desc()).all()
     return render_template('explore.html', title=(_('Fontes e Aplicações')),
-        posts=posts, softwares=softwares)
+        sources=sources, softwares=softwares, remove_accents=remove_accents)
 
 @bp.route('/_autocomplete', methods=['GET'])
 def autocomplete():
     res1 = Software.query.all()
-    res2 = Post.query.all()
+    res2 = Source.query.all()
     list_titles1 = [r.as_dict() for r in res1]
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
@@ -48,9 +60,9 @@ def autocomplete():
 @bp.route('/register_source', methods=['GET', 'POST'])
 @login_required
 def register_source():
-    form = PostForm()
+    form = SourceForm()
     if form.validate_on_submit():
-        sources = Post(title=form.title.data, tag=form.tag.data,
+        sources = Source(title=form.title.data, tag=form.tag.data,
         category=form.category.data, city=form.city.data,
         state=form.state.data, country=form.country.data,
         description=form.description.data, sphere=form.sphere.data,
@@ -59,61 +71,62 @@ def register_source():
         db.session.commit()
         flash(_('Você registrou uma nova Fonte de Dados Abertos'))
         return redirect(url_for('main.explore'))
-    return render_template('register_source.html', title=(_('Cadastrar Fonte')), form=form)
+    return render_template('register_source.html', title=(_('Cadastrar Fonte')),
+        form=form)
 
-@bp.route('/post/<title>', methods=['GET', 'POST'])
-def post(title):
-    post = Post.query.filter_by(title=title).first_or_404()
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
+@bp.route('/source/<title>', methods=['GET', 'POST'])
+def source(title):
+    source = Source.query.filter_by(title=title).first_or_404()
+    sources = Source.query.order_by(Source.timestamp.desc()).all()
     form = SimilarForm(request.form)
     if form.validate_on_submit():
         if not current_user.is_authenticated:
             return redirect(url_for('auth.login'))
-        similar = Similar(name=form.name.data, post_id=post.id)
+        similar = Similar(name=form.name.data, source_id=source.id)
         db.session.add(similar)
         db.session.commit()
         flash(_('Você registrou um semelhante'))
-        return redirect(url_for('main.post', title=post.title))
-    similares = Similar.query.filter_by(post_id=post.id).all()
-    return render_template('post.html', title=(_('Perfil da Fonte')), post=post, form=form,
-        similares=similares, posts=posts)
+        return redirect(url_for('main.source', title=source.title))
+    similares = Similar.query.filter_by(source_id=source.id).all()
+    return render_template('source.html', title=(_('Perfil da Fonte')), source=source, form=form,
+        similares=similares, sources=sources, remove_accents=remove_accents)
 
-@bp.route('/edit_post/<int:id>', methods=['GET', 'POST'])
+@bp.route('/edit_source/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit_post(id):
-    post = Post.query.get_or_404(id)
-    form = PostForm()
+def edit_source(id):
+    source = Source.query.get_or_404(id)
+    form = SourceForm()
     if form.validate_on_submit():
-        post.title = form.title.data
-        post.tag = form.tag.data
-        post.category = form.category.data
-        post.officialLink = form.officialLink.data
-        post.sphere = form.sphere.data
-        post.city = form.city.data
-        post.state = form.state.data
-        post.country = form.country.data
-        post.description = form.description.data
-        db.session.add(post)
+        source.title = form.title.data
+        source.tag = form.tag.data
+        source.category = form.category.data
+        source.officialLink = form.officialLink.data
+        source.sphere = form.sphere.data
+        source.city = form.city.data
+        source.state = form.state.data
+        source.country = form.country.data
+        source.description = form.description.data
+        db.session.add(source)
         db.session.commit()
         flash(_('As alterações foram salvas'))
-        return redirect(url_for('main.post', title=post.title))
-    form.title.data = post.title
-    form.tag.data = post.tag
-    form.category.data = post.category
-    form.officialLink.data = post.officialLink
-    form.sphere.data = post.sphere
-    form.city.data = post.city
-    form.state.data = post.state
-    form.country.data = post.country
-    form.description.data = post.description
-    return render_template('edit_post.html', title=(_('Editar Fonte')),
-                           form=form, post=post)
+        return redirect(url_for('main.source', title=source.title))
+    form.title.data = source.title
+    form.tag.data = source.tag
+    form.category.data = source.category
+    form.officialLink.data = source.officialLink
+    form.sphere.data = source.sphere
+    form.city.data = source.city
+    form.state.data = source.state
+    form.country.data = source.country
+    form.description.data = source.description
+    return render_template('edit_source.html', title=(_('Editar Fonte')),
+                           form=form, source=source)
 
-@bp.route("/deletar_post/<int:id>")
+@bp.route("/deletar_source/<int:id>")
 @login_required
-def deletar_post(id):
-    post = Post.query.filter_by(id=id).first()
-    db.session.delete(post)
+def deletar_source(id):
+    source = Source.query.filter_by(id=id).first()
+    db.session.delete(source)
     db.session.commit()
     flash(_('A fonte foi deletada'))
     return redirect(url_for("main.explore"))
@@ -150,7 +163,8 @@ def software(title):
         return redirect(url_for('main.software', title=software.title))
     similares = Similar.query.filter_by(software_id=software.id).all()
     return render_template('software.html', title=(_('Perfil da Aplicação')),
-        software=software, form=form, similares=similares, softwares=softwares)
+        software=software, form=form, similares=similares, softwares=softwares,
+        remove_accents=remove_accents)
 
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -193,21 +207,11 @@ def deletar_software(id):
 @bp.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    page = request.args.get('page', 1, type=int)
-    posts = user.posts.order_by(Post.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.user', title=user.username, page=posts.next_num) \
-        if posts.has_next else None
-    prev_url = url_for('main.user', username=user.username, page=posts.prev_num) \
-        if posts.has_prev else None
-    softwares = user.softwares.order_by(Software.timestamp.desc()).paginate(
-        page, current_app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('main.user', title=user.username, page=softwares.next_num) \
-        if softwares.has_next else None
-    prev_url = url_for('main.user', username=user.username, page=softwares.prev_num) \
-        if softwares.has_prev else None
-    return render_template('user.html', title=(_('Perfil do Usuário')), user=user, posts=posts.items,
-        softwares=softwares.items, next_url=next_url, prev_url=prev_url)
+    sources = user.sources.order_by(Source.timestamp.desc()).all()
+    softwares = user.softwares.order_by(Software.timestamp.desc()).all()
+    return render_template('user.html', title=(_('Perfil do Usuário')),
+        user=user, sources=sources, softwares=softwares,
+        remove_accents=remove_accents)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
