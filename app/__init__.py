@@ -1,3 +1,4 @@
+#!/usr/bin/env python# -*- coding: utf-8 -*-
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
@@ -26,7 +27,7 @@ db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
-login.login_message = _l('Para acessar essa pagina entre como usuario')
+login.login_message = _l('Entre em Dados Livres para acessar está página')
 mail = Mail()
 moment = Moment()
 babel = Babel()
