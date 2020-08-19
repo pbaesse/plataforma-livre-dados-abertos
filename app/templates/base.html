@@ -28,50 +28,43 @@
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="{{ url_for('main.explore') }}" id="color-red">{{ _('Encontrar Fontes e Aplicações') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}" id="navbar">{{ _('Fontes de Dados Abertos') }}</a></li>
+          <li><a href="{{ url_for('main.explore') }}" id="navbar">{{ _('Aplicações') }}</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Registrar Fonte / Aplicação') }}</a>
-            <div class="dropdown-menu" style="background-color: #F1F2EE;">
-              <ul class="separator">
-                <li class="text-center"><a href="{{ url_for('main.register_source') }}">{{ _('Registrar Fonte de Dados Abertos') }}</a></li>
-                <li class="text-center"><a href="{{ url_for('main.register_software') }}">{{ _('Registrar Aplicação') }}</a></li>
-              </ul>
-            </div>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Registrar Fonte/Aplicação') }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.register_source') }}">{{ _('Registrar Fonte de Dados Abertos') }}</a></li>
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.register_software') }}">{{ _('Registrar Aplicação') }}</a></li>
+            </ul>
           </li>
           {% if current_user.is_anonymous %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Entrar / Inscreva-se') }}</a>
-            <div class="dropdown-menu" style="background-color: #F1F2EE;">
-              <ul class="separator">
-                <li class="text-center"><a href="{{ url_for('auth.login') }}">{{ _('Entre com sua conta em Dados Livres') }}</a></li>
-                <li class="text-center"><a href="{{ url_for('auth.register') }}">{{ _('Ainda não tem conta? Inscreva-se') }}</a></li>
-              </ul>
-            </div>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Entrar/Inscreva-se') }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.login') }}">{{ _('Entre com sua conta em Dados Livres') }}</a></li>
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.register') }}">{{ _('Ainda não tem conta? Inscreva-se') }}</a></li>
+            </ul>
           </li>
           {% else %}
             <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Usuário') }}</a>
-              <div class="dropdown-menu" style="background-color: #F1F2EE;">
-                <ul class="separator">
-                  <li class="text-center"><a href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Ver Perfil') }}</a></li>
-                  <li class="text-center"><a href="{{ url_for('main.edit_profile') }}"> {{ _('Editar Perfil') }}</a></li>
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ current_user }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Ver Perfil') }}</a></li>
+                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.edit_profile') }}"> {{ _('Editar Perfil') }}</a></li>
                   <!-- <li class="text-center"><a href="{{ url_for('main.edit_password') }}"> {{ _('Editar Senha') }}</a></li>-->
-                  <li class="text-center"><a href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
-                </ul>
-              </div>
+                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
+              </ul>
             </li>
           {% endif %}
           <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="color-red">{{ _('Saiba Mais') }}</a>
-            <div class="dropdown-menu" style="background-color: #F1F2EE;">
-              <ul class="separator">
-                <li class="text-center"><a href="{{ url_for('main.about') }}" target="_blank">{{ _('Sobre Dados Livres') }}</a></li>
-                <li class="text-center"><a href="{{ url_for('main.how_to_contribute') }}" target="_blank">{{ _('Como Contribuir?') }}</a></li>
-                <li class="text-center"><a href="{{ url_for('main.contact') }}" target="_blank">{{ _('Contato') }}</a></li>
-              </ul>
-            </div>
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Saiba Mais') }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.about') }}" target="_blank">{{ _('Sobre Dados Livres') }}</a></li>
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.how_to_contribute') }}" target="_blank">{{ _('Como Contribuir?') }}</a></li>
+                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.contact') }}" target="_blank">{{ _('Contato') }}</a></li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -92,8 +85,8 @@
     </div>
     <!-- footer -->
     <hr><p class="text-muted copyright text-center">
-       &copy; Dados Livres 2019. Licenciado com licença Creative Commons. </p>
-       <p class="text-muted text-center"><a href="#" target="_blank" id="color-red">Grupo Dados Livres no Telegram <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="0.97em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248s248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7l-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1l114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4l-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z" fill="#9d0208"/></svg></p>
+       &copy; Dados Livres 2019. Licenciado com licença Creative Commons. <br>
+       <a href="#" target="_blank" id="color-red">Entre para o grupo Dados Livres no Telegram <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="0.97em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248s248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7l-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1l114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4l-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z" fill="#9d0208"/></svg></p>
 {% endblock %}
 {% block scripts %}{{super()}}
 <!-- JavaScript, JQuery-ui -->

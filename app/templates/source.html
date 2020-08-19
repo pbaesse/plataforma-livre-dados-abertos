@@ -3,31 +3,30 @@
 {% block app_content %}
     <div class="row">
       <div class="col-md-12">
-        <h1>{% if post.title %}{{ post.title }}{% endif %}</h1><br><br>
-          <p>{% if post.category %}{{_('Categoria')}}: <a href="category/{{ post.category }}"
-          id="color-red">{{ post.category }}</a> | {% endif %}
-          {% if post.sphere %}{{_('Esfera:')}} {{ post.sphere }}{% endif %}
-          {% if post.city %}| {{_('Município')}}: {{post.city}}{% endif %}
-          {% if post.state %}| {{_('Estado')}}: {{post.state}}{% endif %}
-          {% if post.country %}| {{_('País')}}: {{post.country}}{% endif %}</p>
-          <p class="text-justify">{% if post.description %}{{ post.description }}{% endif %}</p>
+        <h1>{% if source.title %}{{ source.title }}{% endif %}</h1><br><br>
+          <p>{% if source.category %}{{_('Categoria')}}: <a href="/category/{{ remove_accents(source.category) }}"
+          id="color-red">{{ source.category }}</a> | {% endif %}
+          {% if source.sphere %}{{_('Esfera:')}} {{ source.sphere }}{% endif %}
+          {% if source.city %}| {{_('Município')}}: {{source.city}}{% endif %}
+          {% if source.state %}| {{_('Estado')}}: {{source.state}}{% endif %}
+          {% if source.country %}| {{_('País')}}: {{source.country}}{% endif %}</p>
           <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
+          <p class="text-justify">{% if source.description %}{{ source.description }}{% endif %}</p>
       {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_post', id=post.id) }}" id="color-red">{{ _('Editar Fonte de Dados Abertos') }}</a> |
-          <a href="{{ url_for('main.deletar_post', id=post.id) }}" id="color-red">{{ _('Excluir Fonte de Dados Abertos') }}</a></p><br>
+        <p><a href="{{ url_for('main.edit_source', id=source.id) }}" id="color-red">{{ _('Editar Fonte de Dados Abertos') }}</a> |
+          <a href="{{ url_for('main.deletar_source', id=source.id) }}" id="color-red">{{ _('Excluir Fonte de Dados Abertos') }}</a></p>
       {% endif %}
-      <button type="button"class="btn btn-default">
-        <a href="{{ post.officialLink }}" target="_blank" id="color-red">Visitar Página Oficial da Fonte</a></button><br><br>
+    	 <br><h4><a href="{{ source.officialLink }}" id="buttonPerfil" target="_blank">Visitar Página Oficial</a><h4><br>
       <h4>{{ _('Fonte registrada por') }}:
-        <a href="{{ url_for('main.user', username=post.author.username ) }}" id="color-red">
-        {{ post.author.username }}</a></h4>
+        <a href="{{ url_for('main.user', username=source.author.username ) }}" id="color-red">
+        {{ source.author.username }}</a></h4>
       </div>
     </div><br><br><br>
     <h2>Fontes de Dados Abertos e Aplicações semelhantes</h2><br><br>
     <div class="row">
       <div class="col-md-12">
         {% for similar in similares %}
-          {% include '_similarPost.html' %}<hr>
+          {% include '_similarSource.html' %}<hr>
         {% endfor %}
       </div>
     </div><br><br><br><br>
