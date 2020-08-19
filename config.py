@@ -6,6 +6,10 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
+    RECAPTCHA_USE_SSL = False
+    RECAPTCHA_PUBLIC_KEY='you-will-never-guess'
+    RECAPTCHA_PRIVATE_KEY='you-will-never-guess'
+    RECAPTCHA_OPTIONS= {'theme':'black'}
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
