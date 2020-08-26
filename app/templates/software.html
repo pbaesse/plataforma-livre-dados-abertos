@@ -1,47 +1,31 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-  <div class="row">
-    <div class="col-md-12">
-      <h1>{% if software.title %}{{ software.title }}{% endif %}</h1><br><br>
-      <p>{% if software.category %}{{ _('Categoria') }}: <a href="/category/{{ remove_accents(software.category) }}"
-        id="color-red">{{ software.category }}</a> | {% endif %}{% if software.owner %}{{ _('Desenvolvedor') }}:
-        {{ software.owner }}{% endif %} | {% if software.license %}{{ _('Licença') }}: {{ software.license }}{% endif %}
-        {% if software.dateCreation %} | {{ _('Data de criação') }}: {{ software.dateCreation }}{% endif %}</p>
-      {% if software.tag %}<input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">{% endif %}<br><br>
-      <p class="text-justify">{% if software.description %}{{ software.description }}{% endif %}</p>
-      {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-red">{{ _('Editar Aplicação') }}</a> |
-          <a href="{{ url_for('main.deletar_software', id=software.id) }}" id="color-red">{{ _('Excluir Aplicação') }}</a></p>
-      {% endif %}
-      <br><h4><a href="{{ software.officialLink }}" id="buttonPerfil" target="_blank">Visitar Página Oficial</a><h4><br>
-      <h4>{{ _('Aplicação registrada por') }}:
-        <a href="{{ url_for('main.user', username=software.author.username ) }}" id="color-red">
-          {{ software.author.username }}</a></h4>
-    </div>
-  </div><br><br><br>
-  <h2>Fontes de Dados Abertos e Aplicações semelhantes</h2><br><br>
-  <div class="row">
-    <div class="col-md-12">
-      {% for similar in similares %}
-        {% include '_similarSoftware.html' %}<hr>
-      {% endfor %}
-    </div>
-  </div><br><br><br><br>
-  <p>Adicione uma nova fonte ou aplicação que seja semelhante, digitando o seu título no formulário abaixo:</p><br>
-  <div class="row">
-    <div class="col-md-12">
-      {{ wtf.quick_form(form) }}
-    </div>
-  </div><br><br><br><br>
-  <div class="row">
-    <div class="col-md-12">
-    <p>A fonte ou aplicação que gostaria ainda não está registrada em Dados Livres?</p><br><br>
-    <ul><li><p><a href="{{ url_for('main.register_source') }}" id="color-black">
-      {{ _('Cadastrar uma nova Fonte de Dados Abertos') }}</a></li></p>
-        <li><p><a href="{{ url_for('main.register_software') }}" id="color-black">
-      {{ _('Cadastrar uma nova Aplicação') }}</a></li></p>
-    </ul><br><br>
-    </div>
-  </div>
+<div class="row">
+	<h2 class="text-center">{{ _('Encontre as principais categorias em Aplicações') }}</h2><br><br><br>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.CoronaVirus_Software') }}" id="category-link">Corona Vírus</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Saude_Software') }}" id="category-link">Saúde</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Educacao_Software') }}" id="category-link">Educação</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Cultura_Software') }}" id="category-link">Cultura</a></h4>
+	</div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Cinema_Software') }}" id="category-link">Cinema</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Musica_Software') }}" id="category-link">Música</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Tecnologia_Software') }}" id="category-link">Tecnologia</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Paises_Software') }}" id="category-link">Países</a></h4>
+	</div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Ciencia_Software') }}" id="category-link">Ciência</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.SegurancaPublica_Software') }}" id="category-link">Segurança Pública</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.MeioAmbiente_Software') }}" id="category-link">Meio Ambiente</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.IBGE_Software') }}" id="category-link">IBGE</a></h4>
+	</div>
+	<div class="col-md-2"></div><div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Clima_Software') }}" id="category-link">Clima</a></h4>
+	</div><div class="col-md-2"></div><div class="col-md-2"></div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Lazer_Software') }}" id="category-link">Lazer</a></h4>
+	</div><div class="col-md-2"></div>
+</div>
 {% endblock %}

@@ -1,49 +1,31 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
-    <div class="row">
-      <div class="col-md-12">
-        <h1>{% if source.title %}{{ source.title }}{% endif %}</h1><br><br>
-          <p>{% if source.category %}{{_('Categoria')}}: <a href="/category/{{ remove_accents(source.category) }}"
-          id="color-red">{{ source.category }}</a> | {% endif %}
-          {% if source.sphere %}{{_('Esfera:')}} {{ source.sphere }}{% endif %}
-          {% if source.city %}| {{_('Município')}}: {{source.city}}{% endif %}
-          {% if source.state %}| {{_('Estado')}}: {{source.state}}{% endif %}
-          {% if source.country %}| {{_('País')}}: {{source.country}}{% endif %}</p>
-          <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
-          <p class="text-justify">{% if source.description %}{{ source.description }}{% endif %}</p>
-      {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_source', id=source.id) }}" id="color-red">{{ _('Editar Fonte de Dados Abertos') }}</a> |
-          <a href="{{ url_for('main.deletar_source', id=source.id) }}" id="color-red">{{ _('Excluir Fonte de Dados Abertos') }}</a></p>
-      {% endif %}
-    	 <br><h4><a href="{{ source.officialLink }}" id="buttonPerfil" target="_blank">Visitar Página Oficial</a><h4><br>
-      <h4>{{ _('Fonte registrada por') }}:
-        <a href="{{ url_for('main.user', username=source.author.username ) }}" id="color-red">
-        {{ source.author.username }}</a></h4>
-      </div>
-    </div><br><br><br>
-    <h2>Fontes de Dados Abertos e Aplicações semelhantes</h2><br><br>
-    <div class="row">
-      <div class="col-md-12">
-        {% for similar in similares %}
-          {% include '_similarSource.html' %}<hr>
-        {% endfor %}
-      </div>
-    </div><br><br><br><br>
-    <p>Adicione uma nova fonte ou aplicação que seja semelhante, digitando o seu título no formulário abaixo:</p><br>
-    <div class="row">
-      <div class="col-md-12">
-        {{ wtf.quick_form(form) }}
-      </div>
-    </div><br><br><br><br>
-    <div class="row">
-      <div class="col-md-12">
-      <p>A fonte ou aplicação que gostaria ainda não está registrada em Dados Livres?</p><br><br>
-      <ul><li><p><a href="{{ url_for('main.register_source') }}" id="color-black">
-        {{ _('Cadastrar uma nova Fonte de Dados Abertos') }}</a></li></p>
-          <li><p><a href="{{ url_for('main.register_software') }}" id="color-black">
-        {{ _('Cadastrar uma nova Aplicação') }}</a></li></p>
-      </ul><br><br>
-      </div>
-    </div>
+<div class="row">
+	<h2 class="text-center">{{ _('Encontre as principais categorias em Fontes de Dados Abertos') }}</h2><br><br><br>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.CoronaVirus_Source') }}" id="category-link">Corona Vírus</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Saude_Source') }}" id="category-link">Saúde</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Educacao_Source') }}" id="category-link">Educação</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Cultura_Source') }}" id="category-link">Cultura</a></h4>
+	</div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Cinema_Source') }}" id="category-link">Cinema</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Musica_Source') }}" id="category-link">Música</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Tecnologia_Source') }}" id="category-link">Tecnologia</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Paises_Source') }}" id="category-link">Países</a></h4>
+	</div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Ciencia_Source') }}" id="category-link">Ciência</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.SegurancaPublica_Source') }}" id="category-link">Segurança Pública</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.MeioAmbiente_Source') }}" id="category-link">Meio Ambiente</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.IBGE_Source') }}" id="category-link">IBGE</a></h4>
+	</div>
+	<div class="col-md-2"></div><div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Clima_Source') }}" id="category-link">Clima</a></h4>
+	</div><div class="col-md-2"></div><div class="col-md-2"></div>
+	<div class="col-md-4">
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Lazer_Source') }}" id="category-link">Lazer</a></h4>
+	</div><div class="col-md-2"></div>
+</div>
 {% endblock %}
