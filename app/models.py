@@ -1,3 +1,4 @@
+#!/usr/bin/env python -*- coding: utf-8 -*-
 from datetime import datetime
 from hashlib import md5
 from time import time
@@ -21,7 +22,7 @@ class User(db.Model, UserMixin):
     softwares = db.relationship('Software', backref='author', lazy='dynamic')
 
     def __repr__(self):
-        return '{}'.format(self.username)
+        return 'Olá, {}'.format(self.username)
 
     def avatar(self, size):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
@@ -41,7 +42,8 @@ class User(db.Model, UserMixin):
     @staticmethod
     def verify_reset_password_token(token):
         try:
-            id = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
         except:
             return
         return User.query.get(id)
@@ -56,8 +58,6 @@ class Source(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
-    tag = db.Column(db.String(200), index=True)
-    category = db.Column(db.String(200), index=True)
     sphere = db.Column(db.String(200), index=True)
     city = db.Column(db.String(200), index=True)
     state = db.Column(db.String(200), index=True)
@@ -65,12 +65,13 @@ class Source(db.Model):
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    similares = db.relationship('Similar', backref='source', lazy='dynamic')
+    tags = db.relationship('Tag', backref='source_tag', lazy='dynamic')
+    categories = db.relationship('Category', backref='source_category', lazy='dynamic')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Source {}>'.format(self.title)
+        return '{}'.format(self.title)
 
     def as_dict(self):
         return {'title': self.title}
@@ -80,15 +81,14 @@ class Software(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), index=True, unique=True)
-    tag = db.Column(db.String(200), index=True)
-    category = db.Column(db.String(200), index=True)
     description = db.Column(db.String(800), index=True)
     officialLink = db.Column(db.String(300), index=True)
     license = db.Column(db.String(200), index=True)
     owner = db.Column(db.String(200), index=True)
     dateCreation = db.Column(db.String(200), index=True, default=datetime.utcnow)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    similares = db.relationship('Similar', backref='software', lazy='dynamic')
+    tags = db.relationship('Tag', backref='software_tag', lazy='dynamic')
+    categories = db.relationship('Category', backref='software_category', lazy='dynamic')
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -99,17 +99,30 @@ class Software(db.Model):
         return {'title': self.title}
 
 
-class Similar(db.Model):
+class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), index=True)
+    tag = db.Column(db.String(200), index=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
-        return '<Similar {}>'.format(self.name)
+        return '<Tag {}>'.format(self.tag)
+
+
+class Category(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(200), index=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'))
+    software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
+
+    def __repr__(self):
+        return '<Category {}>'.format(self.category)
 
 
 class Comment(db.Model):
