@@ -7,7 +7,7 @@ from wtforms.validators import ValidationError, DataRequired, Length, \
     Email, EqualTo, Regexp
 from datetime import datetime
 from flask_babel import _, lazy_gettext as _l
-from app.models import User, Source, Software, Similar, \
+from app.models import User, Source, Software, Tag, Category, \
     Comment, Report
 
 
@@ -54,8 +54,7 @@ class SourceForm(FlaskForm):
     officialLink = StringField(_l('Página Oficial: *'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
-               render_kw={"placeholder": "Digite a URL da fonte de dados abertos \
-(https://www.exemplo.com/)"})
+               render_kw={"placeholder": "Digite a URL da fonte (https://www.exemplo.com/)"})
     sphere = SelectField('Esfera: *', id="esfera", choices=[('Municipal', 'Municipal'),
         ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
@@ -84,10 +83,9 @@ class SoftwareForm(FlaskForm):
         validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
-        render_kw={"placeholder": "Digite a URL para Página Oficial da aplicação \
-(https://www.exemplo.com/)"})
+        render_kw={"placeholder": "Digite a URL da aplicação (https://www.exemplo.com/)"})
     owner = StringField(_l('Desenvolvedor: *'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite qual a pessoa desenvolvedora/empresa mantedora da Aplicação"})
+        Length(min=3)], render_kw={"placeholder": "Digite qual a pessoa desenvolvedora/empresa da aplicação"})
     dateCreation = StringField(_l('Data de Criação:'),
         render_kw={"placeholder": "Digite a data de criação da Aplicação"})
     license = SelectField('Licença: *', validators=[DataRequired()],
@@ -126,7 +124,6 @@ class ReportForm(FlaskForm):
     type = StringField(_l('Tipo: *'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
 
-
 class ContactForm(FlaskForm):
     username = StringField(_l('Nome: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite seu nome"})
@@ -134,5 +131,4 @@ class ContactForm(FlaskForm):
         render_kw={"placeholder": "Digite seu e-mail"})
     message = TextAreaField(_l('Mensagem: *'), validators=[DataRequired(),
         Length(min=4, max=500)], render_kw={"rows": 6, "placeholder": "Digite sua mensagem"})
-    recaptcha = RecaptchaField()
     submit = SubmitField(_l('Enviar'))
