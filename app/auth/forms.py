@@ -7,9 +7,9 @@ from flask_babel import _, lazy_gettext as _l
 
 
 class LoginForm(FlaskForm):
-    username = StringField(_l('Nome: *'), validators=[DataRequired(),
-        Length(min=3)], render_kw={"placeholder": "Digite seu nome de usuário"})
-    password = PasswordField(_l('Senha: *'), validators=[DataRequired(),
+    email = StringField(_l('E-mail: *'), validators=[DataRequired(),
+        Email()], render_kw={"placeholder": "Digite seu nome de usuário"})
+    senha = PasswordField(_l('Senha: *'), validators=[DataRequired(),
         Length(min=8)], render_kw={"placeholder": "Digite sua senha \
 (mínimo 8 caracteres)"})
     remember_me = BooleanField(_l('Lembrar de mim'))
@@ -32,25 +32,25 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError(_('Escolha um nome de usuário diferente'))
+            raise ValidationError(_('Esse usuário já está cadastrado. Escolha um nome diferente'))
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError(_('Escolha um endereço de e-mail diferente'))
+            raise ValidationError(_('Esse endereço já está cadastrado. Escolha um e-mail diferente'))
 
 
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField(_l('E-mail: *'), validators=[DataRequired(), Email()],
-        render_kw={"placeholder": "Digite o endereço de e-mail que foi cadastrado na plataforma"})
-    submit = SubmitField(_l('Redefinir senha'))
+        render_kw={"placeholder": "Digite seu endereço de e-mail"})
+    submit = SubmitField(_l('Enviar'))
 
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField(_l('Senha: *'), validators=[DataRequired(),
-        Length(min=8)], render_kw={"placeholder": "Digite uma senha \
+    senha = PasswordField(_l('Senha: *'), validators=[DataRequired(),
+        Length(min=8)], render_kw={"placeholder": "Digite sua nova senha \
 (mínimo 8 caracteres)"})
     password2 = PasswordField(_l('Repetir senha: *'), validators=[DataRequired(),
-        EqualTo('password'), Length(min=8)], render_kw={"placeholder":
+        EqualTo('senha'), Length(min=8)], render_kw={"placeholder":
 "Repita a senha anterior (mínimo 8 caracteres)"})
-    submit = SubmitField(_l('Salvar nova senha'))
+    submit = SubmitField(_l('Salvar'))
