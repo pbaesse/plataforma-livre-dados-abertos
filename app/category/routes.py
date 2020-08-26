@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 from flask_babel import _, get_locale
 from app import db
 from app.category import bp
-from app.models import Source, Software
+from app.models import Source, Software, Tag, Category
 
 import unicodedata
 def remove_accents(category):
@@ -17,101 +17,255 @@ def remove_accents(category):
         .decode("utf-8")
     return str(category.replace(" ", ""))
 
-@bp.route('/CoronaVirus', methods=['GET', 'POST'])
-def CoronaVirus():
-    sources = Source.query.filter_by(category='Corona Vírus').all()
-    softwares = Software.query.filter_by(category='Corona Vírus').all()
-    return render_template('category/CoronaVirus.html', title=_('Corona Vírus'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/CoronaVirus_Source', methods=['GET', 'POST'])
+def CoronaVirus_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Corona Vírus',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/CoronaVirus_Source.html', title=(_('Corona Vírus')),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/Saude', methods=['GET', 'POST'])
-def Saude():
-    sources = Source.query.filter_by(category='Saúde').all()
-    softwares = Software.query.filter_by(category='Saúde').all()
-    return render_template('category/Saude.html', title=_('Saúde'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/CoronaVirus_Software', methods=['GET', 'POST'])
+def CoronaVirus_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Corona Vírus',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/CoronaVirus_Software.html', title=(_('Corona Vírus')),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/Educacao', methods=['GET', 'POST'])
-def Educacao():
-    sources = Source.query.filter_by(category='Educação').all()
-    softwares = Software.query.filter_by(category='Educação').all()
-    return render_template('category/Educacao.html', title=_('Educação'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Saude_Source', methods=['GET', 'POST'])
+def Saude_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Saúde',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Saude_Source.html', title=_('Saúde'),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/Cinema', methods=['GET', 'POST'])
-def Cinema():
-    sources = Source.query.filter_by(category='Cinema').all()
-    softwares = Software.query.filter_by(category='Cinema').all()
-    return render_template('category/Cinema.html', title=_('Cinema'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Saude_Software', methods=['GET', 'POST'])
+def Saude_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Saúde',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Saude_Software.html', title=_('Saúde'),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/Musica', methods=['GET', 'POST'])
-def Musica():
-    sources = Source.query.filter_by(category='Música').all()
-    softwares = Software.query.filter_by(category='Música').all()
-    return render_template('category/Musica.html', title=_('Música'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Educacao_Source', methods=['GET', 'POST'])
+def Educacao_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Educação',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Educacao_Source.html', title=_('Educação'),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/Tecnologia', methods=['GET', 'POST'])
-def Tecnologia():
-    sources = Source.query.filter_by(category='Tecnologia').all()
-    softwares = Software.query.filter_by(category='Tecnologia').all()
-    return render_template('category/Tecnologia.html', title=_('Tecnologia'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Educacao_Software', methods=['GET', 'POST'])
+def Educacao_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Educação',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Educacao_Software.html', title=_('Educação'),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/Ciencia', methods=['GET', 'POST'])
-def Ciencia():
-    sources = Source.query.filter_by(category='Ciência').all()
-    softwares = Software.query.filter_by(category='Ciência').all()
-    return render_template('category/Ciencia.html', title=_('Ciência'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Cinema_Source', methods=['GET', 'POST'])
+def Cinema_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Cinema',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Cinema_Source.html', title=_('Cinema'),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/SegurancaPublica', methods=['GET', 'POST'])
-def SegurancaPublica():
-    sources = Source.query.filter_by(category='Segurança Pública').all()
-    softwares = Software.query.filter_by(category='Segurança Pública').all()
-    return render_template('category/SegurancaPublica.html',
-        title=_('Segurança Pública'), sources=sources, softwares=softwares)
+@bp.route('/Cinema_Software', methods=['GET', 'POST'])
+def Cinema_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Cinema',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Cinema_Software.html', title=_('Cinema'),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/MeioAmbiente', methods=['GET', 'POST'])
-def MeioAmbiente():
-    sources = Source.query.filter_by(category='Meio Ambiente').all()
-    softwares = Software.query.filter_by(category='Meio Ambiente').all()
-    return render_template('category/MeioAmbiente.html',
-        title=_('Meio Ambiente'), sources=sources, softwares=softwares,
+@bp.route('/Musica_Source', methods=['GET', 'POST'])
+def Musica_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Música',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Musica_Source.html', title=_('Música'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/Musica_Software', methods=['GET', 'POST'])
+def Musica_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Música',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Musica_Software.html', title=_('Música'),
+        softwares=softwares, remove_accents=remove_accents)
+
+@bp.route('/Tecnologia_Source', methods=['GET', 'POST'])
+def Tecnologia_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Tecnologia',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Tecnologia_Source.html', title=_('Tecnologia'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/Tecnologia_Software', methods=['GET', 'POST'])
+def Tecnologia_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Tecnologia',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Tecnologia_Software.html', title=_('Tecnologia'),
+        softwares=softwares, remove_accents=remove_accents)
+
+@bp.route('/Ciencia_Source', methods=['GET', 'POST'])
+def Ciencia_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Ciência',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Ciencia_Source.html', title=_('Ciência'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/Ciencia_Software', methods=['GET', 'POST'])
+def Ciencia_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Ciência',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Ciencia_Software.html', title=_('Ciência'),
+        softwares=softwares, remove_accents=remove_accents)
+
+@bp.route('/SegurancaPublica_Source', methods=['GET', 'POST'])
+def SegurancaPublica_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Segurança Pública',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/SegurancaPublica_Source.html',
+        title=_('Segurança Pública'), sources=sources)
+
+@bp.route('/SegurancaPublica_Software', methods=['GET', 'POST'])
+def SegurancaPublica_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Segurança Pública',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/SegurancaPublica_Software.html',
+        title=_('Segurança Pública'), softwares=softwares)
+
+@bp.route('/MeioAmbiente_Source', methods=['GET', 'POST'])
+def MeioAmbiente_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Meio Ambiente',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/MeioAmbiente_Source.html',
+        title=_('Meio Ambiente'), sources=sources, remove_accents=remove_accents)
+
+@bp.route('/MeioAmbiente_Software', methods=['GET', 'POST'])
+def MeioAmbiente_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Meio Ambiente',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/MeioAmbiente_Software.html',
+        title=_('Meio Ambiente'), softwares=softwares,
         remove_accents=remove_accents)
 
-@bp.route('/Cultura', methods=['GET', 'POST'])
-def Cultura():
-    sources = Source.query.filter_by(category='Cultura').all()
-    softwares = Software.query.filter_by(category='Cultura').all()
-    return render_template('category/Cultura.html', title=_('Cultura'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Cultura_Source', methods=['GET', 'POST'])
+def Cultura_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Cultura',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Cultura_Source.html', title=_('Cultura'),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/Paises', methods=['GET', 'POST'])
-def Paises():
-    sources = Source.query.filter_by(category='Países').all()
-    softwares = Software.query.filter_by(category='Países').all()
-    return render_template('category/Paises.html', title=_('Países'),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
+@bp.route('/Cultura_Software', methods=['GET', 'POST'])
+def Cultura_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Cultura',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Cultura_Software.html', title=_('Cultura'),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/IBGE', methods=['GET', 'POST'])
-def IBGE():
-    sources = Source.query.filter_by(category='IBGE').all()
-    softwares = Software.query.filter_by(category='IBGE').all()
-    return render_template('category/IBGE.html', title=_('IBGE'),
-        softwares=softwares, sources=sources, remove_accents=remove_accents)
+@bp.route('/Paises_Source', methods=['GET', 'POST'])
+def Paises_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Países',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Paises_Source.html', title=_('Países'),
+        sources=sources, remove_accents=remove_accents)
 
-@bp.route('/Clima', methods=['GET', 'POST'])
-def Clima():
-    sources = Source.query.filter_by(category='Clima').all()
-    softwares = Software.query.filter_by(category='Clima').all()
-    return render_template('category/Clima.html', title=_('Clima'),
-        softwares=softwares, sources=sources, remove_accents=remove_accents)
+@bp.route('/Paises_Software', methods=['GET', 'POST'])
+def Paises_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Países',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Paises_Software.html', title=_('Países'),
+        softwares=softwares, remove_accents=remove_accents)
 
-@bp.route('/Lazer', methods=['GET', 'POST'])
-def Lazer():
-    sources = Source.query.filter_by(category='Lazer').all()
-    softwares = Software.query.filter_by(category='Lazer').all()
-    return render_template('category/Lazer.html', title=_('Lazer'),
-        softwares=softwares, sources=sources, remove_accents=remove_accents)
+@bp.route('/IBGE_Source', methods=['GET', 'POST'])
+def IBGE_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='IBGE',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/IBGE_Source.html', title=_('IBGE'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/IBGE_Software', methods=['GET', 'POST'])
+def IBGE_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='IBGE',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/IBGE_Software.html', title=_('IBGE'),
+        softwares=softwares, remove_accents=remove_accents)
+
+@bp.route('/Clima_Source', methods=['GET', 'POST'])
+def Clima_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Clima',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Clima_Source.html', title=_('Clima'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/Clima_Software', methods=['GET', 'POST'])
+def Clima_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Clima',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Clima_Software.html', title=_('Clima'),
+        softwares=softwares, remove_accents=remove_accents)
+
+@bp.route('/Lazer_Source', methods=['GET', 'POST'])
+def Lazer_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Lazer',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/Lazer_Source.html', title=_('Lazer'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/Lazer_Software', methods=['GET', 'POST'])
+def Lazer_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Lazer',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/Lazer_Software.html', title=_('Lazer'),
+        softwares=softwares, remove_accents=remove_accents)
