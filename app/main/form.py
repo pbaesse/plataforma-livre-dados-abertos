@@ -68,6 +68,11 @@ class SourceForm(FlaskForm):
         Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Fonte de Dados Abertos"})
     submit = SubmitField(_l('Registrar'))
 
+    def validate_title(self, title):
+        source = Source.query.filter_by(title=title.data).first()
+        if source is not None:
+            raise ValidationError(_('Essa fonte já está cadastrada. Escolha um título diferente'))
+
 
 class SoftwareForm(FlaskForm):
     title = StringField(_l('Título: *'), validators=[DataRequired(),
@@ -104,6 +109,11 @@ class SoftwareForm(FlaskForm):
         Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Aplicação"})
     submit = SubmitField(_l('Registrar'))
 
+    def validate_title(self, title):
+        software = Software.query.filter_by(title=title.data).first()
+        if software is not None:
+            raise ValidationError(_('Essa aplicação já está cadastrada. Escolha um título diferente'))
+
 
 class SimilarForm(FlaskForm):
     name = StringField(_l('Título: *'), id='autocomplete', validators=[DataRequired(),
@@ -123,6 +133,7 @@ class ReportForm(FlaskForm):
         Length(min=0, max=150)])
     type = StringField(_l('Tipo: *'), validators=[DataRequired()])
     submit = SubmitField(_l('Enviar'))
+
 
 class ContactForm(FlaskForm):
     username = StringField(_l('Nome: *'), validators=[DataRequired(),
