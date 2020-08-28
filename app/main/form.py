@@ -65,7 +65,7 @@ class SourceForm(FlaskForm):
     country = StringField(_l('País:'), id="internacional",
         render_kw={"placeholder": "Digite o país da fonte de dados abertos"})
     description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
-        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Fonte de Dados Abertos"})
+        Length(max=550)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Fonte de Dados Abertos"})
     submit = SubmitField(_l('Registrar'))
 
     def validate_title(self, title):
@@ -106,7 +106,7 @@ class SoftwareForm(FlaskForm):
         ('GNU Lesser General Public License v2.1','GNU Lesser General Public License v2.1'),
         ('Mozilla Public License 2.0','Mozilla Public License 2.0')], default=1)
     description = TextAreaField(_l('Descrição: *'), validators=[DataRequired(),
-        Length(min=0, max=500)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Aplicação"})
+        Length(max=550)], render_kw={"rows": 6, "placeholder": "Digite uma breve descrição sobre a Aplicação"})
     submit = SubmitField(_l('Registrar'))
 
     def validate_title(self, title):
