@@ -9,9 +9,11 @@ from flask_babel import _, get_locale
 from guess_language import guess_language
 from app import db
 from app.main.form import EditProfileForm, EditPasswordForm, \
-    SourceForm, SoftwareForm, SimilarForm, CommentForm, ReportForm, ContactForm
-from app.models import User, Source, Software, Similar, \
+    SourceForm, SoftwareForm, CommentForm, ReportForm, ContactForm
+from app.models import User, Source, Software, Tag, Category, \
     Comment, Report
+from flask_mail import Message
+from app import mail
 from app.main import bp
 
 @bp.before_request
@@ -33,22 +35,6 @@ def remove_accents(category):
     category.strip()
     return str(category.replace(" ", ""))
 
-@bp.route('/', methods=['GET', 'POST'])
-@bp.route('/index', methods=['GET', 'POST'])
-def index():
-    page = request.args.get('page', 1, type=int)
-    sources = Source.query.order_by(Source.timestamp.desc()).paginate(page=page, per_page=1)
-    softwares = Software.query.order_by(Software.timestamp.desc()).paginate(page=page, per_page=1)
-    return render_template('index.html', title=(_('Página Principal')),
-        sources=sources.items, softwares=softwares.items, remove_accents=remove_accents)
-
-@bp.route('/explore', methods=['GET', 'POST'])
-def explore():
-    sources = Source.query.order_by(Source.timestamp.desc()).all()
-    softwares = Software.query.order_by(Software.timestamp.desc()).all()
-    return render_template('explore.html', title=(_('Fontes e Aplicações')),
-        sources=sources, softwares=softwares, remove_accents=remove_accents)
-
 @bp.route('/_autocomplete', methods=['GET'])
 def autocomplete():
     res1 = Software.query.all()
@@ -57,39 +43,56 @@ def autocomplete():
     list_titles2 = [r.as_dict() for r in res2]
     return jsonify(list_titles1 + list_titles2)
 
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/index', methods=['GET', 'POST'])
+def index():
+    page = request.args.get('page', 1, type=int)
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).paginate(page=page, per_page=1)
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).paginate(page=page, per_page=1)
+    return render_template('index.html', title=(_('Página Principal')),
+        sources=sources.items, softwares=softwares.items, remove_accents=remove_accents)
+
+@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/source', methods=['GET', 'POST'])
+def source():
+    return render_template('source.html', title=(_('Fontes')))
+
+@bp.route('/software', methods=['GET', 'POST'])
+def software():
+    return render_template('software.html', title=(_('Aplicações')))
+
 @bp.route('/register_source', methods=['GET', 'POST'])
 @login_required
 def register_source():
     form = SourceForm()
     if form.validate_on_submit():
-        sources = Source(title=form.title.data, tag=form.tag.data,
-        category=form.category.data, city=form.city.data,
+        source = Source(title=form.title.data, city=form.city.data,
         state=form.state.data, country=form.country.data,
         description=form.description.data, sphere=form.sphere.data,
         officialLink=form.officialLink.data, author=current_user)
-        db.session.add(sources)
+        db.session.add(source)
+        db.session.flush()
+        category = Category(category=form.category.data, source_id=source.id)
+        db.session.add(category)
+        db.session.flush()
+        tag = Tag(tag=form.tag.data, source_id=source.id)
+        db.session.add(tag)
+        db.session.flush()
         db.session.commit()
         flash(_('Você registrou uma nova Fonte de Dados Abertos'))
-        return redirect(url_for('main.explore'))
     return render_template('register_source.html', title=(_('Cadastrar Fonte')),
         form=form)
 
-@bp.route('/source/<title>', methods=['GET', 'POST'])
-def source(title):
+@bp.route('/source_profile/<title>', methods=['GET', 'POST'])
+def source_profile(title):
     source = Source.query.filter_by(title=title).first_or_404()
-    sources = Source.query.order_by(Source.timestamp.desc()).all()
-    form = SimilarForm(request.form)
-    if form.validate_on_submit():
-        if not current_user.is_authenticated:
-            return redirect(url_for('auth.login'))
-        similar = Similar(name=form.name.data, source_id=source.id)
-        db.session.add(similar)
-        db.session.commit()
-        flash(_('Você registrou um semelhante'))
-        return redirect(url_for('main.source', title=source.title))
-    similares = Similar.query.filter_by(source_id=source.id).all()
-    return render_template('source.html', title=(_('Perfil da Fonte')), source=source, form=form,
-        similares=similares, sources=sources, remove_accents=remove_accents)
+    return render_template('source_profile.html', title=(_('Perfil da Fonte')),
+        source=source, remove_accents=remove_accents)
 
 @bp.route('/edit_source/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -127,44 +130,44 @@ def edit_source(id):
 def deletar_source(id):
     source = Source.query.filter_by(id=id).first()
     db.session.delete(source)
+    db.session.flush()
+    tag = Tag.query.filter_by(id=id).first()
+    db.session.delete(tag)
+    db.session.flush()
+    category = Category.query.filter_by(id=id).first()
+    db.session.delete(category)
+    db.session.flush()
     db.session.commit()
     flash(_('A fonte foi deletada'))
-    return redirect(url_for("main.explore"))
+    return redirect(url_for("main.index"))
 
 @bp.route('/register_software', methods=['GET', 'POST'])
 @login_required
 def register_software():
     form = SoftwareForm()
     if form.validate_on_submit():
-        software = Software(title=form.title.data, tag=form.tag.data,
-        category=form.category.data, description=form.description.data,
-        officialLink=form.officialLink.data, license=form.license.data,
-        owner=form.owner.data, dateCreation=form.dateCreation.data,
-        author=current_user)
+        software = Software(title=form.title.data,
+        description=form.description.data, officialLink=form.officialLink.data,
+        license=form.license.data, owner=form.owner.data,
+        dateCreation=form.dateCreation.data, author=current_user)
         db.session.add(software)
+        db.session.flush()
+        category = Category(category=form.category.data, software_id=software.id)
+        db.session.add(category)
+        db.session.flush()
+        tag = Tag(tag=form.tag.data, software_id=software.id)
+        db.session.add(tag)
+        db.session.flush()
         db.session.commit()
-        flash(_('Você registrou uma nova aplicação'))
-        return redirect(url_for('main.explore'))
+        flash(_('Você registrou uma nova Aplicação'))
     return render_template('register_software.html',
-        title=(_('Cadastrar Aplicação')), form=form)
+            title=(_('Cadastrar Aplicação')), form=form)
 
-@bp.route('/software/<title>', methods=['GET', 'POST'])
-def software(title):
+@bp.route('/software_profile/<title>', methods=['GET', 'POST'])
+def software_profile(title):
     software = Software.query.filter_by(title=title).first_or_404()
-    softwares = Software.query.order_by(Software.timestamp.desc()).all()
-    form = SimilarForm(request.form)
-    if form.validate_on_submit():
-        if not current_user.is_authenticated:
-            return redirect(url_for('auth.login'))
-        similar = Similar(name=form.name.data, software_id=software.id)
-        db.session.add(similar)
-        db.session.commit()
-        flash(_('Você registrou um semelhante'))
-        return redirect(url_for('main.software', title=software.title))
-    similares = Similar.query.filter_by(software_id=software.id).all()
-    return render_template('software.html', title=(_('Perfil da Aplicação')),
-        software=software, form=form, similares=similares, softwares=softwares,
-        remove_accents=remove_accents)
+    return render_template('software_profile.html', title=(_('Perfil da Aplicação')),
+        software=software, remove_accents=remove_accents)
 
 @bp.route('/edit_software/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -193,25 +196,37 @@ def edit_software(id):
     form.license.data = software.license
     form.description.data = software.description
     return render_template('edit_software.html', title=(_('Editar Aplicação')),
-        form=form, software=software)
+        form=form,software=software)
 
 @bp.route("/deletar_software/<int:id>")
 @login_required
 def deletar_software(id):
     software = Software.query.filter_by(id=id).first()
     db.session.delete(software)
+    db.session.flush()
+    tag = Tag.query.filter_by(id=id).first()
+    db.session.delete(tag)
+    db.session.flush()
+    category = Category.query.filter_by(id=id).first()
+    db.session.delete(category)
+    db.session.flush()
     db.session.commit()
-    flash(_('A aplicação foi deletada'))
-    return redirect(url_for("main.explore"))
+    flash(_('A fonte foi deletada'))
+    return redirect(url_for("main.index"))
 
 @bp.route('/user/<username>', methods=['GET', 'POST'])
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    sources = user.sources.order_by(Source.timestamp.desc()).all()
-    softwares = user.softwares.order_by(Software.timestamp.desc()).all()
+    sources = db.session.query(Source.title, Source.sphere,
+        Category.category, Tag.tag).filter(Category.source_id == Source.id,
+        Tag.source_id == Source.id, Source.user_id == user.id).order_by(
+        Source.timestamp.desc()).all()
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.software_id == Software.id,
+        Tag.software_id == Software.id, Software.user_id == user.id).order_by(
+        Software.timestamp.desc()).all()
     return render_template('user.html', title=(_('Perfil do Usuário')),
-        user=user, sources=sources, softwares=softwares,
-        remove_accents=remove_accents)
+        user=user, sources=sources, softwares=softwares, remove_accents=remove_accents)
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -260,18 +275,3 @@ def about():
 @bp.route('/how_to_contribute', methods=['GET', 'POST'])
 def how_to_contribute():
     return render_template('how_to_contribute.html', title=(_('Como contribuir')))
-
-@bp.route('/contact', methods=['GET', 'POST'])
-def contact():
-    if current_user.is_authenticated:
-        form = ContactForm(current_user.username)
-        if form.validate_on_submit():
-            current_user.username = form.username.data
-            flash(_('Sua mensagem foi enviada'))
-        elif request.method == 'GET':
-            form.username.data = current_user.username
-    else:
-        form = ContactForm()
-        if form.validate_on_submit():
-            flash(_('Sua mensagem foi enviada'))
-    return render_template('contact.html', title=(_('Contato')), form=form, current_user=current_user)
