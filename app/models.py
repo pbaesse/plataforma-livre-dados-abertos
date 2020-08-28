@@ -93,7 +93,7 @@ class Software(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Software {}>'.format(self.title)
+        return '{}'.format(self.title)
 
     def as_dict(self):
         return {'title': self.title}
@@ -109,7 +109,7 @@ class Tag(db.Model):
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
-        return '<Tag {}>'.format(self.tag)
+        return '{}'.format(self.tag)
 
 
 class Category(db.Model):
@@ -122,7 +122,7 @@ class Category(db.Model):
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
-        return '<Category {}>'.format(self.category)
+        return '{}'.format(self.category)
 
 
 class Comment(db.Model):
@@ -133,7 +133,7 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Comment {}>'.format(self.username)
+        return '{}'.format(self.username)
 
 
 class Report(db.Model):
@@ -148,4 +148,4 @@ class Report(db.Model):
     software_id = db.Column(db.Integer, db.ForeignKey('software.id'))
 
     def __repr__(self):
-        return '<Report {}>'.format(self.name)
+        return '{}'.format(self.name)
