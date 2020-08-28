@@ -1,9 +1,9 @@
 <table>
   <tr valign="top">
     <td>
-      <h4><a href="{{ url_for('main.software', title=software.title) }}"
+      <h4><a href="{{ url_for('main.software_profile', title=software.title) }}"
         id="color-red">{{ software.title }}</a></h4><br>
-        <p>Categoria: <a href="/category/{{ remove_accents(software.category) }}"
+        <p>Categoria: <a href="/category/{{remove_accents(software.category)}}_Software"
           id="color-red">{{ software.category }}</a> |
           Desenvolvedor: {{ software.owner }} <br>Licença: {{ software.license }} </p>
         <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput">

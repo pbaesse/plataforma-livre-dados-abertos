@@ -4,8 +4,8 @@
   <div class="row">
     <div class="col-md-12">
       <h1>{% if software.title %}{{ software.title }}{% endif %}</h1><br><br>
-      <p>{% if software.category %}{{ _('Categoria') }}: <a href="/category/{{remove_accents(software.category)}}_Software"
-        id="color-red">{{ software.category }}</a> | {% endif %}{% if software.owner %}{{ _('Desenvolvedor') }}:
+      <p>{{_('Categoria')}}: {% for category in software.categories %}
+        {{ category }}{% endfor %} | {% if software.owner %}{{ _('Desenvolvedor') }}:
         {{ software.owner }}{% endif %} | {% if software.license %}{{ _('Licença') }}: {{ software.license }}{% endif %}
         {% if software.dateCreation %} | {{ _('Data de criação') }}: {{ software.dateCreation }}{% endif %}</p>
       <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
