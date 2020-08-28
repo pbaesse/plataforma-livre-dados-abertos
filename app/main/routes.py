@@ -275,3 +275,20 @@ def about():
 @bp.route('/how_to_contribute', methods=['GET', 'POST'])
 def how_to_contribute():
     return render_template('how_to_contribute.html', title=(_('Como contribuir')))
+
+@bp.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if request.method == 'POST':
+        msg = Message(form.username.data, sender='dadoslivres.testes@gmail.com',
+        recipients=['m.carolina.soares1@gmail.com'])
+        msg.body = """
+        Enviado por: %s
+        E-mail: %s
+        Mensagem: %s""" % (form.username.data, form.email.data, form.message.data)
+        mail.send(msg)
+        flash(_('Seu e-mail foi enviado, agradecemos pelo contato'))
+        return render_template('contact.html', title=(_('Contato')),
+            form=form)
+    elif request.method == 'GET':
+        return render_template('contact.html',  title=(_('Contato')), form=form)
