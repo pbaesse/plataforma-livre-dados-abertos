@@ -27,45 +27,39 @@
           <img class="navbar-brand" src="../static/image/Logo-Dados-Livres.png" alt="Logo Dados Livres (dadoslivres.org)"></a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="{{ url_for('main.explore') }}" id="navbar">{{ _('Fontes de Dados Abertos') }}</a></li>
-          <li><a href="{{ url_for('main.explore') }}" id="navbar">{{ _('Aplicações') }}</a></li>
+        <ul class="nav navbar-nav navbar-left">
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('main.source') }}" id="navbar">{{ _('Fontes') }}</a></li>
+            <li><a href="{{ url_for('main.software') }}" id="navbar">{{ _('Aplicações') }}</a></li>
+          </ul>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Registrar Fonte/Aplicação') }} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.register_source') }}">{{ _('Registrar Fonte de Dados Abertos') }}</a></li>
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.register_software') }}">{{ _('Registrar Aplicação') }}</a></li>
-            </ul>
-          </li>
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('main.register_source') }}" id="navbar">{{ _('Nova Fonte') }}</a></li>
+            <li><a href="{{ url_for('main.register_software') }}" id="navbar">{{ _('Nova Aplicação') }}</a></li>
+          </ul>
           {% if current_user.is_anonymous %}
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Entrar/Inscreva-se') }} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.login') }}">{{ _('Entre com sua conta em Dados Livres') }}</a></li>
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.register') }}">{{ _('Ainda não tem conta? Inscreva-se') }}</a></li>
+            <ul class="nav navbar-nav">
+              <li><a href="{{ url_for('auth.login') }}" id="navbar">{{ _('Entrar') }}</a></li>
             </ul>
-          </li>
           {% else %}
+          <ul class="nav navbar-nav">
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ current_user }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Ver Perfil') }}</a></li>
-                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.edit_profile') }}"> {{ _('Editar Perfil') }}</a></li>
+                  <li><a style="color:#9d0208; font-size: 12pt;" href="{{ url_for('main.user', username=current_user.username) }}">{{ _('Acessar Perfil') }}</a></li>
+                  <li><a style="color:#9d0208; font-size: 12pt;" href="{{ url_for('main.edit_profile') }}"> {{ _('Editar Perfil') }}</a></li>
                   <!-- <li class="text-center"><a href="{{ url_for('main.edit_password') }}"> {{ _('Editar Senha') }}</a></li>-->
-                  <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
+                  <li><a style="color:#9d0208; font-size: 12pt;" href="{{ url_for('auth.logout') }}">{{ _('Sair') }}</a></li>
               </ul>
             </li>
+          </ul>
           {% endif %}
-          <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbar">{{ _('Saiba Mais') }} <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.about') }}" target="_blank">{{ _('Sobre Dados Livres') }}</a></li>
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.how_to_contribute') }}" target="_blank">{{ _('Como Contribuir?') }}</a></li>
-                <li><a style="color:#9d0208; font-size:12pt;" href="{{ url_for('main.contact') }}" target="_blank">{{ _('Contato') }}</a></li>
-            </ul>
-          </li>
+          <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('main.contact') }}" target="_blank" id="navbar">{{ _('Contato') }}</a></li>
+            <li><a href="{{ url_for('main.about') }}" target="_blank" id="navbar">{{ _('Sobre') }}</a></li>
+            <li><a href="{{ url_for('main.how_to_contribute') }}" target="_blank" id="navbar">{{ _('Como Contribuir?') }}</a></li>
+          </ul>
         </ul>
       </div>
     </div>
