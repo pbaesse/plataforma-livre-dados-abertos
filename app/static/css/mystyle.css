@@ -136,6 +136,8 @@ a#color-black:hover {
 
 div img#imagem_user {
   float: left;
-  margin: 20px 20px 20px 0;
-  max-width: 120px;
+  margin: 10px 20px 20px 0;
+  min-width: 150px;
+  border-radius: 6px;
+  border: 1px solid #bdbdbd;
 }
