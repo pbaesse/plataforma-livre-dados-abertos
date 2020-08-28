@@ -11,14 +11,14 @@
         <br><p><a href="{{ url_for('main.edit_profile') }}" id="color-red">{{ _('Editar Seu Perfil') }}</a></p>
         {% endif %}
       </div>
-    </div><br><br><br><br>
+    </div><br><br><br><br><br>
     <div class="row">
       <div class="col-md-12">
-        <p class="lead"><strong>Fontes de Dados Abertos registradas por {{ user.username }}</strong></p><br>
+        <h4>Fontes registradas por {{ user.username }}</h4><br><br>
         {% for source in sources %}
           {% include '_source.html' %}<hr><br>
-        {% endfor %}<br><br>
-        <p class="lead"><strong>Aplicações registradas por {{ user.username }}</strong></p><br>
+        {% endfor %}<br><br><br>
+        <h4>Aplicações registradas por {{ user.username }}</h4><br><br>
         {% for software in softwares %}
           {% include '_software.html' %}<hr><br>
         {% endfor %}
