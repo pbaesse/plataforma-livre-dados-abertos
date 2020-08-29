@@ -44,7 +44,7 @@ class EditPasswordForm(FlaskForm):
 class SourceForm(FlaskForm):
     title = StringField(_l('Título: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite o título da Fonte de Dados Abertos"})
-    tag = StringField(_l('Palavras-Chaves: *'), validators=[DataRequired()],
+    tag = StringField(_l('Palavras-Chaves: *'), id="tags", validators=[DataRequired()],
         render_kw={"placeholder": "Digite as palavras-chaves da fonte"})
     category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
         choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
@@ -77,7 +77,7 @@ class SourceForm(FlaskForm):
 class SoftwareForm(FlaskForm):
     title = StringField(_l('Título: *'), validators=[DataRequired(),
         Length(min=3)], render_kw={"placeholder": "Digite o título da Aplicação"})
-    tag = StringField(_l('Palavras-Chaves: *'), validators=[DataRequired()],
+    tag = StringField(_l('Palavras-Chaves: *'), id="tags", validators=[DataRequired()],
         render_kw={"placeholder": "Digite as palavras-chaves da Aplicação"})
     category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
         choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
