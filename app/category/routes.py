@@ -234,6 +234,24 @@ def IBGE_Software():
     return render_template('category/IBGE_Software.html', title=_('IBGE'),
         softwares=softwares, remove_accents=remove_accents)
 
+@bp.route('/GastosPublicos_Source', methods=['GET', 'POST'])
+def GastosPublicos_Source():
+    sources = db.session.query(Source.title, Source.sphere, Category.category,
+        Tag.tag).filter(Category.category=='Gastos Públicos',
+        Category.source_id == Source.id, Tag.source_id == Source.id).order_by(
+        Source.timestamp.desc()).all()
+    return render_template('category/GastosPublicos_Source.html', title=_('Gastos Públicos'),
+        sources=sources, remove_accents=remove_accents)
+
+@bp.route('/GastosPublicos_Software', methods=['GET', 'POST'])
+def GastosPublicos_Software():
+    softwares = db.session.query(Software.title, Software.owner, Software.license,
+        Category.category, Tag.tag).filter(Category.category=='Gastos Públicos',
+        Category.software_id == Software.id, Tag.software_id == Software.id).order_by(
+        Software.timestamp.desc()).all()
+    return render_template('category/GastosPublicos_Software.html', title=_('Gastos Públicos'),
+        softwares=softwares, remove_accents=remove_accents)
+
 @bp.route('/Clima_Source', methods=['GET', 'POST'])
 def Clima_Source():
     sources = db.session.query(Source.title, Source.sphere, Category.category,

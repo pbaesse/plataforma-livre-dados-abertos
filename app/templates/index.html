@@ -2,38 +2,35 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
 <div class="jumbotron">
-	<h1 class="text-center">{{ _('Dados Livres') }}</h1><br>
+	<h1 class="text-center">{{ _('Dados Livres') }} <small>(dadoslivres.org)</small></h1><br>
 	<p class="text-center" style="color: #03071E;">{{ _('Plataforma Dados Livres
 			que permite o compartilhamento e a colaboração na identificação de Fontes
 			de Dados Abertos e Aplicações que fazem uso desse tipo de informação,
 			de modo a gerar controle social e transparência pública para a sociedade civil.') }}</p>
 </div><br>
 <div class="row">
-	<h2 class="text-center">{{ _('Encontre as principais categorias em Fontes de Dados Abertos') }}</h2><br>
+	<h2 class="text-center">{{ _('Encontre as principais categorias em Fontes') }}</h2><br>
 	<div class="col-md-4">
 		<h4><a class="topic-grid-item" href="{{ url_for('category.CoronaVirus_Source') }}" id="category-link">Corona Vírus</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Saude_Source') }}" id="category-link">Saúde</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Educacao_Source') }}" id="category-link">Educação</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Cultura_Source') }}" id="category-link">Cultura</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.GastosPublicos_Source') }}" id="category-link">Gastos Públicos</a></h4>
 	</div>
 	<div class="col-md-4">
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Cinema_Source') }}" id="category-link">Cinema</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Musica_Source') }}" id="category-link">Música</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Tecnologia_Source') }}" id="category-link">Tecnologia</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Paises_Source') }}" id="category-link">Países</a></h4>
+		<h4><a class="topic-grid-item" href="{{ url_for('category.Lazer_Source') }}" id="category-link">Lazer</a></h4>
 	</div>
 	<div class="col-md-4">
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Ciencia_Source') }}" id="category-link">Ciência</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.SegurancaPublica_Source') }}" id="category-link">Segurança Pública</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.MeioAmbiente_Source') }}" id="category-link">Meio Ambiente</a></h4>
 		<h4><a class="topic-grid-item" href="{{ url_for('category.IBGE_Source') }}" id="category-link">IBGE</a></h4>
-	</div>
-	<div class="col-md-2"></div><div class="col-md-4">
 		<h4><a class="topic-grid-item" href="{{ url_for('category.Clima_Source') }}" id="category-link">Clima</a></h4>
-	</div><div class="col-md-2"></div><div class="col-md-2"></div>
-	<div class="col-md-4">
-		<h4><a class="topic-grid-item" href="{{ url_for('category.Lazer_Source') }}" id="category-link">Lazer</a></h4>
-	</div><div class="col-md-2"></div>
+	</div>
 </div><br><br>
 <div class="row">
 	<h2 class="text-center">{{ _('Fonte registrada recentemente') }}</h2><br>

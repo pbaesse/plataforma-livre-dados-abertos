@@ -47,16 +47,18 @@ class SourceForm(FlaskForm):
     tag = StringField(_l('Palavras-Chaves: *'), id="tags", validators=[DataRequired()],
         render_kw={"placeholder": "Digite as palavras-chaves da fonte"})
     category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
-        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
-        ('Cinema', 'Cinema'), ('Música', 'Música'), ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
-        ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'), ('Cultura', 'Cultura'),
-        ('Países', 'Países'), ('IBGE', 'IBGE'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
+        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'),
+        ('Educação', 'Educação'), ('Cinema', 'Cinema'), ('Música', 'Música'),
+        ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
+        ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'),
+        ('Cultura', 'Cultura'), ('Países', 'Países'), ('IBGE', 'IBGE'),
+        ('Gastos Públicos', 'Gastos Públicos'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
     officialLink = StringField(_l('Página Oficial: *'), validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
                render_kw={"placeholder": "Digite a URL da fonte (https://www.exemplo.com/)"})
-    sphere = SelectField('Esfera: *', id="esfera", choices=[('Municipal', 'Municipal'),
-        ('Estadual', 'Estadual'), ('Federal', 'Federal'),
+    sphere = SelectField('Esfera: *', id="esfera", choices=[
+        ('Municipal', 'Municipal'), ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
     city = StringField(_l('Município:'), id="municipal",
         render_kw={"placeholder": "Digite o município da fonte de dados abertos"})
@@ -80,10 +82,12 @@ class SoftwareForm(FlaskForm):
     tag = StringField(_l('Palavras-Chaves: *'), id="tags", validators=[DataRequired()],
         render_kw={"placeholder": "Digite as palavras-chaves da Aplicação"})
     category = SelectField(_l('Categoria: *'), validators=[DataRequired()],
-        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'), ('Educação', 'Educação'),
-        ('Cinema', 'Cinema'), ('Música', 'Música'), ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'),
-        ('Segurança Pública', 'Segurança Pública'), ('Meio Ambiente', 'Meio Ambiente'), ('Cultura', 'Cultura'),
-        ('Países', 'Países'), ('IBGE', 'IBGE'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
+        choices=[('Corona Vírus','Corona Vírus'), ('Saúde', 'Saúde'),
+        ('Educação', 'Educação'), ('Cinema', 'Cinema'), ('Música', 'Música'),
+        ('Tecnologia', 'Tecnologia'), ('Ciência', 'Ciência'), ('IBGE', 'IBGE'),
+        ('Segurança Pública', 'Segurança Pública'), ('Países', 'Países'),
+        ('Meio Ambiente', 'Meio Ambiente'), ('Cultura', 'Cultura'),
+        ('Gastos Públicos', 'Gastos Públicos'), ('Clima', 'Clima'), ('Lazer', 'Lazer')], default=1)
     officialLink = StringField(_l('Página Oficial: *'),
         validators=[DataRequired('URL verificada!'),
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
