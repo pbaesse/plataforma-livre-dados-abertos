@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block app_content %}
+  <div class="row">
+    <div class="col-md-12">
+      <img src="{{ user.avatar(100) }}" id="imagem_user" alt="perfil do usuario">
+      <h1>{% if user.username %}{{ user.username }}{% endif %} <br>
+      <small>{% if user.nickname %}{{ user.nickname }}{% endif %}</small></h1>
+    </div></div>
+  <div class="row">
+    <div class="col-md-12">
+      <p>{% if user.about_me %}{{ user.about_me }}{% endif %}</p>
+      {% if not current_user.is_anonymous %}
+        <p><a href="{{ url_for('main.edit_profile') }}" id="color-red">{{ _('Editar Perfil') }}</a></p>
+      {% endif %}
+    </div>
+  </div><br><br>
     <div class="row">
       <div class="col-md-12">
-        <img src="{{ user.avatar(100) }}" align="left" id="imagem_user" alt="perfil do usuario">
-        <h1>{% if user.username %}{{ user.username }}{% endif %}</h1>
-        <p>{% if user.nickname %}{{ user.nickname }}{% endif %}</p>
-  	    <p class="text-justify">{% if user.about_me %}{{ user.about_me }}{% endif %}</p>
-        {% if not current_user.is_anonymous %}
-        <br><p><a href="{{ url_for('main.edit_profile') }}" id="color-red">{{ _('Editar Seu Perfil') }}</a></p>
-        {% endif %}
-      </div>
-    </div><br><br><br><br><br>
-    <div class="row">
-      <div class="col-md-12">
-        <h4>Fontes registradas por {{ user.username }}</h4><br><br>
+        <h4><strong>Fontes registradas por {{ user.username }}:</strong></h4><br>
         {% for source in sources %}
-          {% include '_source.html' %}<hr><br>
-        {% endfor %}<br><br><br>
-        <h4>Aplicações registradas por {{ user.username }}</h4><br><br>
+          {% include '_source.html' %}<hr>
+        {% endfor %}<br><br>
+        <h4><strong>Aplicações registradas por {{ user.username }}:</strong></h4><br>
         {% for software in softwares %}
-          {% include '_software.html' %}<hr><br>
+          {% include '_software.html' %}<hr>
         {% endfor %}
       </div>
     </div>
