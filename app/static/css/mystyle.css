@@ -14,8 +14,8 @@ h4 {
 }
 
 .container {
-  margin-top:90px;
-  margin-bottom:90px;
+  margin-top:80px;
+  margin-bottom:80px;
 }
 
 .container-fluid {
@@ -34,7 +34,6 @@ h4 {
 
 a#navbar {
   color: #9d0208;
-  font-size: 12pt;
 }
 
 a#navbar:hover {
@@ -136,8 +135,8 @@ a#color-black:hover {
 
 div img#imagem_user {
   float: left;
-  margin: 10px 20px 20px 0;
-  min-width: 150px;
-  border-radius: 6px;
-  border: 1px solid #bdbdbd;
+  margin: 10px 40px 40px 0;
+  min-width: 140px;
+  border-radius: 100px;
+  border: 1px solid #ddb9b9;
 }
