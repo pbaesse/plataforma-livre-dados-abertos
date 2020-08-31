@@ -11,7 +11,7 @@
         {% if source.state %}| {{_('Estado')}}: {{source.state}}{% endif %}
         {% if source.country %}| {{_('País')}}: {{source.country}}{% endif %}</p>
         <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
-        <p class="text-justify">{% if source.description %}{{ source.description }}{% endif %}</p>
+        <p>{% if source.description %}{{ source.description }}{% endif %}</p>
         {% if not current_user.is_anonymous %}
           <p><a href="{{ url_for('main.edit_source', id=source.id) }}" id="color-red">{{ _('Editar Fonte') }}</a> |
             <a href="{{ url_for('main.deletar_source', id=source.id) }}" id="color-red">{{ _('Excluir Fonte') }}</a></p>

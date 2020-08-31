@@ -9,7 +9,7 @@
         {{ software.owner }}{% endif %} | {% if software.license %}{{ _('Licença') }}: {{ software.license }}{% endif %}
         {% if software.dateCreation %} | {{ _('Data de criação') }}: {{ software.dateCreation }}{% endif %}</p>
       <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
-      <p class="text-justify">{% if software.description %}{{ software.description }}{% endif %}</p>
+      <p>{% if software.description %}{{ software.description }}{% endif %}</p>
       {% if not current_user.is_anonymous %}
         <p><a href="{{ url_for('main.edit_software', id=software.id) }}" id="color-red">{{ _('Editar Aplicação') }}</a> |
           <a href="{{ url_for('main.deletar_software', id=software.id) }}" id="color-red">{{ _('Excluir Aplicação') }}</a></p>
