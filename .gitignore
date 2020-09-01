@@ -19,7 +19,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-venv/
 lib64/
 lib/
 lib/python3.6/site-packages
@@ -263,6 +262,6 @@ nosetests.xml
 .project
 .pydevproject
 
-venv/
+venv*
 app.db
 plataforma.log*
