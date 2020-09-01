@@ -3,7 +3,7 @@
 {% block app_content %}
   <div class="row">
     <div class="col-md-12">
-      <img src="{{ user.avatar(100) }}" id="imagem_user" alt="perfil do usuario">
+      <img src="{{ user.avatar(100) }}" id="imagem_user" alt="foto de perfil do usuário">
       <h1>{% if user.username %}{{ user.username }}{% endif %} <br>
       <small>{% if user.nickname %}{{ user.nickname }}{% endif %}</small></h1>
     </div></div>
@@ -11,17 +11,17 @@
     <div class="col-md-12">
       <p>{% if user.about_me %}{{ user.about_me }}{% endif %}</p>
       {% if not current_user.is_anonymous %}
-        <p><a href="{{ url_for('main.edit_profile') }}" id="color-red">{{ _('Editar Perfil') }}</a></p>
+        <p><a href="{{ url_for('main.edit_profile') }}" id="color-red">{{_('Editar Perfil')}}</a></p>
       {% endif %}
     </div>
   </div><br><br>
     <div class="row">
       <div class="col-md-12">
-        <h4><strong>Fontes registradas por {{ user.username }}:</strong></h4><br>
+        <h4><strong>{{_('Fontes registradas por')}} {{ user.username }}:</strong></h4><br>
         {% for source in sources %}
           {% include '_source.html' %}<hr>
         {% endfor %}<br><br>
-        <h4><strong>Aplicações registradas por {{ user.username }}:</strong></h4><br>
+        <h4><strong>{{_('Aplicações registradas por')}} {{ user.username }}:</strong></h4><br>
         {% for software in softwares %}
           {% include '_software.html' %}<hr>
         {% endfor %}

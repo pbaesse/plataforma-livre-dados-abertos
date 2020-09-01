@@ -13,11 +13,11 @@
         <input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput"><br><br>
         <p>{% if source.description %}{{ source.description }}{% endif %}</p>
         {% if not current_user.is_anonymous %}
-          <p><a href="{{ url_for('main.edit_source', id=source.id) }}" id="color-red">{{ _('Editar Fonte') }}</a> |
-            <a href="{{ url_for('main.deletar_source', id=source.id) }}" id="color-red">{{ _('Excluir Fonte') }}</a></p>
+          <p><a href="{{ url_for('main.edit_source', id=source.id) }}" id="color-red">{{_('Editar Fonte')}}</a> |
+            <a href="{{ url_for('main.deletar_source', id=source.id) }}" id="color-red">{{_('Excluir Fonte')}}</a></p>
         {% endif %}
-        <br><h4><a href="{{ source.officialLink }}" id="buttonPerfil" target="_blank">Visitar Página Oficial</a><h4><br>
-        <h4>{{ _('Aplicação registrada por') }}:
+        <br><h4><a href="{{ source.officialLink }}" id="buttonPerfil" target="_blank">{{_('Visitar Página Oficial')}}</a><h4><br>
+        <h4>{{_('Aplicação registrada por')}}:
           <a href="{{ url_for('main.user', username=source.author.username ) }}" id="color-red">
             {{ source.author.username }}</a></h4>
     </div>
