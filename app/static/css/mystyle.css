@@ -1,8 +1,17 @@
 @charset "UTF-8";
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Roboto', sans-serif !important;
-  font-weight: 500;
+}
+
+footer#footer {
+  background-color: #f6f6f6;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
 }
 
 p {
@@ -10,26 +19,12 @@ p {
 }
 
 h4 {
-  font-size: 14pt !important;
-}
-
-.container {
-  margin-top:80px;
-  margin-bottom:80px;
-}
-
-.container-fluid {
-  margin-left:10px;
+  font-size: 14pt;
 }
 
 .navbar-brand  {
   float: left;
   padding: 5px 5px 5px 0;
-}
-
-.centered {
-  margin: 0 auto !important;
-  float: none !important;
 }
 
 a#navbar {
@@ -96,7 +91,6 @@ a#buttonPerfil {
   border-radius: 6px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   transition: .1s linear all;
-  width: 100%;
   margin-left: .5%;
   margin-right: .5%;
 }
