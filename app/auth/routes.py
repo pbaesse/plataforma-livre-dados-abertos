@@ -26,7 +26,7 @@ def login():
 		if not next_page or url_parse(next_page).netloc != '':
 			next_page = url_for('main.index')
 		return redirect(next_page)
-	return render_template('auth/login.html', title=_('Entrar'), form=form)
+	return render_template('auth/login.html', title=(_('Entrar')), form=form)
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -40,7 +40,7 @@ def register():
         db.session.commit()
         flash(_('Parabéns, agora você é um usuário registrado'))
         return redirect(url_for('auth.login'))
-    return render_template('auth/register.html', title=_('Inscreva-se'), form=form)
+    return render_template('auth/register.html', title=(_('Inscreva-se')), form=form)
 
 @bp.route('/logout')
 def logout():
@@ -56,11 +56,10 @@ def reset_password_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             send_password_reset_email(user)
-        flash(
-            _('Por favor, verifique seu e-mail para concluir a sua renomeação de senha'))
+        flash(_('Por favor, verifique seu e-mail para concluir a sua renomeação de senha'))
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password_request.html',
-                           title=_('Renomeiar Senha'), form=form)
+                           title=(_('Renomear Senha')), form=form)
 
 @bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -75,4 +74,4 @@ def reset_password(token):
         db.session.commit()
         flash(_('Sua senha foi alterada'))
         return redirect(url_for('auth.login'))
-    return render_template('auth/reset_password.html', form=form)
+    return render_template('auth/reset_password.html', title=(_('Renomear Senha')), form=form)

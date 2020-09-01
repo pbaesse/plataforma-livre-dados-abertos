@@ -27,7 +27,7 @@ class RegistrationForm(FlaskForm):
     password2 = PasswordField(_l('Repetir senha: *'), validators=[DataRequired(),
         EqualTo('senha'), Length(min=8)],
         render_kw={"placeholder": "Repita a senha anterior (mínimo 8 caracteres)"})
-    submit = SubmitField(_('Inscrever'))
+    submit = SubmitField(_l('Inscrever'))
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()

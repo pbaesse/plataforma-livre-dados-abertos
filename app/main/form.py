@@ -57,7 +57,7 @@ class SourceForm(FlaskForm):
         Regexp('^(http|https):\/\/[\w.\-]+(\.[\w.\-]+)+.*$', 0,
                'URL inválida. Use https:// no início da URL')],
                render_kw={"placeholder": "Digite a URL da fonte (https://www.exemplo.com/)"})
-    sphere = SelectField('Esfera: *', id="esfera", choices=[
+    sphere = SelectField(_l('Esfera: *'), id="esfera", choices=[
         ('Municipal', 'Municipal'), ('Estadual', 'Estadual'), ('Federal', 'Federal'),
         ('Internacional','Internacional')], validators=[DataRequired()])
     city = StringField(_l('Município:'), id="municipal",
@@ -97,7 +97,7 @@ class SoftwareForm(FlaskForm):
         Length(min=3)], render_kw={"placeholder": "Digite qual a pessoa desenvolvedora/empresa da aplicação"})
     dateCreation = StringField(_l('Data de Criação:'),
         render_kw={"placeholder": "Digite a data de criação da Aplicação"})
-    license = SelectField('Licença: *', validators=[DataRequired()],
+    license = SelectField(_l('Licença: *'), validators=[DataRequired()],
         choices=[('Apache License 2.0', 'Apache License 2.0'),
         ('GNU General Public License v3.0','GNU General Public License v3.0'),
         ('MIT License','MIT License'), ('BSD 2-Clause "Simplified" License','BSD 2-Clause "Simplified" License'),
