@@ -2,7 +2,7 @@
 
 Plataforma livre (Dados Livres) para catalogação de fontes de dados abertos e aplicações cívicas por meio de colaboração coletiva. 
 
-[dadoslivres.org](dadoslivres.org)
+[dadoslivres.org/](https://dadoslivres.pythonanywhere.com/)
 
 ## GitLab do Projeto
 
