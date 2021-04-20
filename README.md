@@ -1,8 +1,8 @@
 # Dados Livres
 
-Plataforma Dados Livres que permite o compartilhamento e a colaboração na identificação de fontes de dados abertos e aplicações que fazem uso desse tipo de informação, de modo a gerar controle social e transparência pública para a sociedade civil.
+Plataforma livre (Dados Livres) para catalogação de fontes de dados abertos e aplicações cívicas por meio de colaboração coletiva. 
 
-[https://dadoslivres.org](https://dadoslivres.org)
+[dadoslivres.org](dadoslivres.org)
 
 ## GitLab do Projeto
 
