@@ -4,11 +4,11 @@ Plataforma livre (Dados Livres) para catalogação de fontes de dados abertos e 
 
 [dadoslivres.org/](https://dadoslivres.pythonanywhere.com/)
 
-## GitLab do Projeto
+## Projeto continuado no GitLab
 
-Projeto continuado no GitLab! Acesse o Link para ter acesso ao código-fonte atualizado do projeto:
+Acesse o link abaixo para a versão do código mais atualizada do projeto:
 
-[https://gitlab.com/pbaesse/dados-livres](https://gitlab.com/pbaesse/dados-livres)
+[https://gitlab.com/dados-livres/dados-livres](https://gitlab.com/dados-livres/dados-livres)
 
 ## Contato
 
