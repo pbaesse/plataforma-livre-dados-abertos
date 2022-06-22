@@ -1,17 +1,23 @@
-# Dados Livres
+# Este repositório foi descontinuado!
 
-Plataforma livre (Dados Livres) para catalogação de fontes de dados abertos e aplicações cívicas por meio de colaboração coletiva. 
+- **O projeto continua sendo atualizado no GitLab**: [https://gitlab.com/dados-livres/dados-livres](https://gitlab.com/dados-livres/dados-livres)
+- **O site do projeto está disponível para acesso em**: [dadoslivres.org](https://dadoslivres.org/)
+- Temos uma organização do Dados Livres aqui no GitHub: https://github.com/Dados-Livres
 
-[dadoslivres.org/](https://dadoslivres.pythonanywhere.com/)
+**OBSERVAÇÕES:**
 
-## Projeto continuado no GitLab
-
-Acesse o link a seguir para a versão do código mais atualizada do projeto: [https://gitlab.com/dados-livres/dados-livres](https://gitlab.com/dados-livres/dados-livres)
+- Esperamos receber as contribuições ao projeto em nosso repositório do [GitLab](https://gitlab.com/dados-livres/dados-livres)! (pelo motivo do GitLab ser software livre)
+- O repositório do Dados Livres é mantido aqui no GitHub para dá mais visibilidade ao projeto
 
 ## Contatos
 
-Telegram: [@carols0](https://t.me/carols0) | [@pbaesse](https://t.me/pbaesse)
+**Comunidade Dados Livres no Telegram**:
 
-E-mail: m.carolina.soares1@gmail.com | pbaesse@gmail.com
+- [@dadoslivres](https://t.me/dadoslivres)
 
-![logo-provisoria-dados-livres](logoprovisoria.png)
+**Mantedores do projeto**:
+
+- Telegram: [@carols0](https://t.me/carols0) | m.carolina.soares1@gmail.com 
+- Telegram: [@pbaesse](https://t.me/pbaesse) | pbaesse@gmail.com
+
+![Logo Dados Livres](logoprovisoria.png)
