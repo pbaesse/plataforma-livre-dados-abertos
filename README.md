@@ -11,9 +11,10 @@
 
 ## Contatos
 
-**Comunidade Dados Livres no Telegram**:
+**Dados Livres**:
 
-- [@dadoslivres](https://t.me/dadoslivres)
+- Comunidade Dados Livres no Telegram: [@dadoslivres](https://t.me/dadoslivres)
+- contato@dadoslivres.org
 
 **Mantedores do projeto**:
 
